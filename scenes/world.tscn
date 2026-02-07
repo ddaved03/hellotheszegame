@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://cqt4tyo87lyat"]
-
-[ext_resource type="Script" uid="uid://dnjtfnekfgkbp" path="res://src/FirstNode.cs" id="1_nnsk1"]
-
-[node name="World" type="Node2D" unique_id=230028670]
-
-[node name="FirstNode" type="Node" parent="." unique_id=2134742336]
-script = ExtResource("1_nnsk1")
