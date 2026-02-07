@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://d01vwvubds3jm"]
+
+[ext_resource type="Texture2D" uid="uid://dlxm5lxtj1u1p" path="res://Xp.png" id="1_tknrc"]
+[ext_resource type="Script" uid="uid://hftqwceu006p" path="res://src/XpOrb.cs" id="1_vg5r0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tknrc"]
+radius = 374.99927
+
+[node name="XpOrb" type="Area2D" unique_id=521726061]
+script = ExtResource("1_vg5r0")
+
+[node name="CircleShape2D" type="CollisionShape2D" parent="." unique_id=2016913165]
+position = Vector2(43, 41)
+scale = Vector2(0.032000054, 0.032000054)
+shape = SubResource("CircleShape2D_tknrc")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1754335550]
+position = Vector2(43.000004, 38)
+scale = Vector2(0.032000054, 0.032000054)
+texture = ExtResource("1_tknrc")

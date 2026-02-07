@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://cjyiem1gwscc0"]
+
+[ext_resource type="Script" uid="uid://dg8q7i0b68bso" path="res://src/BasePlayer.cs" id="1_dpr2a"]
+[ext_resource type="Texture2D" uid="uid://cd7n8d7wcwa2g" path="res://Hero3.png" id="2_grqey"]
+[ext_resource type="Texture2D" uid="uid://k36shd0xyvyj" path="res://Hero3back1.png" id="3_rq64u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k0juu"]
+size = Vector2(58, 111)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x6lmx"]
+radius = 55.03635
+
+[node name="Player" type="CharacterBody2D" unique_id=1544599848]
+position = Vector2(172, 150)
+script = ExtResource("1_dpr2a")
+FrontSprite = ExtResource("2_grqey")
+BackSprite = ExtResource("3_rq64u")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2092673258]
+position = Vector2(0.9999981, 0.9999962)
+scale = Vector2(0.10399999, 0.13983192)
+texture = ExtResource("2_grqey")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1894949195]
+position = Vector2(-3, 15.5)
+shape = SubResource("RectangleShape2D_k0juu")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1121726718]
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=2038176447]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1838615755]
+position = Vector2(-1, 15)
+shape = SubResource("CircleShape2D_x6lmx")

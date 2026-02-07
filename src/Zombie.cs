@@ -4,101 +4,97 @@ using System;
 public partial class Zombie : CharacterBody2D
 {
 	[Export] public float Speed = 60.0f;
-	[Export] public int Health = 50;
-	[Export] public int Damage = 15; // Ennyit von le a játékostól
-	[Export] public float AttackRange = 45.0f;
+	[Export] public int MaxHealth = 50;
+	public int CurrentHealth;
+	[Export] public int Damage = 15;
 	[Export] public float AttackCooldown = 1.5f;
+	[Export] public PackedScene XpOrbScene; // Ne felejtsd el behúzni az XpOrb.tscn-t!
 
-	private BasePlayer _playerTarget; 
+	private BasePlayer _playerTarget;
 	private float _attackTimer = 0.0f;
-
-	public enum State { Idle, Chase, Attack }
-	public State CurrentState = State.Idle;
 
 	public override void _Ready()
 	{
-		var detectionArea = GetNode<Area2D>("DetectionArea");
-		detectionArea.BodyEntered += OnDetectionAreaBodyEntered;
-		detectionArea.BodyExited += OnDetectionAreaBodyExited;
+		CurrentHealth = MaxHealth;
+		UpdateUI();
+		
+		// Csatlakozunk a DetectionArea-hoz
+		var detArea = GetNodeOrNull<Area2D>("DetectionArea");
+		if (detArea != null)
+		{
+			detArea.BodyEntered += (body) => { if (body is BasePlayer p) _playerTarget = p; };
+			detArea.BodyExited += (body) => { if (body == _playerTarget) _playerTarget = null; };
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		// Ha megállt a játék, nem mozog
+		if (GetTree().Paused || IsQueuedForDeletion()) return;
+
 		_attackTimer += (float)delta;
-		Vector2 velocity = Vector2.Zero;
 
-		switch (CurrentState)
-		{
-			case State.Idle:
-				break;
-
-			case State.Chase:
-				if (_playerTarget != null)
-				{
-					Vector2 direction = (_playerTarget.GlobalPosition - GlobalPosition).Normalized();
-					velocity = direction * Speed;
-
-					if (GlobalPosition.DistanceTo(_playerTarget.GlobalPosition) < AttackRange)
-						CurrentState = State.Attack;
-				}
-				break;
-
-			case State.Attack:
-				if (_playerTarget != null)
-				{
-					// Ha a játékos elszalad
-					if (GlobalPosition.DistanceTo(_playerTarget.GlobalPosition) > AttackRange)
-					{
-						CurrentState = State.Chase;
-					}
-					// Támadás cooldown alapján
-					else if (_attackTimer >= AttackCooldown)
-					{
-						PerformAttack();
-						_attackTimer = 0.0f;
-					}
-				}
-				break;
-		}
-
-		if (velocity.X != 0)
-			GetNode<Sprite2D>("Sprite2D").FlipH = velocity.X < 0;
-
-		Velocity = velocity;
-		MoveAndSlide();
-	}
-
-	private void PerformAttack()
-	{
 		if (_playerTarget != null)
 		{
-			GD.Print("Zombi harap!");
-			_playerTarget.TakeDamage(Damage);
+			Vector2 direction = (_playerTarget.GlobalPosition - GlobalPosition).Normalized();
+			Velocity = direction * Speed;
+			MoveAndSlide();
+
+			// --- IRÁNYÍTÁS: Sprite és Támadó négyzet kezelése ---
+			var sprite = GetNodeOrNull<Sprite2D>("Sprite2D");
+			var performAttack = GetNodeOrNull<Area2D>("PerformAttack");
+
+			if (Velocity.X != 0)
+			{
+				bool facingLeft = Velocity.X < 0;
+				if (sprite != null) sprite.FlipH = facingLeft;
+
+				// A támadó területet (piros négyzet az ábrádon) eltoljuk a mozgás irányába
+				if (performAttack != null)
+				{
+					// Ha balra néz, -35 pixel, ha jobbra, +35 pixel
+					performAttack.Position = new Vector2(facingLeft ? -35 : 35, 0);
+				}
+			}
+
+			// Tényleges támadás, ha a célpont benne van a támadó területben
+			if (performAttack != null && performAttack.OverlapsBody(_playerTarget) && _attackTimer >= AttackCooldown)
+			{
+				_playerTarget.TakeDamage(Damage);
+				_attackTimer = 0.0f;
+			}
+		}
+		else
+		{
+			Velocity = Vector2.Zero;
 		}
 	}
 
 	public void TakeDamage(int amount)
 	{
-		Health -= amount;
-		GD.Print($"Zombi sebződött! Maradék HP: {Health}");
-		if (Health <= 0) QueueFree();
+		CurrentHealth -= amount;
+		UpdateUI();
+		if (CurrentHealth <= 0) Die();
 	}
 
-	private void OnDetectionAreaBodyEntered(Node2D body)
+	private void Die()
 	{
-		if (body is BasePlayer player)
+		if (XpOrbScene != null)
 		{
-			_playerTarget = player;
-			CurrentState = State.Chase;
+			var orb = (Node2D)XpOrbScene.Instantiate();
+			orb.GlobalPosition = GlobalPosition;
+			GetTree().Root.AddChild(orb);
 		}
+		QueueFree();
 	}
 
-	private void OnDetectionAreaBodyExited(Node2D body)
+	private void UpdateUI()
 	{
-		if (body is BasePlayer player && _playerTarget == player)
+		var healthBar = GetNodeOrNull<ProgressBar>("HealthBar");
+		if (healthBar != null)
 		{
-			_playerTarget = null;
-			CurrentState = State.Idle;
+			healthBar.MaxValue = MaxHealth;
+			healthBar.Value = CurrentHealth;
 		}
 	}
 }

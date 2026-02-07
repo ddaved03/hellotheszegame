@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bo3qho5yl5e5d"]
+
+[ext_resource type="Script" uid="uid://ddl1npaidfk3" path="res://src/ZombieSpawner.cs" id="1_m453h"]
+[ext_resource type="PackedScene" uid="uid://drfvop7r5lv5o" path="res://scenes/Zombie.tscn" id="2_hc5lw"]
+
+[node name="ZombieSpawner" type="Node2D" unique_id=1560249549]
+script = ExtResource("1_m453h")
+ZombieScene = ExtResource("2_hc5lw")
+
+[node name="Timer" type="Timer" parent="." unique_id=699959374]
+wait_time = 3.0
+autostart = true

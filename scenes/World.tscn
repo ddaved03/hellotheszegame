@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://uxodcudun3v2"]
+
+[ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="1_7g83o"]
+[ext_resource type="PackedScene" uid="uid://drfvop7r5lv5o" path="res://scenes/Zombie.tscn" id="2_d1c63"]
+[ext_resource type="PackedScene" uid="uid://bo3qho5yl5e5d" path="res://scenes/ZombieSpawner.tscn" id="3_1lgw5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x6lmx"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gqg63"]
+bg_color = Color(0.38431373, 1, 0.2627451, 1)
+
+[node name="World" type="Node2D" unique_id=230028670]
+y_sort_enabled = true
+position = Vector2(764, 515)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1149986149]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1371229669]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="UpgradeMenu" type="Panel" parent="CanvasLayer/Control" unique_id=268442298]
+process_mode = 3
+visible = false
+layout_mode = 0
+offset_left = 193.0
+offset_top = 80.0
+offset_right = 958.0
+offset_bottom = 509.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UpgradeMenu" unique_id=1438414472]
+process_mode = 3
+layout_mode = 0
+offset_left = 174.0
+offset_top = 88.0
+offset_right = 584.0
+offset_bottom = 322.0
+alignment = 1
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=451856229]
+process_mode = 3
+layout_mode = 2
+text = "+10% Sebesség"
+
+[node name="Button2" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=1961863842]
+process_mode = 3
+layout_mode = 2
+text = "+5 Sebzés"
+
+[node name="Button3" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=2060859493]
+process_mode = 3
+layout_mode = 2
+text = "Gyorsabb támadás"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control" unique_id=311235666]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -4.0
+offset_right = 42.0
+offset_bottom = 43.0
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=728376742]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5139996
+anchor_top = 0.6249999
+anchor_right = 0.5139996
+anchor_bottom = 0.6249999
+offset_left = 44.440018
+offset_top = -7.999996
+offset_right = 169.44002
+offset_bottom = 8.000004
+theme_override_styles/fill = SubResource("StyleBoxFlat_x6lmx")
+value = 100.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=27813512]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 36.0
+offset_right = 190.0
+offset_bottom = 63.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_gqg63")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control" unique_id=172486292]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 64.0
+offset_right = 59.0
+offset_bottom = 87.0
+
+[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed") instance=ExtResource("1_7g83o")]
+position = Vector2(-185, -191)
+UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
+BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
+BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
+BtnAtkSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button3")
+
+[node name="Zombie" parent="." unique_id=564053419 instance=ExtResource("2_d1c63")]
+position = Vector2(229, -27)
+
+[node name="ZombieSpawner" parent="." unique_id=1560249549 instance=ExtResource("3_1lgw5")]
+position = Vector2(-657, 58)
