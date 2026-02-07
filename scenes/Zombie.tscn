@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://clr4cafs1suty" path="res://src/Zombie.cs" id="1_yaogc"]
 [ext_resource type="PackedScene" uid="uid://d01vwvubds3jm" path="res://scenes/XpOrb.tscn" id="2_siap5"]
-[ext_resource type="Texture2D" uid="uid://c3c2th8wf6hll" path="res://Zombi.png" id="3_e4xys"]
+[ext_resource type="Texture2D" uid="uid://dt0b07lrc43vu" path="res://kepek/Zombi.png" id="3_yaogc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x6lmx"]
 size = Vector2(93, 103)
@@ -23,7 +23,7 @@ XpOrbScene = ExtResource("2_siap5")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=747252294]
 scale = Vector2(0.13671876, 0.13232422)
-texture = ExtResource("3_e4xys")
+texture = ExtResource("3_yaogc")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1715724753]
 position = Vector2(-3.5, 3.5)

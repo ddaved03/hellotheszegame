@@ -1,8 +1,76 @@
 [gd_scene format=3 uid="uid://cjyiem1gwscc0"]
 
 [ext_resource type="Script" uid="uid://dg8q7i0b68bso" path="res://src/BasePlayer.cs" id="1_dpr2a"]
-[ext_resource type="Texture2D" uid="uid://cd7n8d7wcwa2g" path="res://Hero3.png" id="2_grqey"]
-[ext_resource type="Texture2D" uid="uid://k36shd0xyvyj" path="res://Hero3back1.png" id="3_rq64u"]
+[ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="2_xttg7"]
+[ext_resource type="Texture2D" uid="uid://duin5o1ivbtt3" path="res://kepek/Hero3back1.png" id="3_cx2eu"]
+[ext_resource type="Texture2D" uid="uid://dwco2bw21mxde" path="res://kepek/Hero1Idol/Hero1Idol1.png" id="4_xttg7"]
+[ext_resource type="Texture2D" uid="uid://donyumqo25xed" path="res://kepek/Hero1Idol/Hero1Idol2.png" id="5_cx2eu"]
+[ext_resource type="Texture2D" uid="uid://cyqyrlihvcsnv" path="res://kepek/Hero1Idol/Hero1Idol3.png" id="6_ppkhy"]
+[ext_resource type="Texture2D" uid="uid://b1jefxi6ah8ij" path="res://kepek/Hero1Idol/Hero1Idol4.png" id="7_6was8"]
+[ext_resource type="Texture2D" uid="uid://cfna0ix3weda1" path="res://kepek/Hero1Idol/Hero1Idol5.png" id="8_w0gl4"]
+[ext_resource type="Texture2D" uid="uid://b632o2sc7vg57" path="res://kepek/Hero1Idol/Hero1Idol6.png" id="9_hdh1h"]
+[ext_resource type="Texture2D" uid="uid://dmyfh3uwnawli" path="res://kepek/Hero1Idol/Hero1Idol7.png" id="10_tx3lp"]
+[ext_resource type="Texture2D" uid="uid://c31idm6o4bl16" path="res://kepek/Hero1Idol/Hero1Idol8.png" id="11_m1cun"]
+[ext_resource type="Texture2D" uid="uid://dm2n6a31s67jb" path="res://kepek/Hero1Idol/Hero1Idol9.png" id="12_n2eat"]
+[ext_resource type="Texture2D" uid="uid://oxcigvspafw0" path="res://kepek/Hero1Idol/Hero1Idol10.png" id="13_soh6i"]
+[ext_resource type="Texture2D" uid="uid://4g7c2l7s4v8p" path="res://kepek/Hero1Idol/Hero1Idol11.png" id="14_s668k"]
+[ext_resource type="Texture2D" uid="uid://dbbxllun2dio5" path="res://kepek/Hero1Idol/Hero1Idol12.png" id="15_dhgsa"]
+[ext_resource type="Texture2D" uid="uid://bc0borfd1i87v" path="res://kepek/Hero1Idol/Hero1Idol13.png" id="16_ffl24"]
+[ext_resource type="Texture2D" uid="uid://dcc4t6gfejhuh" path="res://kepek/Hero1Idol/Hero1Idol14.png" id="17_i7ph8"]
+[ext_resource type="Texture2D" uid="uid://c3kgxupfqaqv2" path="res://kepek/Hero1Idol/Hero1Idol15.png" id="18_tosfp"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_apdfg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_xttg7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_cx2eu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ppkhy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_6was8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_w0gl4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_hdh1h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_tx3lp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_m1cun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_n2eat")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_soh6i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_s668k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_dhgsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ffl24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_i7ph8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_tosfp")
+}],
+"loop": false,
+"name": &"blink",
+"speed": 15.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k0juu"]
 size = Vector2(58, 111)
@@ -13,13 +81,14 @@ radius = 55.03635
 [node name="Player" type="CharacterBody2D" unique_id=1544599848]
 position = Vector2(172, 150)
 script = ExtResource("1_dpr2a")
-FrontSprite = ExtResource("2_grqey")
-BackSprite = ExtResource("3_rq64u")
+FrontSprite = ExtResource("2_xttg7")
+BackSprite = ExtResource("3_cx2eu")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2092673258]
+[node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=907502933]
 position = Vector2(0.9999981, 0.9999962)
 scale = Vector2(0.10399999, 0.13983192)
-texture = ExtResource("2_grqey")
+sprite_frames = SubResource("SpriteFrames_apdfg")
+animation = &"blink"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1894949195]
 position = Vector2(-3, 15.5)

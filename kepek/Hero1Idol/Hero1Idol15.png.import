@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3c2th8wf6hll"
-path="res://.godot/imported/Zombi.png-9d20fb8e2b1a8ec76b6cf820296d5d50.ctex"
+uid="uid://c3kgxupfqaqv2"
+path="res://.godot/imported/Hero1Idol15.png-4ab5a133327e3868329f7afe83a1cc11.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Zombi.png"
-dest_files=["res://.godot/imported/Zombi.png-9d20fb8e2b1a8ec76b6cf820296d5d50.ctex"]
+source_file="res://kepek/Hero1Idol/Hero1Idol15.png"
+dest_files=["res://.godot/imported/Hero1Idol15.png-4ab5a133327e3868329f7afe83a1cc11.ctex"]
 
 [params]
 

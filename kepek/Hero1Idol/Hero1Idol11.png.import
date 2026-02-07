@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c85hkfqavxlu5"
-path="res://.godot/imported/pikachu.png-389683407c83ae3fc6ca1c18a4124495.ctex"
+uid="uid://4g7c2l7s4v8p"
+path="res://.godot/imported/Hero1Idol11.png-11d904b7192cf4e297668d8ba14c4896.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pikachu.png"
-dest_files=["res://.godot/imported/pikachu.png-389683407c83ae3fc6ca1c18a4124495.ctex"]
+source_file="res://kepek/Hero1Idol/Hero1Idol11.png"
+dest_files=["res://.godot/imported/Hero1Idol11.png-11d904b7192cf4e297668d8ba14c4896.ctex"]
 
 [params]
 

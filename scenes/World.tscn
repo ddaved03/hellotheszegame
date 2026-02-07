@@ -99,7 +99,7 @@ offset_right = 59.0
 offset_bottom = 87.0
 
 [node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed") instance=ExtResource("1_7g83o")]
-position = Vector2(-185, -191)
+position = Vector2(-186, -191)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
 BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
 BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")

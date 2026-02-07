@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dlxm5lxtj1u1p"
-path="res://.godot/imported/Xp.png-e3401c45ff48892522c03a6a3ab554f3.ctex"
+uid="uid://cfna0ix3weda1"
+path="res://.godot/imported/Hero1Idol5.png-03f4cf30ee3e930cdcbfe07fee9d7175.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Xp.png"
-dest_files=["res://.godot/imported/Xp.png-e3401c45ff48892522c03a6a3ab554f3.ctex"]
+source_file="res://kepek/Hero1Idol/Hero1Idol5.png"
+dest_files=["res://.godot/imported/Hero1Idol5.png-03f4cf30ee3e930cdcbfe07fee9d7175.ctex"]
 
 [params]
 
