@@ -69,7 +69,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"blink",
-"speed": 15.0
+"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k0juu"]
@@ -89,6 +89,8 @@ position = Vector2(0.9999981, 0.9999962)
 scale = Vector2(0.10399999, 0.13983192)
 sprite_frames = SubResource("SpriteFrames_apdfg")
 animation = &"blink"
+frame = 14
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1894949195]
 position = Vector2(-3, 15.5)

@@ -13,8 +13,11 @@ public partial class BasePlayer : CharacterBody2D
     [Export] public int MaxXP = 100;
     [Export] public int Level = 1;
 
-    // UI és Grafika hivatkozások - Húzd be őket az Inspectorban!
-    [Export] public Control UpgradeMenuNode; 
+    // Potion változók
+    [Export] public int PotionsCount = 0;
+    public int MaxPotionSlots = 3; 
+
+    [Export] public Control UpgradeMenuNode; //
     [Export] public Button BtnSpeed;
     [Export] public Button BtnDamage;
     [Export] public Button BtnAtkSpeed;
@@ -30,14 +33,12 @@ public partial class BasePlayer : CharacterBody2D
         CurrentHealth = MaxHealth;
         UpdateUI();
         
-        // Upgrade gombok bekötése
         if (BtnSpeed != null) BtnSpeed.Pressed += () => ApplyUpgrade("speed");
         if (BtnDamage != null) BtnDamage.Pressed += () => ApplyUpgrade("damage");
         if (BtnAtkSpeed != null) BtnAtkSpeed.Pressed += () => ApplyUpgrade("atk_speed");
         if (UpgradeMenuNode != null) UpgradeMenuNode.Visible = false;
 
-        // AnimatedSprite keresése és pislogás időzítő indítása
-        _animSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
+        _animSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D"); //
         
         _blinkTimer = new Timer();
         _blinkTimer.OneShot = true;
@@ -50,22 +51,19 @@ public partial class BasePlayer : CharacterBody2D
     {
         if (GetTree().Paused) return;
 
+        // Potion használata (H gomb)
+        if (Input.IsActionJustPressed("heal")) UsePotion();
+
         Vector2 direction = Input.GetVector("move_left", "move_right", "move_up", "move_down");
         Velocity = direction != Vector2.Zero ? direction * Speed : Velocity.MoveToward(Vector2.Zero, Speed);
         
-        // --- IRÁNYKEZELÉS (Működő verzió megtartása) ---
         if (_animSprite != null)
         {
-            // Csak akkor váltunk textúrát, ha nem fut épp a pislogás animáció
             if (!_animSprite.IsPlaying())
             {
-                if (direction.Y < 0 && BackSprite != null) 
-                    _animSprite.SpriteFrames.SetFrame("blink", 0, BackSprite);
-                else if (direction.Y > 0 || direction.X != 0) 
-                    if (FrontSprite != null) _animSprite.SpriteFrames.SetFrame("blink", 0, FrontSprite);
+                if (direction.Y < 0 && BackSprite != null) _animSprite.SpriteFrames.SetFrame("blink", 0, BackSprite);
+                else if (direction.Y > 0 || direction.X != 0) if (FrontSprite != null) _animSprite.SpriteFrames.SetFrame("blink", 0, FrontSprite);
             }
-            
-            // Megfordulás (FlipH)
             if (direction.X != 0) _animSprite.FlipH = direction.X < 0;
         }
 
@@ -83,18 +81,34 @@ public partial class BasePlayer : CharacterBody2D
         if (Input.IsActionJustPressed("attack")) Attack();
     }
 
+    // --- EZ HIÁNYZOTT A BUILD-HEZ ---
+    public void CollectPotion()
+    {
+        if (PotionsCount < MaxPotionSlots)
+        {
+            PotionsCount++;
+            UpdateUI();
+        }
+    }
+
+    public void UsePotion()
+    {
+        if (PotionsCount > 0 && CurrentHealth < MaxHealth)
+        {
+            CurrentHealth = Mathf.Min(CurrentHealth + 100, MaxHealth);
+            PotionsCount--;
+            UpdateUI();
+        }
+    }
+
     private void StartRandomBlinkTimer() => _blinkTimer.Start((float)GD.RandRange(3.0, 7.0));
 
     private void OnBlinkTimerTimeout()
     {
-        // Elindítjuk a 15 képből álló pislogást
-        if (_animSprite != null && !GetTree().Paused) 
-            _animSprite.Play("blink");
-        
+        if (_animSprite != null && !GetTree().Paused) _animSprite.Play("blink");
         StartRandomBlinkTimer();
     }
 
-    // --- ALAP FUNKCIÓK (VÁLTOZATLANOK) ---
     public void GainXP(int amount)
     {
         CurrentXP += amount;
@@ -107,6 +121,8 @@ public partial class BasePlayer : CharacterBody2D
         Level++;
         CurrentXP = 0;
         MaxXP = (int)(MaxXP * 1.5);
+        if (Level % 5 == 0) MaxPotionSlots++; // 5 szintenként slot bővítés
+
         GetTree().Paused = true; 
         if (UpgradeMenuNode != null) { UpgradeMenuNode.Visible = true; Input.MouseMode = Input.MouseModeEnum.Visible; }
         UpdateUI();
@@ -134,9 +150,12 @@ public partial class BasePlayer : CharacterBody2D
         var hudHP = GetNodeOrNull<ProgressBar>("/root/World/CanvasLayer/Control/HealthBar"); 
         var hudXP = GetNodeOrNull<ProgressBar>("/root/World/CanvasLayer/Control/ProgressBar");
         var lvlLabel = GetNodeOrNull<Label>("/root/World/CanvasLayer/Control/Label");
+        var potLabel = GetNodeOrNull<Label>("/root/World/CanvasLayer/Control/PotionLabel");
+
         if (hudHP != null) { hudHP.MaxValue = MaxHealth; hudHP.Value = CurrentHealth; }
         if (hudXP != null) { hudXP.MaxValue = MaxXP; hudXP.Value = CurrentXP; }
         if (lvlLabel != null) { lvlLabel.Text = "LVL " + Level; }
+        if (potLabel != null) { potLabel.Text = "x" + PotionsCount + "/" + MaxPotionSlots; }
     }
 
     private void Attack()

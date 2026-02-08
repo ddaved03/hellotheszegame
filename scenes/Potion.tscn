@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cwvotj14dd7hi"]
+
+[ext_resource type="Script" uid="uid://c88erjd61luvt" path="res://src/Potion.cs" id="1_dghaj"]
+[ext_resource type="Texture2D" uid="uid://bhcpe1radangw" path="res://kepek/Hppoti.png" id="2_bjhqt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xpeo5"]
+radius = 17.0
+
+[node name="Area2D" type="Area2D" unique_id=1953388318]
+z_index = 10
+script = ExtResource("1_dghaj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1918262995]
+scale = Vector2(0.046386715, 0.046386715)
+texture = ExtResource("2_bjhqt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1068089822]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_xpeo5")

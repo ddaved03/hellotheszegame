@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://uxodcudun3v2"]
 
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="1_7g83o"]
+[ext_resource type="Texture2D" uid="uid://bhcpe1radangw" path="res://kepek/Hppoti.png" id="1_d1c63"]
 [ext_resource type="PackedScene" uid="uid://drfvop7r5lv5o" path="res://scenes/Zombie.tscn" id="2_d1c63"]
 [ext_resource type="PackedScene" uid="uid://bo3qho5yl5e5d" path="res://scenes/ZombieSpawner.tscn" id="3_1lgw5"]
 
@@ -98,6 +99,22 @@ offset_top = 64.0
 offset_right = 59.0
 offset_bottom = 87.0
 
+[node name="PotionLabel" type="Label" parent="CanvasLayer/Control" unique_id=1924109295]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 594.0
+offset_right = 156.0
+offset_bottom = 622.0
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Control" unique_id=1664467102]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 513.0
+offset_right = 149.0
+offset_bottom = 616.0
+texture = ExtResource("1_d1c63")
+expand_mode = 1
+
 [node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed") instance=ExtResource("1_7g83o")]
 position = Vector2(-186, -191)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
@@ -109,4 +126,4 @@ BtnAtkSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button3
 position = Vector2(229, -27)
 
 [node name="ZombieSpawner" parent="." unique_id=1560249549 instance=ExtResource("3_1lgw5")]
-position = Vector2(-657, 58)
+position = Vector2(-480, -139)
