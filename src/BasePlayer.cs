@@ -13,19 +13,18 @@ public partial class BasePlayer : CharacterBody2D
     [Export] public int MaxXP = 100;
     [Export] public int Level = 1;
 
-    // Potion változók
     [Export] public int PotionsCount = 0;
     public int MaxPotionSlots = 3; 
 
-    [Export] public Control UpgradeMenuNode; //
+    [Export] public Control UpgradeMenuNode; 
     [Export] public Button BtnSpeed;
     [Export] public Button BtnDamage;
     [Export] public Button BtnAtkSpeed;
-    [Export] public Texture2D FrontSprite; 
-    [Export] public Texture2D BackSprite;  
 
     private AnimatedSprite2D _animSprite;
     private Timer _blinkTimer;
+    private float _idleTime = 0.0f; 
+    private string _currentDirAnim = "idle_front";
 
     public override void _Ready()
     {
@@ -38,20 +37,19 @@ public partial class BasePlayer : CharacterBody2D
         if (BtnAtkSpeed != null) BtnAtkSpeed.Pressed += () => ApplyUpgrade("atk_speed");
         if (UpgradeMenuNode != null) UpgradeMenuNode.Visible = false;
 
-        _animSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D"); //
+        // Az AnimatedSprite2D node megkeresése
+        _animSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
         
         _blinkTimer = new Timer();
         _blinkTimer.OneShot = true;
         AddChild(_blinkTimer);
         _blinkTimer.Timeout += OnBlinkTimerTimeout;
-        StartRandomBlinkTimer();
     }
 
     public override void _PhysicsProcess(double delta)
     {
         if (GetTree().Paused) return;
 
-        // Potion használata (H gomb)
         if (Input.IsActionJustPressed("heal")) UsePotion();
 
         Vector2 direction = Input.GetVector("move_left", "move_right", "move_up", "move_down");
@@ -59,15 +57,39 @@ public partial class BasePlayer : CharacterBody2D
         
         if (_animSprite != null)
         {
-            if (!_animSprite.IsPlaying())
+            if (direction != Vector2.Zero)
             {
-                if (direction.Y < 0 && BackSprite != null) _animSprite.SpriteFrames.SetFrame("blink", 0, BackSprite);
-                else if (direction.Y > 0 || direction.X != 0) if (FrontSprite != null) _animSprite.SpriteFrames.SetFrame("blink", 0, FrontSprite);
+                _idleTime = 0.0f;
+                _blinkTimer.Stop(); 
+
+                // Irány meghatározása az animációkhoz
+                if (direction.Y < 0) _currentDirAnim = "idle_back";
+                else if (direction.Y > 0) _currentDirAnim = "idle_front";
+                else if (direction.X != 0) _currentDirAnim = "idle_side";
+
+                if (_animSprite.Animation != "blink") // Ne szakítsuk félbe a pislogást mozgással, ha nem muszáj
+                {
+                    _animSprite.Play(_currentDirAnim);
+                }
+                
+                if (direction.X != 0) _animSprite.FlipH = direction.X < 0;
             }
-            if (direction.X != 0) _animSprite.FlipH = direction.X < 0;
+            else
+            {
+                _idleTime += (float)delta;
+
+                if (!_animSprite.IsPlaying())
+                {
+                    _animSprite.Play(_currentDirAnim);
+                }
+
+                if (_idleTime >= 5.0f && _currentDirAnim == "idle_front" && _blinkTimer.IsStopped())
+                {
+                    StartRandomBlinkTimer();
+                }
+            }
         }
 
-        // Támadás iránya az egér felé
         var attackArea = GetNodeOrNull<Area2D>("AttackArea");
         if (attackArea != null)
         {
@@ -81,48 +103,56 @@ public partial class BasePlayer : CharacterBody2D
         if (Input.IsActionJustPressed("attack")) Attack();
     }
 
-    // --- EZ HIÁNYZOTT A BUILD-HEZ ---
-    public void CollectPotion()
+    private void StartRandomBlinkTimer() 
     {
-        if (PotionsCount < MaxPotionSlots)
+        _blinkTimer.Start((float)GD.RandRange(1.0, 3.0));
+    }
+
+    private void OnBlinkTimerTimeout()
+    {
+        if (_animSprite != null && !GetTree().Paused && Velocity == Vector2.Zero && _currentDirAnim == "idle_front") 
         {
-            PotionsCount++;
-            UpdateUI();
+            _animSprite.Play("blink");
         }
     }
 
+    // ÚJ: Javított TakeDamage a piros villanáshoz
+    public async void TakeDamage(int amount)
+    {
+        CurrentHealth -= amount;
+        UpdateUI();
+
+        if (_animSprite != null)
+        {
+            _animSprite.SelfModulate = new Color(1, 0, 0); // Piros villanás
+            await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
+            if (IsInstanceValid(_animSprite)) 
+                _animSprite.SelfModulate = new Color(1, 1, 1); // Vissza fehérre
+        }
+
+        if (CurrentHealth <= 0) GetTree().ReloadCurrentScene();
+    }
+
+    public void CollectPotion() { if (PotionsCount < MaxPotionSlots) { PotionsCount++; UpdateUI(); } }
+    
     public void UsePotion()
     {
         if (PotionsCount > 0 && CurrentHealth < MaxHealth)
         {
-            CurrentHealth = Mathf.Min(CurrentHealth + 100, MaxHealth);
+            CurrentHealth = Mathf.Min(CurrentHealth + 20, MaxHealth);
             PotionsCount--;
             UpdateUI();
         }
     }
 
-    private void StartRandomBlinkTimer() => _blinkTimer.Start((float)GD.RandRange(3.0, 7.0));
-
-    private void OnBlinkTimerTimeout()
-    {
-        if (_animSprite != null && !GetTree().Paused) _animSprite.Play("blink");
-        StartRandomBlinkTimer();
-    }
-
-    public void GainXP(int amount)
-    {
-        CurrentXP += amount;
-        if (CurrentXP >= MaxXP) LevelUp();
-        UpdateUI();
-    }
-
+    public void GainXP(int amount) { CurrentXP += amount; if (CurrentXP >= MaxXP) LevelUp(); UpdateUI(); }
+    
     private void LevelUp()
     {
         Level++;
         CurrentXP = 0;
         MaxXP = (int)(MaxXP * 1.5);
-        if (Level % 5 == 0) MaxPotionSlots++; // 5 szintenként slot bővítés
-
+        if (Level % 5 == 0) MaxPotionSlots++;
         GetTree().Paused = true; 
         if (UpgradeMenuNode != null) { UpgradeMenuNode.Visible = true; Input.MouseMode = Input.MouseModeEnum.Visible; }
         UpdateUI();
@@ -136,13 +166,6 @@ public partial class BasePlayer : CharacterBody2D
         if (UpgradeMenuNode != null) UpgradeMenuNode.Visible = false;
         GetTree().Paused = false; 
         UpdateUI();
-    }
-
-    public void TakeDamage(int amount)
-    {
-        CurrentHealth -= amount;
-        UpdateUI();
-        if (CurrentHealth <= 0) GetTree().ReloadCurrentScene();
     }
 
     private void UpdateUI()

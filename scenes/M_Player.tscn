@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dg8q7i0b68bso" path="res://src/BasePlayer.cs" id="1_dpr2a"]
 [ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="2_xttg7"]
 [ext_resource type="Texture2D" uid="uid://duin5o1ivbtt3" path="res://kepek/Hero3back1.png" id="3_cx2eu"]
+[ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="4_cx2eu"]
 [ext_resource type="Texture2D" uid="uid://dwco2bw21mxde" path="res://kepek/Hero1Idol/Hero1Idol1.png" id="4_xttg7"]
 [ext_resource type="Texture2D" uid="uid://donyumqo25xed" path="res://kepek/Hero1Idol/Hero1Idol2.png" id="5_cx2eu"]
 [ext_resource type="Texture2D" uid="uid://cyqyrlihvcsnv" path="res://kepek/Hero1Idol/Hero1Idol3.png" id="6_ppkhy"]
@@ -18,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://bc0borfd1i87v" path="res://kepek/Hero1Idol/Hero1Idol13.png" id="16_ffl24"]
 [ext_resource type="Texture2D" uid="uid://dcc4t6gfejhuh" path="res://kepek/Hero1Idol/Hero1Idol14.png" id="17_i7ph8"]
 [ext_resource type="Texture2D" uid="uid://c3kgxupfqaqv2" path="res://kepek/Hero1Idol/Hero1Idol15.png" id="18_tosfp"]
+[ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="20_ppkhy"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_apdfg"]
 animations = [{
@@ -70,6 +72,30 @@ animations = [{
 "loop": false,
 "name": &"blink",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_cx2eu")
+}],
+"loop": true,
+"name": &"idle_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xttg7")
+}],
+"loop": true,
+"name": &"idle_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_cx2eu")
+}],
+"loop": true,
+"name": &"idle_side",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k0juu"]
@@ -81,16 +107,20 @@ radius = 55.03635
 [node name="Player" type="CharacterBody2D" unique_id=1544599848]
 position = Vector2(172, 150)
 script = ExtResource("1_dpr2a")
-FrontSprite = ExtResource("2_xttg7")
-BackSprite = ExtResource("3_cx2eu")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=907502933]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=907502933]
 position = Vector2(0.9999981, 0.9999962)
 scale = Vector2(0.10399999, 0.13983192)
 sprite_frames = SubResource("SpriteFrames_apdfg")
-animation = &"blink"
-frame = 14
-frame_progress = 1.0
+animation = &"idle_side"
+
+[node name="Hand" type="Node2D" parent="AnimatedSprite2D" unique_id=497735284]
+
+[node name="SwordSprite" type="Sprite2D" parent="AnimatedSprite2D/Hand" unique_id=1486644704]
+position = Vector2(288.46152, 286.05777)
+rotation = 1.5740987
+scale = Vector2(0.5226953, 0.5226953)
+texture = ExtResource("20_ppkhy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1894949195]
 position = Vector2(-3, 15.5)
