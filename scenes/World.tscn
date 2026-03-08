@@ -1,9 +1,48 @@
 [gd_scene format=3 uid="uid://uxodcudun3v2"]
 
+[ext_resource type="Texture2D" uid="uid://c821brboh5r10" path="res://kepek/Tutorialmap.png" id="1_1lgw5"]
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="1_7g83o"]
 [ext_resource type="Texture2D" uid="uid://bhcpe1radangw" path="res://kepek/Hppoti.png" id="1_d1c63"]
+[ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="2_0uv0p"]
 [ext_resource type="PackedScene" uid="uid://drfvop7r5lv5o" path="res://scenes/Zombie.tscn" id="2_d1c63"]
 [ext_resource type="PackedScene" uid="uid://bo3qho5yl5e5d" path="res://scenes/ZombieSpawner.tscn" id="3_1lgw5"]
+[ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="3_b3faq"]
+[ext_resource type="Texture2D" uid="uid://dbi0qhhwd5hke" path="res://kepek/inventoryv3.png" id="5_b3faq"]
+[ext_resource type="Texture2D" uid="uid://byycym0tadc3u" path="res://kepek/inventoryv4.png" id="5_uni40"]
+[ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="6_ygioq"]
+[ext_resource type="Texture2D" uid="uid://dwco2bw21mxde" path="res://kepek/Hero1Idol/Hero1Idol1.png" id="7_uni40"]
+[ext_resource type="Texture2D" uid="uid://donyumqo25xed" path="res://kepek/Hero1Idol/Hero1Idol2.png" id="8_aqlsr"]
+[ext_resource type="Texture2D" uid="uid://cyqyrlihvcsnv" path="res://kepek/Hero1Idol/Hero1Idol3.png" id="9_n2fr6"]
+[ext_resource type="Texture2D" uid="uid://b1jefxi6ah8ij" path="res://kepek/Hero1Idol/Hero1Idol4.png" id="10_128ka"]
+[ext_resource type="Texture2D" uid="uid://cfna0ix3weda1" path="res://kepek/Hero1Idol/Hero1Idol5.png" id="11_ngql4"]
+[ext_resource type="Texture2D" uid="uid://b632o2sc7vg57" path="res://kepek/Hero1Idol/Hero1Idol6.png" id="12_b64vv"]
+[ext_resource type="Texture2D" uid="uid://dmyfh3uwnawli" path="res://kepek/Hero1Idol/Hero1Idol7.png" id="13_agajo"]
+[ext_resource type="Texture2D" uid="uid://c31idm6o4bl16" path="res://kepek/Hero1Idol/Hero1Idol8.png" id="14_2pad8"]
+[ext_resource type="Texture2D" uid="uid://dm2n6a31s67jb" path="res://kepek/Hero1Idol/Hero1Idol9.png" id="15_e4yt5"]
+[ext_resource type="Texture2D" uid="uid://oxcigvspafw0" path="res://kepek/Hero1Idol/Hero1Idol10.png" id="16_x70b3"]
+[ext_resource type="Texture2D" uid="uid://4g7c2l7s4v8p" path="res://kepek/Hero1Idol/Hero1Idol11.png" id="17_5w2bu"]
+[ext_resource type="Texture2D" uid="uid://dbbxllun2dio5" path="res://kepek/Hero1Idol/Hero1Idol12.png" id="18_1bdwf"]
+[ext_resource type="Texture2D" uid="uid://bc0borfd1i87v" path="res://kepek/Hero1Idol/Hero1Idol13.png" id="19_1w2qq"]
+[ext_resource type="Texture2D" uid="uid://dcc4t6gfejhuh" path="res://kepek/Hero1Idol/Hero1Idol14.png" id="20_yd118"]
+[ext_resource type="Texture2D" uid="uid://c3kgxupfqaqv2" path="res://kepek/Hero1Idol/Hero1Idol15.png" id="21_lffjk"]
+[ext_resource type="Texture2D" uid="uid://duin5o1ivbtt3" path="res://kepek/Hero3back1.png" id="22_cgwb4"]
+[ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="23_tx6do"]
+[ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="24_jot8m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1lgw5"]
+size = Vector2(1794, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hlk0d"]
+size = Vector2(48, 1013)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ygioq"]
+texture = ExtResource("3_b3faq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pdh0q"]
+texture = ExtResource("3_b3faq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h1bdy"]
+texture = ExtResource("3_b3faq")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x6lmx"]
 bg_color = Color(1, 0, 0, 1)
@@ -11,9 +50,113 @@ bg_color = Color(1, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gqg63"]
 bg_color = Color(0.38431373, 1, 0.2627451, 1)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_302v5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_uni40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_aqlsr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_n2fr6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_128ka")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ngql4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_b64vv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_agajo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_2pad8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_e4yt5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_x70b3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_5w2bu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_1bdwf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_1w2qq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_yd118")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_lffjk")
+}],
+"loop": false,
+"name": &"blink",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_cgwb4")
+}],
+"loop": true,
+"name": &"idle_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_tx6do")
+}],
+"loop": true,
+"name": &"idle_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_jot8m")
+}],
+"loop": true,
+"name": &"idle_side",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7c4bj"]
+texture = ExtResource("6_ygioq")
+
 [node name="World" type="Node2D" unique_id=230028670]
 y_sort_enabled = true
 position = Vector2(764, 515)
+
+[node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=637263388]
+
+[node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=722935921]
+position = Vector2(130, 440)
+shape = SubResource("RectangleShape2D_1lgw5")
+
+[node name="CollisionShape2D up" type="CollisionShape2D" parent="MapBoundaries" unique_id=1667004783]
+position = Vector2(132, -538)
+shape = SubResource("RectangleShape2D_1lgw5")
+
+[node name="CollisionShape2D L" type="CollisionShape2D" parent="MapBoundaries" unique_id=830743350]
+position = Vector2(-788, -53)
+shape = SubResource("RectangleShape2D_hlk0d")
+
+[node name="CollisionShape2D R" type="CollisionShape2D" parent="MapBoundaries" unique_id=420710691]
+position = Vector2(1046, -53)
+shape = SubResource("RectangleShape2D_hlk0d")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1523926591]
+z_index = -10
+position = Vector2(129.50003, -47.99999)
+scale = Vector2(5.578125, 5.2000003)
+texture = ExtResource("1_1lgw5")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1149986149]
 
@@ -32,6 +175,13 @@ offset_top = 80.0
 offset_right = 958.0
 offset_bottom = 509.0
 
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UpgradeMenu" unique_id=260148763]
+texture_filter = 1
+layout_mode = 0
+offset_right = 764.0
+offset_bottom = 429.0
+texture = ExtResource("2_0uv0p")
+
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UpgradeMenu" unique_id=1438414472]
 process_mode = 3
 layout_mode = 0
@@ -44,16 +194,19 @@ alignment = 1
 [node name="Button" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=451856229]
 process_mode = 3
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_ygioq")
 text = "+10% Sebesség"
 
 [node name="Button2" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=1961863842]
 process_mode = 3
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pdh0q")
 text = "+5 Sebzés"
 
 [node name="Button3" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=2060859493]
 process_mode = 3
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_h1bdy")
 text = "Gyorsabb támadás"
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control" unique_id=311235666]
@@ -64,21 +217,21 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -6.0
-offset_top = -4.0
-offset_right = 42.0
-offset_bottom = 43.0
+offset_top = -12.0
+offset_right = 41.0
+offset_bottom = 32.0
 
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=728376742]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5139996
-anchor_top = 0.6249999
-anchor_right = 0.5139996
-anchor_bottom = 0.6249999
-offset_left = 44.440018
-offset_top = -7.999996
-offset_right = 169.44002
-offset_bottom = 8.000004
+anchor_left = 0.6790001
+anchor_top = 0.68700004
+anchor_right = 0.74500006
+anchor_bottom = 0.7249999
+offset_left = 88.84
+offset_top = -6.4800014
+offset_right = 250.2
+offset_bottom = 5.000004
 theme_override_styles/fill = SubResource("StyleBoxFlat_x6lmx")
 value = 100.0
 show_percentage = false
@@ -86,18 +239,21 @@ metadata/_edit_use_anchors_ = true
 
 [node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=27813512]
 layout_mode = 0
-offset_left = 64.0
-offset_top = 36.0
-offset_right = 190.0
-offset_bottom = 63.0
+offset_left = 114.0
+offset_top = 75.0
+offset_right = 282.0
+offset_bottom = 87.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_gqg63")
+show_percentage = false
 
 [node name="Label" type="Label" parent="CanvasLayer/Control" unique_id=172486292]
 layout_mode = 0
-offset_left = 19.0
-offset_top = 64.0
-offset_right = 59.0
-offset_bottom = 87.0
+offset_left = 15.0
+offset_top = 59.0
+offset_right = 62.0
+offset_bottom = 104.0
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PotionLabel" type="Label" parent="CanvasLayer/Control" unique_id=1924109295]
 layout_mode = 0
@@ -106,7 +262,7 @@ offset_top = 594.0
 offset_right = 156.0
 offset_bottom = 622.0
 
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/Control" unique_id=1664467102]
+[node name="Potion" type="TextureRect" parent="CanvasLayer/Control" unique_id=1664467102]
 layout_mode = 0
 offset_left = 46.0
 offset_top = 513.0
@@ -115,12 +271,142 @@ offset_bottom = 616.0
 texture = ExtResource("1_d1c63")
 expand_mode = 1
 
-[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed") instance=ExtResource("1_7g83o")]
+[node name="Resours" type="TextureRect" parent="CanvasLayer/Control" unique_id=381528905]
+z_index = -2
+layout_mode = 0
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 306.0
+offset_bottom = 114.0
+texture = ExtResource("5_uni40")
+
+[node name="Inventory" type="Control" parent="CanvasLayer" unique_id=420155089]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 764.0
+offset_top = 515.0
+offset_right = 804.0
+offset_bottom = 555.0
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Inventory" unique_id=1983817472]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -19.055
+anchor_top = -12.891001
+anchor_right = -19.055
+anchor_bottom = -12.891001
+offset_left = 69.20001
+offset_top = 79.640015
+offset_right = 1088.2
+offset_bottom = 507.64
+texture = ExtResource("5_b3faq")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer/Inventory" unique_id=34304873]
+layout_mode = 0
+offset_left = -649.0
+offset_top = -380.0
+offset_right = -520.0
+offset_bottom = -128.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/Inventory/SubViewportContainer" unique_id=358914251]
+handle_input_locally = false
+size = Vector2i(129, 252)
+render_target_update_mode = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/Inventory/SubViewportContainer/SubViewport" unique_id=1438843824]
+position = Vector2(71.99999, 107)
+scale = Vector2(0.18625, 0.24425001)
+sprite_frames = SubResource("SpriteFrames_302v5")
+animation = &"blink"
+frame = 14
+frame_progress = 1.0
+
+[node name="Weapon" type="Panel" parent="CanvasLayer/Inventory" unique_id=1022686817]
+layout_mode = 0
+offset_left = -554.0
+offset_top = -381.0
+offset_right = -361.0
+offset_bottom = -118.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_7c4bj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Inventory" unique_id=1454607532]
+layout_mode = 0
+offset_left = -398.0
+offset_top = -381.0
+offset_right = -327.0
+offset_bottom = -118.0
+
+[node name="Slot_Helmet" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1424773343]
+layout_mode = 2
+
+[node name="Slot_Chest" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1428464591]
+layout_mode = 2
+
+[node name="Slot_Legs" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1356064121]
+layout_mode = 2
+
+[node name="Slot_Boots" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1505877213]
+layout_mode = 2
+
+[node name="Label_HP" type="Label" parent="CanvasLayer/Inventory" unique_id=81591321]
+layout_mode = 0
+offset_left = -288.0
+offset_top = -180.0
+offset_right = -195.0
+offset_bottom = -157.0
+text = "Életerő: 100"
+
+[node name="Label_Attack" type="Label" parent="CanvasLayer/Inventory" unique_id=898675115]
+layout_mode = 0
+offset_left = -287.0
+offset_top = -164.0
+offset_right = -196.0
+offset_bottom = -139.0
+text = "Sebzés: 20"
+
+[node name="Label_Armor" type="Label" parent="CanvasLayer/Inventory" unique_id=1386834089]
+layout_mode = 0
+offset_left = -287.0
+offset_top = -149.0
+offset_right = -196.0
+offset_bottom = -126.0
+text = "Páncél: 5"
+
+[node name="Label_SpeedLevel" type="Label" parent="CanvasLayer/Inventory" unique_id=358310315]
+layout_mode = 0
+offset_left = -288.0
+offset_top = -134.0
+offset_right = -191.0
+offset_bottom = -110.0
+text = "Speed LVL: 1"
+
+[node name="Label_Attack_Speed" type="Label" parent="CanvasLayer/Inventory" unique_id=1382148941]
+layout_mode = 0
+offset_left = -288.0
+offset_top = -118.0
+offset_right = -138.0
+offset_bottom = -91.0
+text = "Attackspeed LVL: 1 "
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Inventory" unique_id=1608979014]
+layout_mode = 0
+offset_left = -284.0
+offset_top = -381.0
+offset_right = 14.0
+offset_bottom = -212.0
+columns = 4
+
+[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode") instance=ExtResource("1_7g83o")]
+process_mode = 3
 position = Vector2(-186, -191)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
 BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
 BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
 BtnAtkSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button3")
+InventoryNode = NodePath("../CanvasLayer/Inventory")
 
 [node name="Zombie" parent="." unique_id=564053419 instance=ExtResource("2_d1c63")]
 position = Vector2(229, -27)

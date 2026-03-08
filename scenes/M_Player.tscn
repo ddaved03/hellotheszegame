@@ -115,6 +115,7 @@ sprite_frames = SubResource("SpriteFrames_apdfg")
 animation = &"idle_side"
 
 [node name="Hand" type="Node2D" parent="AnimatedSprite2D" unique_id=497735284]
+visible = false
 
 [node name="SwordSprite" type="Sprite2D" parent="AnimatedSprite2D/Hand" unique_id=1486644704]
 position = Vector2(288.46152, 286.05777)
@@ -127,6 +128,10 @@ position = Vector2(-3, 15.5)
 shape = SubResource("RectangleShape2D_k0juu")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1121726718]
+limit_left = 0
+limit_top = 0
+limit_right = 1786
+limit_bottom = 935
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=2038176447]
 

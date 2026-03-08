@@ -21,6 +21,10 @@ public partial class BasePlayer : CharacterBody2D
     [Export] public Button BtnDamage;
     [Export] public Button BtnAtkSpeed;
 
+    // --- ÚJ INVENTORY VÁLTOZÓK ---
+    [Export] public Control InventoryNode; 
+    private bool _isInventoryOpen = false;
+
     private AnimatedSprite2D _animSprite;
     private Timer _blinkTimer;
     private float _idleTime = 0.0f; 
@@ -48,6 +52,14 @@ public partial class BasePlayer : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
     {
+        // --- INVENTORY NYITÁS/ZÁRÁS ---
+        // Az "inventory" akciót (E betű) a Project Settings -> Input Map-ben kell létrehoznod!
+        if (Input.IsActionJustPressed("inventory"))
+        {
+            ToggleInventory();
+            return;
+        }
+
         if (GetTree().Paused) return;
 
         if (Input.IsActionJustPressed("heal")) UsePotion();
@@ -100,7 +112,30 @@ public partial class BasePlayer : CharacterBody2D
         }
 
         MoveAndSlide();
-        if (Input.IsActionJustPressed("attack")) Attack();
+        if (Input.IsActionJustPressed("attack") && !_isInventoryOpen) Attack();
+    }
+
+    // --- ÚJ FÜGGVÉNY: INVENTORY KEZELÉS ---
+    private void ToggleInventory()
+    {
+        _isInventoryOpen = !_isInventoryOpen;
+        
+        if (InventoryNode != null)
+        {
+            InventoryNode.Visible = _isInventoryOpen;
+        }
+
+        GetTree().Paused = _isInventoryOpen;
+
+        if (_isInventoryOpen)
+        {
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+        }
+        else
+        {
+            // Mindig látható marad a kurzor bezárás után is
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+        }
     }
 
     private void StartRandomBlinkTimer() 
