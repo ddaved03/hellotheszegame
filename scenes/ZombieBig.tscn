@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/Zombie.cs" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/XpOrb.tscn" id="2_xporb"]
+[ext_resource type="PackedScene" path="res://scenes/Potion.tscn" id="3_potion"]
+[ext_resource type="Texture2D" path="res://kepek/Zombi_large.png" id="4_texture"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(93, 103)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detect"]
+size = Vector2(313, 294)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(92, 101)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
+bg_color = Color(1, 0, 0, 1)
+
+[node name="ZombieBig" type="CharacterBody2D"]
+position = Vector2(42, -97)
+script = ExtResource("1_script")
+Speed = 40.0
+MaxHealth = 120
+Damage = 24
+XpOrbScene = ExtResource("2_xporb")
+PotionScene = ExtResource("3_potion")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.18457031, 0.17834473)
+texture = ExtResource("4_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-3.5, 3.5)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_detect")
+
+[node name="PerformAttack" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PerformAttack"]
+position = Vector2(-4, 3.5)
+shape = SubResource("RectangleShape2D_attack")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -45.0
+offset_top = -70.0
+offset_right = 42.0
+offset_bottom = -55.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_health")
+max_value = 120.0
+value = 120.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
