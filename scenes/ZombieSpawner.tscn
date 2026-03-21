@@ -2,10 +2,14 @@
 
 [ext_resource type="Script" uid="uid://ddl1npaidfk3" path="res://src/ZombieSpawner.cs" id="1_m453h"]
 [ext_resource type="PackedScene" uid="uid://drfvop7r5lv5o" path="res://scenes/Zombie.tscn" id="2_hc5lw"]
+[ext_resource type="PackedScene" path="res://scenes/ZombieSmall.tscn" id="3_small"]
+[ext_resource type="PackedScene" path="res://scenes/ZombieBig.tscn" id="4_big"]
 
 [node name="ZombieSpawner" type="Node2D" unique_id=1560249549]
 script = ExtResource("1_m453h")
-ZombieScene = ExtResource("2_hc5lw")
+ZombieNormalScene = ExtResource("2_hc5lw")
+ZombieSmallScene = ExtResource("3_small")
+ZombieBigScene = ExtResource("4_big")
 
 [node name="Timer" type="Timer" parent="." unique_id=699959374]
 wait_time = 3.0
