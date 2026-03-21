@@ -216,6 +216,11 @@ public partial class BasePlayer : CharacterBody2D
         if (potLabel != null) { potLabel.Text = "x" + PotionsCount + "/" + MaxPotionSlots; }
     }
 
+    public void RefreshUI()
+    {
+        UpdateUI();
+    }
+
     private void Attack()
     {
         var attackArea = GetNodeOrNull<Area2D>("AttackArea");
