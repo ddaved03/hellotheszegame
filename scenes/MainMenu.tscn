@@ -1,6 +1,4 @@
-[node name="SettingsLabel" type="Label" parent="SettingsPanel"]
-...
-text = "Beallitasok helye, ha lesz"[gd_scene format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://src/MainMenuController.cs" id="1_main"]
 [ext_resource type="Texture2D" path="res://src/level-hattér.png" id="2_panel_bg"]
