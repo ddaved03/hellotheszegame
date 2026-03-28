@@ -20,6 +20,7 @@ public partial class Zombie : CharacterBody2D
 	private float _attackTimer = 0.0f;
 	private Sprite2D _sprite;
 	private Area2D _performAttack;
+	private Timer _ambientTimer;
 
 	public override void _Ready()
 	{
@@ -32,6 +33,15 @@ public partial class Zombie : CharacterBody2D
 		{
 			FrontTexture = _sprite.Texture;
 		}
+
+		_ambientTimer = new Timer
+		{
+			OneShot = true,
+			Autostart = false
+		};
+		AddChild(_ambientTimer);
+		_ambientTimer.Timeout += OnAmbientTimerTimeout;
+		ScheduleAmbient();
 		
 		// Csatlakozunk a DetectionArea-hoz a követéshez
 		var detArea = GetNodeOrNull<Area2D>("DetectionArea");
@@ -61,6 +71,7 @@ public partial class Zombie : CharacterBody2D
 			// Tényleges támadás ellenőrzése a PerformAttack terület segítségével
 			if (_performAttack != null && _performAttack.OverlapsBody(_playerTarget) && _attackTimer >= AttackCooldown)
 			{
+				AudioManager.Instance?.PlayZombieAttack(GlobalPosition);
 				_playerTarget.TakeDamage(Damage);
 				_attackTimer = 0.0f;
 			}
@@ -112,13 +123,35 @@ public partial class Zombie : CharacterBody2D
 
 	public void TakeDamage(int amount)
 	{
+		AudioManager.Instance?.PlayZombieHit(GlobalPosition);
 		CurrentHealth -= amount;
 		UpdateUI();
 		if (CurrentHealth <= 0) Die();
 	}
 
+	private void OnAmbientTimerTimeout()
+	{
+		if (!IsQueuedForDeletion() && IsInsideTree() && !GetTree().Paused)
+		{
+			AudioManager.Instance?.PlayZombieAmbient(GlobalPosition);
+		}
+
+		ScheduleAmbient();
+	}
+
+	private void ScheduleAmbient()
+	{
+		if (_ambientTimer == null)
+		{
+			return;
+		}
+
+		_ambientTimer.Start((float)GD.RandRange(2.2f, 6.0f));
+	}
+
 	private void Die()
 	{
+		AudioManager.Instance?.PlayZombieDeath(GlobalPosition);
 		GD.Print("Zombi meghalt!");
 
 		if (XpOrbScene != null)
@@ -126,6 +159,7 @@ public partial class Zombie : CharacterBody2D
 			var orb = (Node2D)XpOrbScene.Instantiate();
 			orb.GlobalPosition = GlobalPosition;
 			GetTree().Root.AddChild(orb);
+			AudioManager.Instance?.PlayDropXp(GlobalPosition);
 		}
 		else
 		{
@@ -139,6 +173,7 @@ public partial class Zombie : CharacterBody2D
 				var potion = (Node2D)PotionScene.Instantiate();
 				potion.GlobalPosition = GlobalPosition + new Vector2(10, 10);
 				GetTree().Root.AddChild(potion);
+				AudioManager.Instance?.PlayDropPotion(potion.GlobalPosition);
 			}
 			else
 			{

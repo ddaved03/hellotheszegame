@@ -68,6 +68,7 @@ public partial class WorldController : Node2D
 
     private void OnResumePressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         if (_pauseMenu != null)
         {
             _pauseMenu.Visible = false;
@@ -79,6 +80,7 @@ public partial class WorldController : Node2D
 
     private void OnSavePressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         if (_player != null)
         {
             SaveSystem.Save(_player);
@@ -87,6 +89,7 @@ public partial class WorldController : Node2D
 
     private void OnLoadPressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         if (_player != null)
         {
             SaveSystem.Load(_player);
@@ -97,6 +100,7 @@ public partial class WorldController : Node2D
 
     private void OnMainMenuPressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         OnResumePressed();
         GetTree().ChangeSceneToFile("res://scenes/MainMenu.tscn");
     }

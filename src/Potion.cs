@@ -16,6 +16,7 @@ public partial class Potion : Area2D
             if (body is BasePlayer player)
             {
                 player.CollectPotion();
+                AudioManager.Instance?.PlayPickupPotion(GlobalPosition);
                 QueueFree();
             }
         };
