@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://d01vwvubds3jm" path="res://scenes/XpOrb.tscn" id="2_siap5"]
 [ext_resource type="PackedScene" uid="uid://cwvotj14dd7hi" path="res://scenes/Potion.tscn" id="3_siap5"]
 [ext_resource type="Texture2D" uid="uid://dt0b07lrc43vu" path="res://kepek/Zombi.png" id="3_yaogc"]
+[ext_resource type="Texture2D" path="res://kepek/Zombi_back.png" id="5_back"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x6lmx"]
 size = Vector2(93, 103)
@@ -22,6 +23,8 @@ position = Vector2(42, -97)
 script = ExtResource("1_yaogc")
 XpOrbScene = ExtResource("2_siap5")
 PotionScene = ExtResource("3_siap5")
+FrontTexture = ExtResource("3_yaogc")
+BackTexture = ExtResource("5_back")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=747252294]
 scale = Vector2(0.13671876, 0.13232422)
