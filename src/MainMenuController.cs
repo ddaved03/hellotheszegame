@@ -33,12 +33,14 @@ public partial class MainMenuController : Control
 
     private void OnNewGamePressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         SaveSystem.LoadRequested = false;
         GetTree().ChangeSceneToFile("res://scenes/World.tscn");
     }
 
     private void OnLoadPressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         if (!SaveSystem.HasSave())
         {
             GD.Print("Nincsen mit betölteni!");
@@ -51,12 +53,14 @@ public partial class MainMenuController : Control
 
     private void OnSettingsPressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         // Toggle settings panel
         _settingsPanel.Visible = !_settingsPanel.Visible;
     }
 
     private void OnQuitPressed()
     {
+        AudioManager.Instance?.PlayUiClick();
         GetTree().Quit();
     }
 }

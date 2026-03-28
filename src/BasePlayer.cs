@@ -187,6 +187,7 @@ public partial class BasePlayer : CharacterBody2D
         Level++;
         CurrentXP = 0;
         MaxXP = (int)(MaxXP * 1.5);
+        AudioManager.Instance?.PlayLevelUp();
         if (Level % 5 == 0) MaxPotionSlots++;
         GetTree().Paused = true; 
         if (UpgradeMenuNode != null) { UpgradeMenuNode.Visible = true; Input.MouseMode = Input.MouseModeEnum.Visible; }
@@ -225,6 +226,9 @@ public partial class BasePlayer : CharacterBody2D
     {
         var attackArea = GetNodeOrNull<Area2D>("AttackArea");
         if (attackArea == null) return;
+
+        AudioManager.Instance?.PlayPlayerAttack(GlobalPosition);
+
         foreach (var body in attackArea.GetOverlappingBodies())
         {
             if (body != this && body.HasMethod("TakeDamage"))

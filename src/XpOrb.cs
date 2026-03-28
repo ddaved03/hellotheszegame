@@ -13,6 +13,7 @@ public partial class XpOrb : Area2D
             if (body is BasePlayer player)
             {
                 player.GainXP(XpAmount);
+                AudioManager.Instance?.PlayPickupXp(GlobalPosition);
                 QueueFree(); // Felvétel után eltűnik
             }
         };
