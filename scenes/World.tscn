@@ -1,15 +1,21 @@
 [gd_scene format=3 uid="uid://uxodcudun3v2"]
 
-[ext_resource type="Texture2D" uid="uid://c821brboh5r10" path="res://kepek/Tutorialmap.png" id="1_1lgw5"]
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="1_7g83o"]
 [ext_resource type="Texture2D" uid="uid://bhcpe1radangw" path="res://kepek/Hppoti.png" id="1_d1c63"]
 [ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="2_0uv0p"]
+[ext_resource type="PackedScene" uid="uid://cdttfxhr1o2c2" path="res://scenes/car_blue.tscn" id="2_2pad8"]
+[ext_resource type="Texture2D" uid="uid://cd6idjbinavku" path="res://kepek/Tutorial-map-v1.png" id="2_aqlsr"]
 [ext_resource type="PackedScene" uid="uid://drfvop7r5lv5o" path="res://scenes/Zombie.tscn" id="2_d1c63"]
 [ext_resource type="PackedScene" uid="uid://bo3qho5yl5e5d" path="res://scenes/ZombieSpawner.tscn" id="3_1lgw5"]
 [ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="3_b3faq"]
+[ext_resource type="Texture2D" uid="uid://dr5gjhlqvlhuq" path="res://kepek/ko-oszlop-2.png" id="3_n2fr6"]
+[ext_resource type="Texture2D" uid="uid://bn1g4iu87iftg" path="res://kepek/ko-oszlop-3.png" id="4_ngql4"]
 [ext_resource type="Texture2D" uid="uid://dbi0qhhwd5hke" path="res://kepek/inventoryv3.png" id="5_b3faq"]
+[ext_resource type="Texture2D" uid="uid://dojbq8sl48i4k" path="res://kepek/ko-oszlop-1.png" id="5_b64vv"]
 [ext_resource type="Texture2D" uid="uid://byycym0tadc3u" path="res://kepek/inventoryv4.png" id="5_uni40"]
+[ext_resource type="Texture2D" uid="uid://cf2p1smux1ryj" path="res://kepek/busz.png" id="6_agajo"]
 [ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="6_ygioq"]
+[ext_resource type="Texture2D" uid="uid://cexk0c1yf2kx0" path="res://kepek/keke-auto-bal-oldala.png" id="7_2pad8"]
 [ext_resource type="Texture2D" uid="uid://dwco2bw21mxde" path="res://kepek/Hero1Idol/Hero1Idol1.png" id="7_uni40"]
 [ext_resource type="Texture2D" uid="uid://donyumqo25xed" path="res://kepek/Hero1Idol/Hero1Idol2.png" id="8_aqlsr"]
 [ext_resource type="Texture2D" uid="uid://cyqyrlihvcsnv" path="res://kepek/Hero1Idol/Hero1Idol3.png" id="9_n2fr6"]
@@ -28,13 +34,40 @@
 [ext_resource type="Texture2D" uid="uid://duin5o1ivbtt3" path="res://kepek/Hero3back1.png" id="22_cgwb4"]
 [ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="23_tx6do"]
 [ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="24_jot8m"]
-[ext_resource type="Script" path="res://src/WorldController.cs" id="25_worldctrl"]
+[ext_resource type="Script" uid="uid://c41uchhwx5d5x" path="res://src/WorldController.cs" id="25_worldctrl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1lgw5"]
-size = Vector2(1794, 40)
+size = Vector2(3647.5, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hlk0d"]
-size = Vector2(48, 1013)
+size = Vector2(48, 1342.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aqlsr"]
+size = Vector2(32, 725)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n2fr6"]
+size = Vector2(29, 106)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_128ka"]
+size = Vector2(28, 235)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ngql4"]
+size = Vector2(140, 30)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_128ka"]
+radius = 73.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_agajo"]
+radius = 52.009613
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2pad8"]
+radius = 36.496574
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e4yt5"]
+radius = 42.047592
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_agajo"]
+size = Vector2(3569, 14)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ygioq"]
 texture = ExtResource("3_b3faq")
@@ -131,36 +164,169 @@ animations = [{
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7c4bj"]
 texture = ExtResource("6_ygioq")
 
+[sub_resource type="Animation" id="Animation_2pad8"]
+resource_name = "Arrival"
+length = 12.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D busz:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 8, 10, 12),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(3167.0002, 514.99994), Vector2(-295.99976, 518.99994), Vector2(-295.99976, 518.99994), Vector2(-1154, 522.99994)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(3007, 496), Vector2(-463, 493)]
+}
+
+[sub_resource type="Animation" id="Animation_e4yt5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D busz:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3167.0002, 514.99994)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3007, 496)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x70b3"]
+_data = {
+&"Arrival": SubResource("Animation_2pad8"),
+&"RESET": SubResource("Animation_e4yt5")
+}
+
 [node name="World" type="Node2D" unique_id=230028670]
 y_sort_enabled = true
 position = Vector2(764, 515)
 script = ExtResource("25_worldctrl")
 PlayerPath = NodePath("Player")
 PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
+BusAnimationPath = NodePath("AnimationPlayer")
+VehiclePrefabs = Array[PackedScene]([ExtResource("2_2pad8")])
 
 [node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=637263388]
 
 [node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=722935921]
-position = Vector2(130, 440)
+position = Vector2(1059.75, 753)
 shape = SubResource("RectangleShape2D_1lgw5")
 
 [node name="CollisionShape2D up" type="CollisionShape2D" parent="MapBoundaries" unique_id=1667004783]
-position = Vector2(132, -538)
+position = Vector2(1059, -536)
 shape = SubResource("RectangleShape2D_1lgw5")
 
 [node name="CollisionShape2D L" type="CollisionShape2D" parent="MapBoundaries" unique_id=830743350]
-position = Vector2(-788, -53)
+position = Vector2(-788, 112)
 shape = SubResource("RectangleShape2D_hlk0d")
 
 [node name="CollisionShape2D R" type="CollisionShape2D" parent="MapBoundaries" unique_id=420710691]
-position = Vector2(1046, -53)
+position = Vector2(2829, 109)
 shape = SubResource("RectangleShape2D_hlk0d")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1523926591]
+[node name="CollisionShape2D patka" type="CollisionShape2D" parent="MapBoundaries" unique_id=612917682]
+position = Vector2(2437, 77.5)
+shape = SubResource("RectangleShape2D_aqlsr")
+
+[node name="CollisionShape2D patka 2" type="CollisionShape2D" parent="MapBoundaries" unique_id=1640569417]
+position = Vector2(2438.5, -463)
+shape = SubResource("RectangleShape2D_n2fr6")
+
+[node name="CollisionShape2D lepcso" type="CollisionShape2D" parent="MapBoundaries" unique_id=1346835877]
+position = Vector2(2298, -291.5)
+shape = SubResource("RectangleShape2D_128ka")
+
+[node name="CollisionShape2D lepcso1" type="CollisionShape2D" parent="MapBoundaries" unique_id=2093473277]
+position = Vector2(2354, -425)
+shape = SubResource("RectangleShape2D_ngql4")
+
+[node name="CollisionShape2D szobor 1" type="CollisionShape2D" parent="MapBoundaries" unique_id=1201113716]
+position = Vector2(1843, 171)
+shape = SubResource("CircleShape2D_128ka")
+
+[node name="CollisionShape2D szobor2" type="CollisionShape2D" parent="MapBoundaries" unique_id=148922417]
+position = Vector2(1733, 249)
+shape = SubResource("CircleShape2D_agajo")
+
+[node name="CollisionShape2D szobor 3" type="CollisionShape2D" parent="MapBoundaries" unique_id=836775995]
+position = Vector2(1629, 270)
+shape = SubResource("CircleShape2D_2pad8")
+
+[node name="CollisionShape2D szobor 2 2" type="CollisionShape2D" parent="MapBoundaries" unique_id=1658206945]
+position = Vector2(1374, 164)
+shape = SubResource("CircleShape2D_e4yt5")
+
+[node name="CollisionShape2D út" type="CollisionShape2D" parent="MapBoundaries" unique_id=835132759]
+position = Vector2(1020.5, 580)
+shape = SubResource("RectangleShape2D_agajo")
+
+[node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=1523926591]
 z_index = -10
-position = Vector2(129.50003, -47.99999)
+position = Vector2(1021, 109.000015)
 scale = Vector2(5.578125, 5.2000003)
-texture = ExtResource("1_1lgw5")
+texture = ExtResource("2_aqlsr")
+
+[node name="Sprite2D Szobor 1" type="Sprite2D" parent="." unique_id=637921733]
+position = Vector2(1846, 94.50001)
+scale = Vector2(0.62020886, 0.91596645)
+texture = ExtResource("3_n2fr6")
+
+[node name="Sprite2D Szobor 2" type="Sprite2D" parent="." unique_id=1872122415]
+position = Vector2(1732, 183.99997)
+scale = Vector2(0.50903624, 0.53699285)
+texture = ExtResource("4_ngql4")
+
+[node name="Sprite2D Szobor 3" type="Sprite2D" parent="." unique_id=674683109]
+position = Vector2(1630, 192)
+scale = Vector2(0.19011424, 0.30156824)
+texture = ExtResource("5_b64vv")
+
+[node name="Sprite2D Szobor 2 2" type="Sprite2D" parent="." unique_id=1201568847]
+position = Vector2(1372.9999, 86.00003)
+scale = Vector2(0.41164634, 0.56324583)
+texture = ExtResource("4_ngql4")
+
+[node name="Sprite2D auto" type="Sprite2D" parent="." unique_id=1100256429]
+position = Vector2(12, 270)
+scale = Vector2(0.5090726, 0.5459662)
+
+[node name="Sprite2D busz" type="Sprite2D" parent="." unique_id=202486321]
+position = Vector2(3167.0002, 514.99994)
+scale = Vector2(0.68940246, 0.6763224)
+texture = ExtResource("6_agajo")
+
+[node name="Sprite2D auto oldala" type="Sprite2D" parent="." unique_id=1704740307]
+position = Vector2(3743.9998, 567)
+scale = Vector2(0.24658178, 0.23190509)
+texture = ExtResource("7_2pad8")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1149986149]
 
@@ -403,10 +569,9 @@ offset_right = 14.0
 offset_bottom = -212.0
 columns = 4
 
-[node name="PauseMenu" type="Panel" parent="CanvasLayer"]
+[node name="PauseMenu" type="Panel" parent="CanvasLayer" unique_id=995539478]
 process_mode = 3
 visible = false
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -419,7 +584,7 @@ offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PauseMenu"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PauseMenu" unique_id=1645701154]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -428,7 +593,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_0uv0p")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PauseMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PauseMenu" unique_id=1840837050]
 layout_mode = 0
 offset_left = 45.0
 offset_top = 25.0
@@ -436,34 +601,37 @@ offset_right = 355.0
 offset_bottom = 275.0
 theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="CanvasLayer/PauseMenu/VBoxContainer"]
+[node name="Title" type="Label" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=42644518]
 layout_mode = 2
 text = "Szuenet"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=785287515]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_ygioq")
 text = "Folytatas"
 
-[node name="SaveButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
+[node name="SaveButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=1482131213]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_ygioq")
 text = "Mentes"
 
-[node name="LoadButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
+[node name="LoadButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=2121976809]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_ygioq")
 text = "Betoltes"
 
-[node name="MainMenuButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=1614375405]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_ygioq")
 text = "Fomenu"
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=788776201]
+libraries/ = SubResource("AnimationLibrary_x70b3")
+
 [node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode") instance=ExtResource("1_7g83o")]
 process_mode = 3
-position = Vector2(-186, -191)
+position = Vector2(3007, 496)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
 BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
 BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
@@ -472,6 +640,11 @@ InventoryNode = NodePath("../CanvasLayer/Inventory")
 
 [node name="Zombie" parent="." unique_id=564053419 instance=ExtResource("2_d1c63")]
 position = Vector2(229, -27)
+FrontTexture = null
+BackTexture = null
 
 [node name="ZombieSpawner" parent="." unique_id=1560249549 instance=ExtResource("3_1lgw5")]
 position = Vector2(-480, -139)
+ZombieNormalScene = null
+ZombieSmallScene = null
+ZombieBigScene = null
