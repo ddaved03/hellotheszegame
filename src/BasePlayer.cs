@@ -16,15 +16,23 @@ public partial class BasePlayer : CharacterBody2D
     [Export] public int PotionsCount = 0;
     public int MaxPotionSlots = 3; 
 
+    [ExportGroup("Menus")]
     [Export] public Control UpgradeMenuNode; 
     [Export] public Button BtnSpeed;
     [Export] public Button BtnDamage;
     [Export] public Button BtnAtkSpeed;
-
-    // --- ÚJ INVENTORY VÁLTOZÓK ---
     [Export] public Control InventoryNode; 
-    private bool _isInventoryOpen = false;
 
+    // --- ÚJ INVENTORY UI KAPCSOLATOK ---
+    [ExportGroup("Inventory UI Stats")]
+    [Export] public Label StatHPLabel;
+    [Export] public Label StatAtkLabel;
+    [Export] public Label StatSpeedLabel;
+    [Export] public Label LvlSpeedLabel;
+    [Export] public Label LvlAtkLabel;
+    [Export] public Label LvlAtkSpeedLabel;
+
+    private bool _isInventoryOpen = false;
     private AnimatedSprite2D _animSprite;
     private Timer _blinkTimer;
     private float _idleTime = 0.0f; 
@@ -41,7 +49,6 @@ public partial class BasePlayer : CharacterBody2D
         if (BtnAtkSpeed != null) BtnAtkSpeed.Pressed += () => ApplyUpgrade("atk_speed");
         if (UpgradeMenuNode != null) UpgradeMenuNode.Visible = false;
 
-        // Az AnimatedSprite2D node megkeresése
         _animSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
         
         _blinkTimer = new Timer();
@@ -52,8 +59,6 @@ public partial class BasePlayer : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
     {
-        // --- INVENTORY NYITÁS/ZÁRÁS ---
-        // Az "inventory" akciót (E betű) a Project Settings -> Input Map-ben kell létrehoznod!
         if (Input.IsActionJustPressed("inventory"))
         {
             ToggleInventory();
@@ -74,12 +79,11 @@ public partial class BasePlayer : CharacterBody2D
                 _idleTime = 0.0f;
                 _blinkTimer.Stop(); 
 
-                // Irány meghatározása az animációkhoz
                 if (direction.Y < 0) _currentDirAnim = "idle_back";
                 else if (direction.Y > 0) _currentDirAnim = "idle_front";
                 else if (direction.X != 0) _currentDirAnim = "idle_side";
 
-                if (_animSprite.Animation != "blink") // Ne szakítsuk félbe a pislogást mozgással, ha nem muszáj
+                if (_animSprite.Animation != "blink") 
                 {
                     _animSprite.Play(_currentDirAnim);
                 }
@@ -115,7 +119,6 @@ public partial class BasePlayer : CharacterBody2D
         if (Input.IsActionJustPressed("attack") && !_isInventoryOpen) Attack();
     }
 
-    // --- ÚJ FÜGGVÉNY: INVENTORY KEZELÉS ---
     private void ToggleInventory()
     {
         _isInventoryOpen = !_isInventoryOpen;
@@ -123,19 +126,28 @@ public partial class BasePlayer : CharacterBody2D
         if (InventoryNode != null)
         {
             InventoryNode.Visible = _isInventoryOpen;
+            if (_isInventoryOpen) UpdateInventoryStatsUI(); // Frissítés nyitáskor
         }
 
         GetTree().Paused = _isInventoryOpen;
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+    }
 
-        if (_isInventoryOpen)
-        {
-            Input.MouseMode = Input.MouseModeEnum.Visible;
-        }
-        else
-        {
-            // Mindig látható marad a kurzor bezárás után is
-            Input.MouseMode = Input.MouseModeEnum.Visible;
-        }
+    // ÚJ: Dinamikus statisztika frissítő függvény
+    private void UpdateInventoryStatsUI()
+    {
+        if (StatHPLabel != null) StatHPLabel.Text = $"HP: {CurrentHealth} / {MaxHealth}";
+        if (StatAtkLabel != null) StatAtkLabel.Text = $"Attack: {AttackDamage}";
+        if (StatSpeedLabel != null) StatSpeedLabel.Text = $"Speed: {Mathf.Round(Speed)}";
+
+        // Szintek kiszámítása az alapértékekhez képest
+        int speedLvl = (int)((Speed - 300) / 40);
+        int damageLvl = (AttackDamage - 20) / 10;
+        int atkSpeedLvl = (int)((0.5f - AttackCooldown) / 0.05f); // Példa számítás
+
+        if (LvlSpeedLabel != null) LvlSpeedLabel.Text = $"Speed Lvl: {speedLvl}";
+        if (LvlAtkLabel != null) LvlAtkLabel.Text = $"Dmg Lvl: {damageLvl}";
+        if (LvlAtkSpeedLabel != null) LvlAtkSpeedLabel.Text = $"AtkSpd Lvl: {atkSpeedLvl}";
     }
 
     private void StartRandomBlinkTimer() 
@@ -151,7 +163,6 @@ public partial class BasePlayer : CharacterBody2D
         }
     }
 
-    // ÚJ: Javított TakeDamage a piros villanáshoz
     public async void TakeDamage(int amount)
     {
         CurrentHealth -= amount;
@@ -159,10 +170,10 @@ public partial class BasePlayer : CharacterBody2D
 
         if (_animSprite != null)
         {
-            _animSprite.SelfModulate = new Color(1, 0, 0); // Piros villanás
+            _animSprite.SelfModulate = new Color(1, 0, 0); 
             await ToSignal(GetTree().CreateTimer(0.1f), "timeout");
             if (IsInstanceValid(_animSprite)) 
-                _animSprite.SelfModulate = new Color(1, 1, 1); // Vissza fehérre
+                _animSprite.SelfModulate = new Color(1, 1, 1); 
         }
 
         if (CurrentHealth <= 0) GetTree().ReloadCurrentScene();
@@ -187,8 +198,14 @@ public partial class BasePlayer : CharacterBody2D
         Level++;
         CurrentXP = 0;
         MaxXP = (int)(MaxXP * 1.5);
+        
+        // --- AUTOMATIKUS ÉLETERŐ NÖVEKEDÉS ---
+        MaxHealth += 20; // Szintenként 20-szal nő a max HP
+        CurrentHealth = MaxHealth; // Szintlépéskor teljesen meggyógyul
+
         AudioManager.Instance?.PlayLevelUp();
         if (Level % 5 == 0) MaxPotionSlots++;
+        
         GetTree().Paused = true; 
         if (UpgradeMenuNode != null) { UpgradeMenuNode.Visible = true; Input.MouseMode = Input.MouseModeEnum.Visible; }
         UpdateUI();
@@ -215,12 +232,12 @@ public partial class BasePlayer : CharacterBody2D
         if (hudXP != null) { hudXP.MaxValue = MaxXP; hudXP.Value = CurrentXP; }
         if (lvlLabel != null) { lvlLabel.Text = "LVL " + Level; }
         if (potLabel != null) { potLabel.Text = "x" + PotionsCount + "/" + MaxPotionSlots; }
+        
+        // Ha nyitva van az inventory, akkor az ottani statokat is frissítjük
+        if (_isInventoryOpen) UpdateInventoryStatsUI();
     }
 
-    public void RefreshUI()
-    {
-        UpdateUI();
-    }
+    public void RefreshUI() { UpdateUI(); }
 
     private void Attack()
     {

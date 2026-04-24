@@ -629,7 +629,7 @@ text = "Fomenu"
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=788776201]
 libraries/ = SubResource("AnimationLibrary_x70b3")
 
-[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode") instance=ExtResource("1_7g83o")]
+[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode", "StatHPLabel", "StatAtkLabel", "LvlSpeedLabel", "LvlAtkSpeedLabel") instance=ExtResource("1_7g83o")]
 process_mode = 3
 position = Vector2(3007, 496)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
@@ -637,6 +637,10 @@ BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
 BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
 BtnAtkSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button3")
 InventoryNode = NodePath("../CanvasLayer/Inventory")
+StatHPLabel = NodePath("../CanvasLayer/Inventory/Label_HP")
+StatAtkLabel = NodePath("../CanvasLayer/Inventory/Label_Attack")
+LvlSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_SpeedLevel")
+LvlAtkSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_Attack_Speed")
 
 [node name="Zombie" parent="." unique_id=564053419 instance=ExtResource("2_d1c63")]
 position = Vector2(229, -27)
