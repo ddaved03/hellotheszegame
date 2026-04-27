@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic; // Szükséges a List-hez
 
 public partial class BasePlayer : CharacterBody2D
 {
@@ -32,6 +33,9 @@ public partial class BasePlayer : CharacterBody2D
     [Export] public Label LvlAtkLabel;
     [Export] public Label LvlAtkSpeedLabel;
 
+    // --- INVENTORY MANAGER KAPCSOLAT ---
+    public InventoryManager Inventory; 
+
     private bool _isInventoryOpen = false;
     private AnimatedSprite2D _animSprite;
     private Timer _blinkTimer;
@@ -42,6 +46,11 @@ public partial class BasePlayer : CharacterBody2D
     {
         AddToGroup("Player");
         CurrentHealth = MaxHealth;
+        
+        // Inventory Manager inicializálása
+        Inventory = new InventoryManager();
+        AddChild(Inventory);
+
         UpdateUI();
         
         if (BtnSpeed != null) BtnSpeed.Pressed += () => ApplyUpgrade("speed");
@@ -130,20 +139,18 @@ public partial class BasePlayer : CharacterBody2D
         }
 
         GetTree().Paused = _isInventoryOpen;
-        Input.MouseMode = Input.MouseModeEnum.Visible;
+        Input.MouseMode = _isInventoryOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Hidden;
     }
 
-    // ÚJ: Dinamikus statisztika frissítő függvény
     private void UpdateInventoryStatsUI()
     {
         if (StatHPLabel != null) StatHPLabel.Text = $"HP: {CurrentHealth} / {MaxHealth}";
         if (StatAtkLabel != null) StatAtkLabel.Text = $"Attack: {AttackDamage}";
         if (StatSpeedLabel != null) StatSpeedLabel.Text = $"Speed: {Mathf.Round(Speed)}";
 
-        // Szintek kiszámítása az alapértékekhez képest
         int speedLvl = (int)((Speed - 300) / 40);
         int damageLvl = (AttackDamage - 20) / 10;
-        int atkSpeedLvl = (int)((0.5f - AttackCooldown) / 0.05f); // Példa számítás
+        int atkSpeedLvl = (int)((0.5f - AttackCooldown) / 0.05f);
 
         if (LvlSpeedLabel != null) LvlSpeedLabel.Text = $"Speed Lvl: {speedLvl}";
         if (LvlAtkLabel != null) LvlAtkLabel.Text = $"Dmg Lvl: {damageLvl}";
@@ -199,9 +206,8 @@ public partial class BasePlayer : CharacterBody2D
         CurrentXP = 0;
         MaxXP = (int)(MaxXP * 1.5);
         
-        // --- AUTOMATIKUS ÉLETERŐ NÖVEKEDÉS ---
-        MaxHealth += 20; // Szintenként 20-szal nő a max HP
-        CurrentHealth = MaxHealth; // Szintlépéskor teljesen meggyógyul
+        MaxHealth += 20;
+        CurrentHealth = MaxHealth;
 
         AudioManager.Instance?.PlayLevelUp();
         if (Level % 5 == 0) MaxPotionSlots++;
@@ -233,7 +239,6 @@ public partial class BasePlayer : CharacterBody2D
         if (lvlLabel != null) { lvlLabel.Text = "LVL " + Level; }
         if (potLabel != null) { potLabel.Text = "x" + PotionsCount + "/" + MaxPotionSlots; }
         
-        // Ha nyitva van az inventory, akkor az ottani statokat is frissítjük
         if (_isInventoryOpen) UpdateInventoryStatsUI();
     }
 

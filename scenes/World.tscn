@@ -4,11 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://bhcpe1radangw" path="res://kepek/Hppoti.png" id="1_d1c63"]
 [ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="2_0uv0p"]
 [ext_resource type="PackedScene" uid="uid://cdttfxhr1o2c2" path="res://scenes/car_blue.tscn" id="2_2pad8"]
-[ext_resource type="Texture2D" uid="uid://cd6idjbinavku" path="res://kepek/Tutorial-map-v1.png" id="2_aqlsr"]
 [ext_resource type="PackedScene" uid="uid://drfvop7r5lv5o" path="res://scenes/Zombie.tscn" id="2_d1c63"]
-[ext_resource type="PackedScene" uid="uid://bo3qho5yl5e5d" path="res://scenes/ZombieSpawner.tscn" id="3_1lgw5"]
+[ext_resource type="Texture2D" uid="uid://dal4xhe8cqxs6" path="res://kepek/Tutorial-haz-map-v1.png" id="3_2pad8"]
 [ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="3_b3faq"]
 [ext_resource type="Texture2D" uid="uid://dr5gjhlqvlhuq" path="res://kepek/ko-oszlop-2.png" id="3_n2fr6"]
+[ext_resource type="PackedScene" uid="uid://d2adqian1r0uw" path="res://scenes/TutorialKeyPart.tscn" id="4_e4yt5"]
 [ext_resource type="Texture2D" uid="uid://bn1g4iu87iftg" path="res://kepek/ko-oszlop-3.png" id="4_ngql4"]
 [ext_resource type="Texture2D" uid="uid://dbi0qhhwd5hke" path="res://kepek/inventoryv3.png" id="5_b3faq"]
 [ext_resource type="Texture2D" uid="uid://dojbq8sl48i4k" path="res://kepek/ko-oszlop-1.png" id="5_b64vv"]
@@ -35,6 +35,13 @@
 [ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="23_tx6do"]
 [ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="24_jot8m"]
 [ext_resource type="Script" uid="uid://c41uchhwx5d5x" path="res://src/WorldController.cs" id="25_worldctrl"]
+[ext_resource type="Script" uid="uid://by5l66akda3a8" path="res://src/UniversityDoor.cs" id="36_e4yt5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5w2bu"]
+size = Vector2(179.5, 19)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1bdwf"]
+radius = 139.01439
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1lgw5"]
 size = Vector2(3647.5, 40)
@@ -52,7 +59,7 @@ size = Vector2(29, 106)
 size = Vector2(28, 235)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ngql4"]
-size = Vector2(140, 30)
+size = Vector2(1092, 30)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_128ka"]
 radius = 73.0
@@ -69,6 +76,9 @@ radius = 42.047592
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_agajo"]
 size = Vector2(3569, 14)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2pad8"]
+size = Vector2(2477, 62)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ygioq"]
 texture = ExtResource("3_b3faq")
 
@@ -83,6 +93,10 @@ bg_color = Color(1, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gqg63"]
 bg_color = Color(0.38431373, 1, 0.2627451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_x70b3"]
+font_size = 20
+font_color = Color(1, 1, 0, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_302v5"]
 animations = [{
@@ -219,10 +233,27 @@ tracks/1/keys = {
 "values": [Vector2(3007, 496)]
 }
 
+[sub_resource type="Animation" id="Animation_x70b3"]
+resource_name = "ZombieBusArrival"
+length = 12.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D busz:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 8, 10, 12),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(3167.0002, 514.99994), Vector2(-295.99976, 518.99994), Vector2(-295.99976, 518.99994), Vector2(-1154, 522.99994)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_x70b3"]
 _data = {
 &"Arrival": SubResource("Animation_2pad8"),
-&"RESET": SubResource("Animation_e4yt5")
+&"RESET": SubResource("Animation_e4yt5"),
+&"ZombieBusArrival": SubResource("Animation_x70b3")
 }
 
 [node name="World" type="Node2D" unique_id=230028670]
@@ -233,6 +264,23 @@ PlayerPath = NodePath("Player")
 PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
 BusAnimationPath = NodePath("AnimationPlayer")
 VehiclePrefabs = Array[PackedScene]([ExtResource("2_2pad8")])
+ZombieNormalScene = ExtResource("2_d1c63")
+QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
+TutorialKeyPartScene = ExtResource("4_e4yt5")
+
+[node name="UniversityDoor" type="StaticBody2D" parent="." unique_id=178862940]
+script = ExtResource("36_e4yt5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UniversityDoor" unique_id=419727560]
+position = Vector2(2636, -415.5)
+shape = SubResource("RectangleShape2D_5w2bu")
+
+[node name="DetectionArea" type="Area2D" parent="UniversityDoor" unique_id=423306120]
+position = Vector2(2636, -415.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UniversityDoor/DetectionArea" unique_id=1491566554]
+position = Vector2(-5, 76)
+shape = SubResource("CircleShape2D_1bdwf")
 
 [node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=637263388]
 
@@ -265,7 +313,7 @@ position = Vector2(2298, -291.5)
 shape = SubResource("RectangleShape2D_128ka")
 
 [node name="CollisionShape2D lepcso1" type="CollisionShape2D" parent="MapBoundaries" unique_id=2093473277]
-position = Vector2(2354, -425)
+position = Vector2(2263, -425)
 shape = SubResource("RectangleShape2D_ngql4")
 
 [node name="CollisionShape2D szobor 1" type="CollisionShape2D" parent="MapBoundaries" unique_id=1201113716]
@@ -288,11 +336,15 @@ shape = SubResource("CircleShape2D_e4yt5")
 position = Vector2(1020.5, 580)
 shape = SubResource("RectangleShape2D_agajo")
 
+[node name="CollisionShape2D fal" type="CollisionShape2D" parent="MapBoundaries" unique_id=1923633708]
+position = Vector2(479.5, -352)
+shape = SubResource("RectangleShape2D_2pad8")
+
 [node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=1523926591]
 z_index = -10
 position = Vector2(1021, 109.000015)
 scale = Vector2(5.578125, 5.2000003)
-texture = ExtResource("2_aqlsr")
+texture = ExtResource("3_2pad8")
 
 [node name="Sprite2D Szobor 1" type="Sprite2D" parent="." unique_id=637921733]
 position = Vector2(1846, 94.50001)
@@ -450,6 +502,15 @@ offset_right = 306.0
 offset_bottom = 114.0
 texture = ExtResource("5_uni40")
 
+[node name="QuestLabel" type="Label" parent="CanvasLayer/Control" unique_id=1857486560]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 127.0
+offset_right = 319.0
+offset_bottom = 155.0
+text = "Küldetés: Menj be az egyetemre!"
+label_settings = SubResource("LabelSettings_x70b3")
+
 [node name="Inventory" type="Control" parent="CanvasLayer" unique_id=420155089]
 process_mode = 3
 visible = false
@@ -565,9 +626,83 @@ text = "Attackspeed LVL: 1 "
 layout_mode = 0
 offset_left = -284.0
 offset_top = -381.0
-offset_right = 14.0
+offset_right = 13.0
 offset_bottom = -212.0
 columns = 4
+
+[node name="Slot1" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1712470731]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot1" unique_id=1121084764]
+layout_mode = 0
+offset_right = 69.0
+offset_bottom = 76.0
+
+[node name="Slot2" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1460220578]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot2" unique_id=997199499]
+layout_mode = 0
+offset_left = 71.0
+offset_right = 140.0
+offset_bottom = 76.0
+
+[node name="Slot3" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=663299038]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot3" unique_id=145485811]
+layout_mode = 0
+offset_left = 142.0
+offset_right = 212.0
+offset_bottom = 76.0
+
+[node name="Slot4" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1302657325]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot4" unique_id=84259361]
+layout_mode = 0
+offset_left = 216.0
+offset_right = 285.0
+offset_bottom = 76.0
+
+[node name="Slot5" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=950499675]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot5" unique_id=1142630006]
+layout_mode = 0
+offset_top = 89.0
+offset_right = 69.0
+offset_bottom = 165.0
+
+[node name="Slot6" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1166334508]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot6" unique_id=1668640837]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 89.0
+offset_right = 140.0
+offset_bottom = 165.0
+
+[node name="Slot7" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=504016207]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot7" unique_id=2097236096]
+layout_mode = 0
+offset_left = 142.0
+offset_top = 89.0
+offset_right = 212.0
+offset_bottom = 165.0
+
+[node name="Slot8" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1558172240]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot8" unique_id=1123452902]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 89.0
+offset_right = 285.0
+offset_bottom = 165.0
 
 [node name="PauseMenu" type="Panel" parent="CanvasLayer" unique_id=995539478]
 process_mode = 3
@@ -646,9 +781,3 @@ LvlAtkSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_Attack_Speed")
 position = Vector2(229, -27)
 FrontTexture = null
 BackTexture = null
-
-[node name="ZombieSpawner" parent="." unique_id=1560249549 instance=ExtResource("3_1lgw5")]
-position = Vector2(-480, -139)
-ZombieNormalScene = null
-ZombieSmallScene = null
-ZombieBigScene = null

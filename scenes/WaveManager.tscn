@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://qyc6a8sqbmjs"]
+
+[ext_resource type="Script" uid="uid://c4tdbpxo4ysx6" path="res://src/TutorialItem.cs" id="1_glj0v"]
+[ext_resource type="Texture2D" uid="uid://bs7lpnj6q2nf4" path="res://kepek/kulcs-alja-torott.png" id="2_vwxse"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e28ns"]
+radius = 14.142136
+
+[node name="WaveManager" type="Node2D" unique_id=681601594]
+script = ExtResource("1_glj0v")
+
+[node name="TutorialItem" type="Area2D" parent="." unique_id=553490358]
+
+[node name="Sprite2D" type="Sprite2D" parent="TutorialItem" unique_id=1627343460]
+texture = ExtResource("2_vwxse")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TutorialItem/Sprite2D" unique_id=1780204403]
+position = Vector2(-12, 9)
+shape = SubResource("CircleShape2D_e28ns")
