@@ -20,58 +20,48 @@ public partial class InventoryManager : Node
         return false;
     }
 
-    public void UpdateUI()
+public void UpdateUI()
+{
+    // Megkeressük a GridContainer-t a teljes jelenetfában
+    // A FindChild helyett próbáljuk meg így, ez stabilabb:
+    var grid = GetTree().Root.FindChild("GridContainer", true, false) as GridContainer;
+
+    if (grid == null)
     {
-        // Megkeressük a GridContainer-t. 
-        // Mivel a Player gyereke vagy, a fád alapján így érjük el a CanvasLayer-en keresztül:
-        var grid = GetTree().Root.FindChild("GridContainer", true, false) as GridContainer;
+        GD.PrintErr("!!! HIBA: Nem találom a GridContainer-t az UI-ban!");
+        return;
+    }
 
-        if (grid == null)
+    GD.Print("GridContainer megtalálva, slotok száma: " + grid.GetChildCount());
+
+    for (int i = 0; i < grid.GetChildCount(); i++)
+    {
+        var slot = grid.GetChild(i);
+        // Itt fontos: a te fádban a slot alatt 'Icon' néven van a TextureRect?
+        var iconDisplay = slot.GetNodeOrNull<TextureRect>("Icon");
+
+        if (iconDisplay != null)
         {
-            GD.PrintErr("Hiba: Nem találom a GridContainer-t az UI-ban!");
-            return;
-        }
-
-        // Végigmegyünk a rács összes gyerekén (Slot1, Slot2...)
-        for (int i = 0; i < grid.GetChildCount(); i++)
-        {
-            var slot = grid.GetChild(i);
-            // Megkeressük a Slot alatti Icon node-ot
-            var iconDisplay = slot.GetNodeOrNull<TextureRect>("Icon");
-
-            if (iconDisplay != null)
+            if (i < Items.Count)
             {
-                // Ha van felvett tárgy ehhez a slot indexhez
-                if (i < Items.Count)
-                {
-                    iconDisplay.Texture = GetTextureForItem(Items[i]);
-                    iconDisplay.Visible = true; // Megmutatjuk az ikont
-                }
-                else
-                {
-                    // Ha nincs tárgy, kiürítjük a slotot
-                    iconDisplay.Texture = null;
-                    iconDisplay.Visible = false; // Elrejtjük az üres ikont
-                }
+                iconDisplay.Texture = GetTextureForItem(Items[i]);
+                iconDisplay.Visible = true;
+                GD.Print($"Slot{i+1} frissítve: {Items[i]}");
+            }
+            else
+            {
+                iconDisplay.Texture = null;
+                iconDisplay.Visible = false;
             }
         }
     }
+}
 
     // Ez a függvény rendeli hozzá a nevekhez a képeket
     private Texture2D GetTextureForItem(string name)
-    {
-        switch (name)
-        {
-            case "KeyPart1":
-                // Ide írd a kulcs ikonod PONTOS elérési útját a FileSystem-ből!
-                // Példa: "res://assets/items/key_icon.png"
-                return GD.Load<Texture2D>("res://scenes/TutorialKeyPart.png"); 
-            
-            // Később ide jöhet a többi tárgy:
-            // case "KeyPart2": return GD.Load<Texture2D>("...");
-
-            default:
-                return null;
-        }
-    }
+{
+    if (name == "KeyPart1") return GD.Load<Texture2D>("res://kepek/kulcs-alja-torott.png");
+    if (name == "KeyPart2") return GD.Load<Texture2D>("res://kepek/kulcs-kozepe-torott.png"); // Legyen egy másik ikonja
+    return null;
+}
 }

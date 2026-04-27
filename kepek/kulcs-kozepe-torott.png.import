@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0lgiynj52ek4"
-path="res://.godot/imported/kek-auto-hata.png-74c348b4ecc813a65db71055178e898d.ctex"
+uid="uid://didn870jrj4nu"
+path="res://.godot/imported/kulcs-kozepe-torott.png-b4d5af3a09708d499582815204b54095.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://kepek/kek-auto-hata.png"
-dest_files=["res://.godot/imported/kek-auto-hata.png-74c348b4ecc813a65db71055178e898d.ctex"]
+source_file="res://kepek/kulcs-kozepe-torott.png"
+dest_files=["res://.godot/imported/kulcs-kozepe-torott.png-b4d5af3a09708d499582815204b54095.ctex"]
 
 [params]
 

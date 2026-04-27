@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dr5gjhlqvlhuq" path="res://kepek/ko-oszlop-2.png" id="3_n2fr6"]
 [ext_resource type="PackedScene" uid="uid://d2adqian1r0uw" path="res://scenes/TutorialKeyPart.tscn" id="4_e4yt5"]
 [ext_resource type="Texture2D" uid="uid://bn1g4iu87iftg" path="res://kepek/ko-oszlop-3.png" id="4_ngql4"]
+[ext_resource type="PackedScene" path="res://scenes/ZombieSmall.tscn" id="4_x70b3"]
 [ext_resource type="Texture2D" uid="uid://dbi0qhhwd5hke" path="res://kepek/inventoryv3.png" id="5_b3faq"]
 [ext_resource type="Texture2D" uid="uid://dojbq8sl48i4k" path="res://kepek/ko-oszlop-1.png" id="5_b64vv"]
 [ext_resource type="Texture2D" uid="uid://byycym0tadc3u" path="res://kepek/inventoryv4.png" id="5_uni40"]
@@ -78,6 +79,9 @@ size = Vector2(3569, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2pad8"]
 size = Vector2(2477, 62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e4yt5"]
+size = Vector2(2040, 418)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ygioq"]
 texture = ExtResource("3_b3faq")
@@ -265,6 +269,8 @@ PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
 BusAnimationPath = NodePath("AnimationPlayer")
 VehiclePrefabs = Array[PackedScene]([ExtResource("2_2pad8")])
 ZombieNormalScene = ExtResource("2_d1c63")
+ZombieSmallScene = ExtResource("4_x70b3")
+CarPrefab = ExtResource("2_2pad8")
 QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
 TutorialKeyPartScene = ExtResource("4_e4yt5")
 
@@ -339,6 +345,12 @@ shape = SubResource("RectangleShape2D_agajo")
 [node name="CollisionShape2D fal" type="CollisionShape2D" parent="MapBoundaries" unique_id=1923633708]
 position = Vector2(479.5, -352)
 shape = SubResource("RectangleShape2D_2pad8")
+
+[node name="ParkingTrigger" type="Area2D" parent="." unique_id=287140749]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParkingTrigger" unique_id=1215314848]
+position = Vector2(257, -26)
+shape = SubResource("RectangleShape2D_e4yt5")
 
 [node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=1523926591]
 z_index = -10

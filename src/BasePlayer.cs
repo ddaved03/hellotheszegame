@@ -49,7 +49,7 @@ public partial class BasePlayer : CharacterBody2D
         
         // Inventory Manager inicializálása
         Inventory = new InventoryManager();
-        AddChild(Inventory);
+        CallDeferred("add_child", Inventory);
 
         UpdateUI();
         
@@ -129,18 +129,32 @@ public partial class BasePlayer : CharacterBody2D
     }
 
     private void ToggleInventory()
+{
+    _isInventoryOpen = !_isInventoryOpen;
+    
+    if (InventoryNode != null)
     {
-        _isInventoryOpen = !_isInventoryOpen;
-        
-        if (InventoryNode != null)
-        {
-            InventoryNode.Visible = _isInventoryOpen;
-            if (_isInventoryOpen) UpdateInventoryStatsUI(); // Frissítés nyitáskor
-        }
-
-        GetTree().Paused = _isInventoryOpen;
-        Input.MouseMode = _isInventoryOpen ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Hidden;
+        InventoryNode.Visible = _isInventoryOpen;
+        if (_isInventoryOpen) UpdateInventoryStatsUI();
     }
+
+    // A játék megállítása/elindítása
+    GetTree().Paused = _isInventoryOpen;
+
+    // EGÉRKÉZELÉS JAVÍTÁSA:
+    if (_isInventoryOpen)
+    {
+        // Ha nyitva van, legyen látható és szabad
+        Input.MouseMode = Input.MouseModeEnum.Visible;
+    }
+    else
+    {
+        // Ha bezárjuk, legyen látható (vagy láthatatlan, ha úgy szereted), 
+        // de mindenképpen "Captured" vagy "Visible" módban, hogy a játék érzékelje!
+        // Javaslat: Használj Visible-t, ha egérrel célzol/lősz, vagy Captured-öt, ha FPS-szerű.
+        Input.MouseMode = Input.MouseModeEnum.Visible; 
+    }
+}
 
     private void UpdateInventoryStatsUI()
     {

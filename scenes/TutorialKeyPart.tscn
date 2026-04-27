@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://d2adqian1r0uw"]
 
+[ext_resource type="Script" uid="uid://c4tdbpxo4ysx6" path="res://src/TutorialItem.cs" id="1_bdtl3"]
 [ext_resource type="Texture2D" uid="uid://bs7lpnj6q2nf4" path="res://kepek/kulcs-alja-torott.png" id="1_vc1q2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdtl3"]
 radius = 14.0
 
 [node name="TutorialKeyPart" type="Area2D" unique_id=906691971]
+script = ExtResource("1_bdtl3")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1540362941]
 texture = ExtResource("1_vc1q2")
