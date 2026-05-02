@@ -585,14 +585,37 @@ offset_bottom = -118.0
 [node name="Slot_Helmet" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1424773343]
 layout_mode = 2
 
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Helmet" unique_id=943270458]
+layout_mode = 0
+offset_right = 71.0
+offset_bottom = 61.0
+
 [node name="Slot_Chest" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1428464591]
 layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Chest" unique_id=1179809199]
+layout_mode = 0
+offset_top = 64.0
+offset_right = 71.0
+offset_bottom = 122.0
 
 [node name="Slot_Legs" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1356064121]
 layout_mode = 2
 
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Legs" unique_id=1717077487]
+layout_mode = 0
+offset_top = 126.0
+offset_right = 71.0
+offset_bottom = 186.0
+
 [node name="Slot_Boots" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1505877213]
 layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Boots" unique_id=23259551]
+layout_mode = 0
+offset_top = 192.0
+offset_right = 71.0
+offset_bottom = 250.0
 
 [node name="Label_HP" type="Label" parent="CanvasLayer/Inventory" unique_id=81591321]
 layout_mode = 0

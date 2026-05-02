@@ -135,7 +135,7 @@ public partial class WorldController : Node2D
     // Most NEM kell a FlipH = true, mert az autó alapból jobbra néz
     if (car.HasNode("Sprite2D")) 
     {
-        car.GetNode<Sprite2D>("Sprite2D").FlipH = false; 
+        car.GetNode<Sprite2D>("Sprite2D").FlipH = true; 
     }
 
     var tween = CreateTween();
@@ -150,50 +150,76 @@ public partial class WorldController : Node2D
     };
 }
 
-    private void SpawnZombiesFromCar(Vector2 pos, int carIndex)
-    {
-        // Autónként 4 normál és 1 kicsi (összesen 15 zombi)
-        for (int i = 0; i < 4; i++) SpawnSingleZombie(ZombieNormalScene, pos, false);
-        
-        // Az utolsó autó utolsó zombija (kicsi) dobja majd a kulcsot
-        bool isKeyCarrier = (carIndex == 2);
-        SpawnSingleZombie(ZombieSmallScene, pos, isKeyCarrier);
-    }
+private void SpawnZombiesFromCar(Vector2 pos, int carIndex)
+{
+    // Autónként 4 normál és 1 kicsi (összesen 15 zombi)
+    for (int i = 0; i < 4; i++) SpawnSingleZombie(ZombieNormalScene, pos);
+    
+    // A kicsi zombi spawnolása (már nem kell az isKeyCarrier változó)
+    SpawnSingleZombie(ZombieSmallScene, pos);
+}
 
-    private void SpawnSingleZombie(PackedScene scene, Vector2 pos, bool isLast)
+private void SpawnSingleZombie(PackedScene scene, Vector2 pos)
 {
     if (scene == null) return;
 
     var zombie = (Node2D)scene.Instantiate();
-    // Az autó pozíciójához képest egy kicsit "kiszórjuk" őket (offset), hogy ne az autó alatt legyenek
-    zombie.GlobalPosition = pos + new Vector2((float)GD.RandRange(50, 100), (float)GD.RandRange(-30, 30));
     
-    // Legyenek az autó felett látványban
-    zombie.ZIndex = 10; 
+    // A te jól beállított pozícióid:
+    float offsetX = (float)GD.RandRange(-600, -400);
+    float offsetY = -800f; 
+    
+    // A zombi abszolút pozíciója az autóhoz képest
+    zombie.GlobalPosition = new Vector2(pos.X + offsetX, pos.Y + offsetY);
+    zombie.ZIndex = 50; 
     
     AddChild(zombie);
     _parkingZombiesAlive++;
     
     zombie.TreeExited += () => {
-        _parkingZombiesAlive--;
-        if (_parkingZombiesAlive <= 0 && isLast)
+        _parkingZombiesAlive--; // Egy meghalt, levonjuk
+        
+        GD.Print($"Parkolós zombi meghalt. Hátralévő: {_parkingZombiesAlive}");
+
+        // JAVÍTÁS: Nincs "isLast" feltétel. Bármelyik is hal meg utoljára, dobja a kulcsot!
+        if (_parkingZombiesAlive <= 0)
         {
+            GD.Print("Minden parkolós zombi meghalt! Kulcs spawnolása...");
             SpawnKeyPart(zombie.GlobalPosition, "KeyPart2");
         }
     };
 }
 
     private void SpawnKeyPart(Vector2 pos, string keyName)
+{
+    if (TutorialKeyPartScene == null) return;
+
+    // Létrehozzuk a tárgyat (Area2D / TutorialItem)
+    var key = (TutorialItem)TutorialKeyPartScene.Instantiate();
+    key.ItemName = keyName;
+    key.GlobalPosition = pos;
+
+    // --- ÚJ RÉSZ: KICSÉRÉLJÜK A KÉPET A FÖLDÖN LÉVŐ TÁRGYON ---
+    var sprite = key.GetNodeOrNull<Sprite2D>("Sprite2D");
+    if (sprite != null)
     {
-        if (TutorialKeyPartScene == null) return;
-
-        var key = (TutorialItem)TutorialKeyPartScene.Instantiate();
-        key.ItemName = keyName;
-        key.GlobalPosition = pos;
-        AddChild(key);
-
-        if (_questLabel != null) _questLabel.Text = "Küldetés: Vedd fel a második kulcsdarabot!";
+        if (keyName == "KeyPart2")
+        {
+            // FONTOS: Ide ugyanazt az elérési utat másold be, amit az InventoryManager.cs-ben is 
+            // használtál a KeyPart2 képéhez! (pl. "res://scenes/masodik_kulcs.png")
+            sprite.Texture = GD.Load<Texture2D>("res://kepek/kulcs-kozepe-torott.png"); 
+        }
+        // A KeyPart1-nél nem kell cserélni, mert az az alapértelmezett a jelenetben
     }
+
+    AddChild(key);
+
+    // Küldetés szövegének frissítése
+    if (_questLabel != null) 
+    {
+        _questLabel.Text = "Küldetés: Vedd fel a második kulcsdarabot!";
+    }
+}
 
     // --- EREDETI FUNKCIÓK ---
     private async void StartArrivalCutscene()
@@ -293,12 +319,20 @@ public partial class WorldController : Node2D
     }
 
     public void OnKeyPartCollected(string name)
+{
+    if (name == "KeyPart1")
     {
-        if (name == "KeyPart1")
-        {
+        if (_questLabel != null) 
             _questLabel.Text = "Küldetés: Menj a parkolóhoz a következő darabért!";
-        }
     }
+    else if (name == "KeyPart2")
+    {
+        if (_questLabel != null) 
+            _questLabel.Text = "Küldetés: Indulj tovább az erdő felé! (Hamarosan folytatódik...)";
+            
+        // Ide jöhet majd a következő esemény indítása (pl. kapu kinyitása)
+    }
+}
 
     private void SpawnRandomTraffic()
     {
