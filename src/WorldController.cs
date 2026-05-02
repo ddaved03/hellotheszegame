@@ -88,6 +88,11 @@ public partial class WorldController : Node2D
         // Az egyetem ajtajának triggere (a képed alapján a UniversityDoor gyermeke)
         var doorTrigger = GetNodeOrNull<Area2D>("UniversityDoor/DetectionArea");
         if (doorTrigger != null) doorTrigger.BodyEntered += OnDoorTriggerEntered;
+
+        // Pályaváltó trigger csatlakoztatása
+        var transitionTrigger = GetNodeOrNull<Area2D>("MapTransitionTrigger");
+        if (transitionTrigger != null) transitionTrigger.BodyEntered += OnMapTransitionTriggerEntered;
+
     }
 
     public override void _Process(double delta)
@@ -479,6 +484,20 @@ private void OnDoorTriggerEntered(Node2D body)
         {
             UpdateQuestText("Küldetés: Előbb rakd össze a kulcsot az Inventory-ban!");
         }
+    }
+}
+
+private void OnMapTransitionTriggerEntered(Node2D body)
+{
+    // Ellenőrizzük, hogy a játékos lépett-e bele
+    if (body is BasePlayer)
+    {
+        GD.Print("Játékos belépett a kapun! Töltés a következő pályára...");
+        
+        // --- ITT TÖRTÉNIK A VARÁZSLAT ---
+        // A macskakörmök közé a MÁSIK PÁLYÁD (Scene) pontos elérési útját kell beírnod!
+        // Például: "res://scenes/UniversityLevel.tscn"
+        GetTree().ChangeSceneToFile("res://scenes/GroundFloor.tscn");
     }
 }
 

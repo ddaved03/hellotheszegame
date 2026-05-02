@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cucgu5becbush"]
+
+[ext_resource type="Texture2D" uid="uid://dmwvtbwxnr8of" path="res://kepek/map-2.png" id="1_4fudr"]
+[ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_0qkuh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0qkuh"]
+size = Vector2(3719.5, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tefep"]
+size = Vector2(31, 1689)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cy7w5"]
+size = Vector2(46, 1695)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4fudr"]
+size = Vector2(3719.5, 35)
+
+[node name="GroundFloor" type="Node2D" unique_id=1265253517]
+
+[node name="CollisionShape2D down" type="CollisionShape2D" parent="." unique_id=1989571960]
+position = Vector2(1856, 1646)
+shape = SubResource("RectangleShape2D_0qkuh")
+
+[node name="CollisionShape2D l" type="CollisionShape2D" parent="." unique_id=1557954756]
+position = Vector2(-15.5, 812)
+shape = SubResource("RectangleShape2D_tefep")
+
+[node name="CollisionShape2D r" type="CollisionShape2D" parent="." unique_id=231753542]
+position = Vector2(3741, 814.5)
+shape = SubResource("RectangleShape2D_cy7w5")
+
+[node name="CollisionShape2D up" type="CollisionShape2D" parent="." unique_id=136492772]
+position = Vector2(1859.25, -17.5)
+shape = SubResource("RectangleShape2D_4fudr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1617667065]
+z_index = -10
+position = Vector2(1859.0001, 815.5)
+scale = Vector2(5.809375, 6.7958326)
+texture = ExtResource("1_4fudr")
+
+[node name="Player" parent="." unique_id=1544599848 instance=ExtResource("2_0qkuh")]
+position = Vector2(168, 1554)

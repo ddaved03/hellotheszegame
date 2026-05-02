@@ -39,11 +39,14 @@
 [ext_resource type="Script" uid="uid://c41uchhwx5d5x" path="res://src/WorldController.cs" id="25_worldctrl"]
 [ext_resource type="Script" uid="uid://by5l66akda3a8" path="res://src/UniversityDoor.cs" id="36_e4yt5"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1w2qq"]
+size = Vector2(175.25, 42.5)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x70b3"]
 size = Vector2(610.5, 235.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5w2bu"]
-size = Vector2(179.5, 19)
+size = Vector2(179.5, 29)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1bdwf"]
 radius = 139.01439
@@ -64,7 +67,7 @@ size = Vector2(29, 106)
 size = Vector2(28, 235)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ngql4"]
-size = Vector2(1092, 30)
+size = Vector2(829, 30)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_128ka"]
 radius = 73.0
@@ -83,6 +86,9 @@ size = Vector2(3569, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2pad8"]
 size = Vector2(2477, 62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bdwf"]
+size = Vector2(79, 29)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4yt5"]
 size = Vector2(2040, 418)
@@ -278,6 +284,12 @@ CarPrefab = ExtResource("2_2pad8")
 QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
 TutorialKeyPartScene = ExtResource("4_e4yt5")
 
+[node name="MapTransitionTrigger" type="Area2D" parent="." unique_id=1778733647]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MapTransitionTrigger" unique_id=977077007]
+position = Vector2(2636, -463)
+shape = SubResource("RectangleShape2D_1w2qq")
+
 [node name="RocksTrigger" type="Area2D" parent="." unique_id=1924491189]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RocksTrigger" unique_id=27399639]
@@ -288,7 +300,7 @@ shape = SubResource("RectangleShape2D_x70b3")
 script = ExtResource("36_e4yt5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UniversityDoor" unique_id=419727560]
-position = Vector2(2636, -415.5)
+position = Vector2(2636, -424.5)
 shape = SubResource("RectangleShape2D_5w2bu")
 
 [node name="DetectionArea" type="Area2D" parent="UniversityDoor" unique_id=423306120]
@@ -329,7 +341,7 @@ position = Vector2(2298, -291.5)
 shape = SubResource("RectangleShape2D_128ka")
 
 [node name="CollisionShape2D lepcso1" type="CollisionShape2D" parent="MapBoundaries" unique_id=2093473277]
-position = Vector2(2263, -425)
+position = Vector2(2131.5, -425)
 shape = SubResource("RectangleShape2D_ngql4")
 
 [node name="CollisionShape2D szobor 1" type="CollisionShape2D" parent="MapBoundaries" unique_id=1201113716]
@@ -355,6 +367,10 @@ shape = SubResource("RectangleShape2D_agajo")
 [node name="CollisionShape2D fal" type="CollisionShape2D" parent="MapBoundaries" unique_id=1923633708]
 position = Vector2(479.5, -352)
 shape = SubResource("RectangleShape2D_2pad8")
+
+[node name="CollisionShape2D lepcso 1-2" type="CollisionShape2D" parent="MapBoundaries" unique_id=1355203354]
+position = Vector2(2765.5, -424.5)
+shape = SubResource("RectangleShape2D_1bdwf")
 
 [node name="ParkingTrigger" type="Area2D" parent="." unique_id=287140749]
 
