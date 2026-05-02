@@ -30,6 +30,16 @@ public partial class WorldController : Node2D
     private int _parkingZombiesAlive = 0;
     private const int TotalParkingZombies = 15;
 
+    // --- KÖVES (TÚLÉLŐ) ESEMÉNY VÁLTOZÓI ---
+    private bool _rocksEventStarted = false;
+    private bool _rocksTimerActive = false;
+    private float _rocksTimeLeft = 60f; // 1 perc
+    private float _rocksSpawnCooldown = 0f;
+    private int _rocksZombiesAlive = 0;
+    private Vector2 _rocksSpawnCenter;
+    private bool _rocksEventCompleted = false;
+
+
     public override void _Ready()
     {
         if (PlayerPath != null) _player = GetNodeOrNull<BasePlayer>(PlayerPath);
@@ -52,6 +62,12 @@ public partial class WorldController : Node2D
             parkingTrigger.BodyEntered += OnParkingTriggerEntered;
         }
 
+        var rocksTrigger = GetNodeOrNull<Area2D>("RocksTrigger");
+        if (rocksTrigger != null) 
+        {
+            rocksTrigger.BodyEntered += OnRocksTriggerEntered;
+        }
+        
         if (_pauseMenu != null)
         {
             _pauseMenu.Visible = false;
@@ -68,19 +84,60 @@ public partial class WorldController : Node2D
             SaveSystem.LoadRequested = false;
             if (_player != null) SaveSystem.Load(_player);
         }
+
+        // Az egyetem ajtajának triggere (a képed alapján a UniversityDoor gyermeke)
+        var doorTrigger = GetNodeOrNull<Area2D>("UniversityDoor/DetectionArea");
+        if (doorTrigger != null) doorTrigger.BodyEntered += OnDoorTriggerEntered;
     }
 
     public override void _Process(double delta)
-    {
-        if (GetTree().Paused) return;
+{
+    if (GetTree().Paused) return;
 
-        _trafficTimer += (float)delta;
-        if (_trafficTimer >= TrafficSpawnInterval)
+    // Forgalom logika
+    _trafficTimer += (float)delta;
+    if (_trafficTimer >= TrafficSpawnInterval)
+    {
+        SpawnRandomTraffic();
+        _trafficTimer = 0;
+    }
+
+    // --- ÚJ: KÖVES ESEMÉNY LOGIKÁJA ---
+    if (_rocksTimerActive)
+    {
+        _rocksTimeLeft -= (float)delta; // Visszaszámlálás
+        
+        // Kiírjuk a képernyőre a maradék másodpercet (felkerekítve)
+        if (_questLabel != null)
         {
-            SpawnRandomTraffic();
-            _trafficTimer = 0;
+            int seconds = Mathf.CeilToInt(_rocksTimeLeft);
+            _questLabel.Text = $"Túlélsz: {seconds} másodperc...";
+        }
+
+        // Zombik folyamatos érkezése (pl. 1.5 másodpercenként)
+        _rocksSpawnCooldown -= (float)delta;
+        if (_rocksSpawnCooldown <= 0)
+        {
+            SpawnRocksZombie();
+            _rocksSpawnCooldown = 1.5f; // <-- Módosíthatod, ha nehezebb/könnyebb kell
+        }
+
+        // Amikor lejárt az 1 perc (0 lett az idő):
+        if (_rocksTimeLeft <= 0 && _rocksTimerActive)
+        {
+            _rocksTimerActive = false;
+            if (_questLabel != null)
+                _questLabel.Text = "Küldetés: Tisztítsd meg a területet az utolsó kulcsért!";
+                
+            // Ha véletlenül épp egyetlen zombi sem élne, azonnal eldobjuk
+            if (_rocksZombiesAlive <= 0 && !_rocksEventCompleted)
+            {
+                _rocksEventCompleted = true; // Kész, lezárva!
+                SpawnKeyPart(_rocksSpawnCenter, "KeyPart3");
+            }
         }
     }
+}
 
     // --- PARKOLÓ ESEMÉNY LOGIKA ---
     private void OnParkingTriggerEntered(Node2D body)
@@ -90,7 +147,7 @@ public partial class WorldController : Node2D
         if (body is BasePlayer player)
         {
             // Csak akkor indul el, ha már nálunk van az első kulcs
-            if (player.Inventory != null && player.Inventory.Items.Contains("KeyPart1"))
+            if (player.Inventory != null && InventoryManager.Items.Contains("KeyPart1"))
             {
                 _parkingEventStarted = true;
                 StartParkingSequence();
@@ -147,6 +204,59 @@ public partial class WorldController : Node2D
     {
         GD.Print($"Autó {index} megállt. Zombik lehívása ide: {targetPos}");
         SpawnZombiesFromCar(targetPos, index);
+    };
+}
+
+// --- KÖVES ESEMÉNY FUNKCIÓI ---
+
+private void OnRocksTriggerEntered(Node2D body)
+{
+    // Ha már elindult, VAGY már sikeresen befejeztük, ne csináljon semmit!
+    if (_rocksEventStarted || _rocksEventCompleted) return;
+
+    if (body is BasePlayer player)
+    {
+        // Csak akkor indul el, ha megvan a 2. kulcs, ÉS MÉG NINCS meg a 3.
+        if (player.Inventory != null && 
+            InventoryManager.Items.Contains("KeyPart2") && 
+            !InventoryManager.Items.Contains("KeyPart3"))
+        {
+            _rocksEventStarted = true;
+            _rocksTimerActive = true;
+            _rocksTimeLeft = 60f; // Visszaszámláló kezdete
+            
+            var trigger = GetNodeOrNull<Area2D>("RocksTrigger");
+            _rocksSpawnCenter = trigger != null ? trigger.GlobalPosition : player.GlobalPosition;
+        }
+    }
+}
+
+private void SpawnRocksZombie()
+{
+    if (ZombieNormalScene == null) return;
+
+    var zombie = (Node2D)ZombieNormalScene.Instantiate();
+    
+    // Ide tedd vissza azokat az X és Y számokat, amiket korábban beállítottál és jól működtek!
+    float offsetX = (float)GD.RandRange(-100, 900);
+    float offsetY = (float)GD.RandRange(-700, 0);
+    
+    zombie.GlobalPosition = _rocksSpawnCenter + new Vector2(offsetX, offsetY);
+    zombie.ZIndex = 50; 
+    
+    AddChild(zombie);
+    _rocksZombiesAlive++;
+    
+    zombie.TreeExited += () => {
+        _rocksZombiesAlive--;
+        
+        // HA lejárt az idő ÉS mindenki meghalt ÉS még nem dobtuk el a kulcsot
+        if (!_rocksTimerActive && _rocksZombiesAlive <= 0 && !_rocksEventCompleted)
+        {
+            _rocksEventCompleted = true; // KÉSZ! Örökre lezárjuk az eseményt.
+            GD.Print("Lejárt az idő, és mindenki meghalt! 3. Kulcs érkezik!");
+            SpawnKeyPart(zombie.GlobalPosition, "KeyPart3");
+        }
     };
 }
 
@@ -209,7 +319,10 @@ private void SpawnSingleZombie(PackedScene scene, Vector2 pos)
             // használtál a KeyPart2 képéhez! (pl. "res://scenes/masodik_kulcs.png")
             sprite.Texture = GD.Load<Texture2D>("res://kepek/kulcs-kozepe-torott.png"); 
         }
-        // A KeyPart1-nél nem kell cserélni, mert az az alapértelmezett a jelenetben
+        else if (keyName == "KeyPart3")
+        {
+            sprite.Texture = GD.Load<Texture2D>("res://kepek/kulcs-eleje-torott.png");
+        }
     }
 
     AddChild(key);
@@ -328,9 +441,44 @@ private void SpawnSingleZombie(PackedScene scene, Vector2 pos)
     else if (name == "KeyPart2")
     {
         if (_questLabel != null) 
-            _questLabel.Text = "Küldetés: Indulj tovább az erdő felé! (Hamarosan folytatódik...)";
-            
-        // Ide jöhet majd a következő esemény indítása (pl. kapu kinyitása)
+            _questLabel.Text = "Küldetés: Keresd a köveknél az utolsó kulcsdarabot!";
+       
+    }
+    else if (name == "KeyPart3")
+    {
+        // ÚJ: A harmadik kulcs felvételekor
+        if (_questLabel != null) _questLabel.Text = "Küldetés: Javítsd meg a kulcsot!";
+    }
+
+}
+
+    public void UpdateQuestText(string text)
+{
+    if (_questLabel != null) _questLabel.Text = text;
+}
+
+private void OnDoorTriggerEntered(Node2D body)
+{
+    if (body is BasePlayer player)
+    {
+        // Ha már megvan az összerakott kulcs
+        if (player.Inventory != null && InventoryManager.Items.Contains("UniversityKey"))
+        {
+            var door = GetNodeOrNull<StaticBody2D>("UniversityDoor");
+            if (door != null)
+            {
+                // Eltüntetjük az ajtót (kinyílik)
+                door.QueueFree(); 
+                
+                GD.Print("Egyetem ajtaja kinyitva!");
+                UpdateQuestText("Küldetés: Lépj be az egyetemre!");
+            }
+        }
+        // Ha csak a darabok vannak meg
+        else if (player.Inventory != null && InventoryManager.Items.Contains("KeyPart3") && !InventoryManager.Items.Contains("UniversityKey"))
+        {
+            UpdateQuestText("Küldetés: Előbb rakd össze a kulcsot az Inventory-ban!");
+        }
     }
 }
 

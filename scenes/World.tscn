@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://c31idm6o4bl16" path="res://kepek/Hero1Idol/Hero1Idol8.png" id="14_2pad8"]
 [ext_resource type="Texture2D" uid="uid://dm2n6a31s67jb" path="res://kepek/Hero1Idol/Hero1Idol9.png" id="15_e4yt5"]
 [ext_resource type="Texture2D" uid="uid://oxcigvspafw0" path="res://kepek/Hero1Idol/Hero1Idol10.png" id="16_x70b3"]
+[ext_resource type="Script" uid="uid://kn873uhxipbb" path="res://src/InventoryManager.cs" id="17_1bdwf"]
 [ext_resource type="Texture2D" uid="uid://4g7c2l7s4v8p" path="res://kepek/Hero1Idol/Hero1Idol11.png" id="17_5w2bu"]
 [ext_resource type="Texture2D" uid="uid://dbbxllun2dio5" path="res://kepek/Hero1Idol/Hero1Idol12.png" id="18_1bdwf"]
 [ext_resource type="Texture2D" uid="uid://bc0borfd1i87v" path="res://kepek/Hero1Idol/Hero1Idol13.png" id="19_1w2qq"]
@@ -37,6 +38,9 @@
 [ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="24_jot8m"]
 [ext_resource type="Script" uid="uid://c41uchhwx5d5x" path="res://src/WorldController.cs" id="25_worldctrl"]
 [ext_resource type="Script" uid="uid://by5l66akda3a8" path="res://src/UniversityDoor.cs" id="36_e4yt5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x70b3"]
+size = Vector2(610.5, 235.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5w2bu"]
 size = Vector2(179.5, 19)
@@ -273,6 +277,12 @@ ZombieSmallScene = ExtResource("4_x70b3")
 CarPrefab = ExtResource("2_2pad8")
 QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
 TutorialKeyPartScene = ExtResource("4_e4yt5")
+
+[node name="RocksTrigger" type="Area2D" parent="." unique_id=1924491189]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RocksTrigger" unique_id=27399639]
+position = Vector2(1634.75, 203.25)
+shape = SubResource("RectangleShape2D_x70b3")
 
 [node name="UniversityDoor" type="StaticBody2D" parent="." unique_id=178862940]
 script = ExtResource("36_e4yt5")
@@ -532,6 +542,7 @@ offset_left = 764.0
 offset_top = 515.0
 offset_right = 804.0
 offset_bottom = 555.0
+script = ExtResource("17_1bdwf")
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Inventory" unique_id=1983817472]
 layout_mode = 1
@@ -739,6 +750,14 @@ offset_top = 89.0
 offset_right = 285.0
 offset_bottom = 165.0
 
+[node name="Button" type="Button" parent="CanvasLayer/Inventory" unique_id=690495061]
+layout_mode = 0
+offset_left = 67.0
+offset_top = -378.0
+offset_right = 274.0
+offset_bottom = -344.0
+text = "Kulcs Készítése"
+
 [node name="PauseMenu" type="Panel" parent="CanvasLayer" unique_id=995539478]
 process_mode = 3
 visible = false
@@ -812,7 +831,4 @@ StatAtkLabel = NodePath("../CanvasLayer/Inventory/Label_Attack")
 LvlSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_SpeedLevel")
 LvlAtkSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_Attack_Speed")
 
-[node name="Zombie" parent="." unique_id=564053419 instance=ExtResource("2_d1c63")]
-position = Vector2(229, -27)
-FrontTexture = null
-BackTexture = null
+[connection signal="pressed" from="CanvasLayer/Inventory/Button" to="CanvasLayer/Inventory" method="CraftUniversityKey"]
