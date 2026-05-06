@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://c2vdk2hgipqu6"]
+
+[ext_resource type="Texture2D" uid="uid://7bre2gd4hdn0" path="res://kepek/C100-map-aisle.png" id="1_c100"]
+[ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_player"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
+size = Vector2(2304, 205)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_bottom"]
+size = Vector2(2304, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_side"]
+size = Vector2(60, 1536)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_plant"]
+radius = 15.297058
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_desk_segment"]
+size = Vector2(718, 58.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_teacher_desk"]
+size = Vector2(200, 69)
+
+[node name="C100" type="Node2D" unique_id=2050255343]
+y_sort_enabled = true
+
+[node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=163658260]
+z_index = -10
+position = Vector2(1152, 768)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_c100")
+
+[node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=71792524]
+
+[node name="CollisionShape2D up" type="CollisionShape2D" parent="MapBoundaries" unique_id=1894892702]
+position = Vector2(1152, 102.5)
+shape = SubResource("RectangleShape2D_wall_top")
+
+[node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=653957681]
+position = Vector2(1152, 1506)
+shape = SubResource("RectangleShape2D_wall_bottom")
+
+[node name="CollisionShape2D left" type="CollisionShape2D" parent="MapBoundaries" unique_id=570121330]
+position = Vector2(30, 768)
+shape = SubResource("RectangleShape2D_wall_side")
+
+[node name="CollisionShape2D right" type="CollisionShape2D" parent="MapBoundaries" unique_id=397827598]
+position = Vector2(2274, 768)
+shape = SubResource("RectangleShape2D_wall_side")
+
+[node name="CollisionShape2D left plant" type="CollisionShape2D" parent="MapBoundaries" unique_id=2019690488]
+position = Vector2(106, 222)
+shape = SubResource("CircleShape2D_plant")
+
+[node name="CollisionShape2D right plant" type="CollisionShape2D" parent="MapBoundaries" unique_id=2059008345]
+position = Vector2(2195, 223)
+shape = SubResource("CircleShape2D_plant")
+
+[node name="DeskCollisions" type="StaticBody2D" parent="." unique_id=1188787159]
+
+[node name="CollisionShape2D desk row 1 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1100516282]
+position = Vector2(634, 532.625)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 1 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=1230861439]
+position = Vector2(1625, 532)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 2 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=14817531]
+position = Vector2(637, 762)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 2 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=2049881027]
+position = Vector2(1629, 765)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 3 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1712624542]
+position = Vector2(634, 1035.75)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 3 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=962729543]
+position = Vector2(1629, 1035)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 4 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1334737540]
+position = Vector2(634, 1290)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 4 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=267799947]
+position = Vector2(1629, 1290)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D teacher desk" type="CollisionShape2D" parent="DeskCollisions" unique_id=1045438904]
+position = Vector2(271, 349.5)
+shape = SubResource("RectangleShape2D_teacher_desk")
+
+[node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
+position = Vector2(1152, 336)
+
+[node name="Camera2D" parent="Player" index="2"]
+limit_left = 0
+limit_top = 0
+limit_right = 2304
+limit_bottom = 1600

@@ -497,7 +497,7 @@ private void OnMapTransitionTriggerEntered(Node2D body)
         // --- ITT TÖRTÉNIK A VARÁZSLAT ---
         // A macskakörmök közé a MÁSIK PÁLYÁD (Scene) pontos elérési útját kell beírnod!
         // Például: "res://scenes/UniversityLevel.tscn"
-        GetTree().ChangeSceneToFile("res://scenes/GroundFloor.tscn");
+        GetTree().ChangeSceneToFile("res://scenes/C100.tscn");
     }
 }
 
