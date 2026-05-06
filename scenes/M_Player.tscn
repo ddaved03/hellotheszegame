@@ -101,6 +101,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k0juu"]
 size = Vector2(34, 92)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_x6lmx"]
+radius = 60.00833
+
 [node name="Player" type="CharacterBody2D" unique_id=1544599848]
 position = Vector2(172, 150)
 script = ExtResource("1_dpr2a")
@@ -131,3 +134,7 @@ limit_right = 3569
 limit_bottom = 1248
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=2038176447]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1838615755]
+position = Vector2(-1, 15)
+shape = SubResource("CircleShape2D_x6lmx")
