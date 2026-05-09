@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://7bre2gd4hdn0" path="res://kepek/C100-map-aisle.png" id="1_c100"]
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/Paalda.tscn" id="3_paalda"]
+[ext_resource type="Texture2D" path="res://kepek/C100-monitor-overlay.png" id="4_monitor_overlay"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(2304, 205)
@@ -30,6 +31,198 @@ z_index = -10
 position = Vector2(1152, 768)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_c100")
+
+[node name="MonitorOverlayL1A" type="Sprite2D" parent="."]
+position = Vector2(377.25, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 311, 51, 57)
+
+[node name="MonitorOverlayL1B" type="Sprite2D" parent="."]
+position = Vector2(591.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 311, 51, 57)
+
+[node name="MonitorOverlayL1C" type="Sprite2D" parent="."]
+position = Vector2(821.25, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 311, 51, 57)
+
+[node name="MonitorOverlayR1A" type="Sprite2D" parent="."]
+position = Vector2(1398.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 311, 51, 57)
+
+[node name="MonitorOverlayR1B" type="Sprite2D" parent="."]
+position = Vector2(1623.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 311, 51, 57)
+
+[node name="MonitorOverlayR1C" type="Sprite2D" parent="."]
+position = Vector2(1842.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 311, 51, 57)
+
+[node name="MonitorOverlayL2A" type="Sprite2D" parent="."]
+position = Vector2(377.25, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 467, 51, 57)
+
+[node name="MonitorOverlayL2B" type="Sprite2D" parent="."]
+position = Vector2(591.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 467, 51, 57)
+
+[node name="MonitorOverlayL2C" type="Sprite2D" parent="."]
+position = Vector2(821.25, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 467, 51, 57)
+
+[node name="MonitorOverlayR2A" type="Sprite2D" parent="."]
+position = Vector2(1398.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 467, 51, 57)
+
+[node name="MonitorOverlayR2B" type="Sprite2D" parent="."]
+position = Vector2(1623.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 467, 51, 57)
+
+[node name="MonitorOverlayR2C" type="Sprite2D" parent="."]
+position = Vector2(1842.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 467, 51, 57)
+
+[node name="MonitorOverlayL3A" type="Sprite2D" parent="."]
+position = Vector2(377.25, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 648, 51, 57)
+
+[node name="MonitorOverlayL3B" type="Sprite2D" parent="."]
+position = Vector2(591.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 648, 51, 57)
+
+[node name="MonitorOverlayL3C" type="Sprite2D" parent="."]
+position = Vector2(821.25, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 648, 51, 57)
+
+[node name="MonitorOverlayR3A" type="Sprite2D" parent="."]
+position = Vector2(1398.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 648, 51, 57)
+
+[node name="MonitorOverlayR3B" type="Sprite2D" parent="."]
+position = Vector2(1623.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 648, 51, 57)
+
+[node name="MonitorOverlayR3C" type="Sprite2D" parent="."]
+position = Vector2(1842.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 648, 51, 57)
+
+[node name="MonitorOverlayL4A" type="Sprite2D" parent="."]
+position = Vector2(377.25, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 819, 51, 57)
+
+[node name="MonitorOverlayL4B" type="Sprite2D" parent="."]
+position = Vector2(591.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 819, 51, 57)
+
+[node name="MonitorOverlayL4C" type="Sprite2D" parent="."]
+position = Vector2(821.25, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 819, 51, 57)
+
+[node name="MonitorOverlayR4A" type="Sprite2D" parent="."]
+position = Vector2(1398.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 819, 51, 57)
+
+[node name="MonitorOverlayR4B" type="Sprite2D" parent="."]
+position = Vector2(1623.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 819, 51, 57)
+
+[node name="MonitorOverlayR4C" type="Sprite2D" parent="."]
+position = Vector2(1842.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 819, 51, 57)
 
 [node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=71792524]
 

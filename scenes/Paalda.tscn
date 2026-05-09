@@ -29,6 +29,8 @@ size = Vector2(36, 81.5)
 size = Vector2(54, 44)
 
 [node name="Paalda" type="CharacterBody2D" unique_id=714242388]
+z_index = 30
+y_sort_origin = 104
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_paalda_script")
@@ -39,6 +41,7 @@ DiagonalFrontTexture = ExtResource("5_paalda_diag_front")
 DiagonalBackTexture = ExtResource("4_paalda_diag_back")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1872256109]
+z_index = 30
 scale = Vector2(0.26, 0.26)
 texture = ExtResource("1_paalda")
 
