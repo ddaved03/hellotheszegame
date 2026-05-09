@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://7bre2gd4hdn0" path="res://kepek/C100-map-aisle.png" id="1_c100"]
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/Paalda.tscn" id="3_paalda"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(2304, 205)
@@ -96,6 +97,68 @@ shape = SubResource("RectangleShape2D_teacher_desk")
 
 [node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
 position = Vector2(1152, 336)
+
+[node name="Paalda" parent="." instance=ExtResource("3_paalda")]
+position = Vector2(1152, 768)
+
+[node name="PatrolPoints" type="Node2D" parent="Paalda"]
+
+[node name="CenterTop" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(0, -442)
+
+[node name="CenterTopDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(100, -332)
+
+[node name="CenterGapOne" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(0, -222)
+
+[node name="LeftGapOne" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(-982, -222)
+
+[node name="LeftGapTwo" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(-982, 28)
+
+[node name="CenterGapTwo" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(0, 28)
+
+[node name="CenterDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(-100, 158)
+
+[node name="CenterDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(100, 392)
+
+[node name="CenterGapThree" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(0, 392)
+
+[node name="LeftGapThree" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(-982, 392)
+
+[node name="LeftBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(-982, 560)
+
+[node name="CenterBottom" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(120, 560)
+
+[node name="BottomDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(-100, 470)
+
+[node name="BottomDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(100, 560)
+
+[node name="RightBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(982, 560)
+
+[node name="RightGapThree" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(982, 392)
+
+[node name="RightGapTwo" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(982, 28)
+
+[node name="RightGapOne" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(982, -222)
+
+[node name="RightTopReturn" type="Marker2D" parent="Paalda/PatrolPoints"]
+position = Vector2(982, -442)
 
 [node name="Camera2D" parent="Player" index="2"]
 limit_left = 0
