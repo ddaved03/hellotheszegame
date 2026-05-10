@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/XpOrb.tscn" id="2_xporb"]
 [ext_resource type="PackedScene" path="res://scenes/Potion.tscn" id="3_potion"]
 [ext_resource type="Texture2D" path="res://kepek/Zombi_large.png" id="4_texture"]
+[ext_resource type="Texture2D" path="res://kepek/Zombi_large_back.png" id="5_back"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(93, 103)
@@ -25,6 +26,8 @@ MaxHealth = 120
 Damage = 24
 XpOrbScene = ExtResource("2_xporb")
 PotionScene = ExtResource("3_potion")
+FrontTexture = ExtResource("4_texture")
+BackTexture = ExtResource("5_back")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.18457031, 0.17834473)

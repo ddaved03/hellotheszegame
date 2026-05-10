@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cdttfxhr1o2c2"]
+
+[ext_resource type="Texture2D" uid="uid://cexk0c1yf2kx0" path="res://kepek/keke-auto-bal-oldala.png" id="1_nwy6m"]
+
+[node name="CarBlue" type="Node2D" unique_id=2063740317]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1838495048]
+position = Vector2(-186, -282)
+scale = Vector2(0.27309683, 0.296173)
+texture = ExtResource("1_nwy6m")
