@@ -39,6 +39,7 @@ public partial class BasePlayer : CharacterBody2D
     private bool _isInventoryOpen = false;
     private AnimatedSprite2D _animSprite;
     private Timer _blinkTimer;
+    private Timer _footstepTimer;
     private float _idleTime = 0.0f; 
     private string _currentDirAnim = "idle_front";
 
@@ -64,6 +65,16 @@ public partial class BasePlayer : CharacterBody2D
         _blinkTimer.OneShot = true;
         AddChild(_blinkTimer);
         _blinkTimer.Timeout += OnBlinkTimerTimeout;
+
+        // Footstep timer
+        _footstepTimer = new Timer
+        {
+            OneShot = false,
+            WaitTime = 0.45f,
+            Autostart = false
+        };
+        AddChild(_footstepTimer);
+        _footstepTimer.Timeout += () => { if (!GetTree().Paused) AudioManager.Instance?.PlayFootstep(GlobalPosition); };
     }
 
     public override void _PhysicsProcess(double delta)
@@ -88,6 +99,8 @@ public partial class BasePlayer : CharacterBody2D
                 _idleTime = 0.0f;
                 _blinkTimer.Stop(); 
 
+                if (_footstepTimer != null && _footstepTimer.IsStopped()) _footstepTimer.Start();
+
                 if (direction.Y < 0) _currentDirAnim = "idle_back";
                 else if (direction.Y > 0) _currentDirAnim = "idle_front";
                 else if (direction.X != 0) _currentDirAnim = "idle_side";
@@ -102,6 +115,8 @@ public partial class BasePlayer : CharacterBody2D
             else
             {
                 _idleTime += (float)delta;
+
+                if (_footstepTimer != null && !_footstepTimer.IsStopped()) _footstepTimer.Stop();
 
                 if (!_animSprite.IsPlaying())
                 {

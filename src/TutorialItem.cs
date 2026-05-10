@@ -58,6 +58,23 @@ public override void _Ready()
                         var groundFloor = GetTree().Root.FindChild("GroundFloor", true, false) as GroundFloorController;
                         if (groundFloor != null) groundFloor.OnKeyPartCollected(ItemName);
 
+                    // Play pickup sound based on item name
+                    if (AudioManager.Instance != null)
+                    {
+                        if (ItemName != null && ItemName.ToLower().Contains("key"))
+                        {
+                            AudioManager.Instance?.PlayKeyPickup(GlobalPosition);
+                        }
+                        else if (ItemName != null && ItemName.ToLower().Contains("potion"))
+                        {
+                            AudioManager.Instance?.PlayPickupPotion(GlobalPosition);
+                        }
+                        else if (ItemName != null && (ItemName.ToLower().Contains("xp") || ItemName.ToLower().Contains("xporb")))
+                        {
+                            AudioManager.Instance?.PlayPickupXp(GlobalPosition);
+                        }
+                    }
+
                     QueueFree(); // Eltüntetjük a földről
                 }
             }

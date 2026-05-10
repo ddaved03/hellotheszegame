@@ -27,6 +27,7 @@ public partial class UniversityDoor : StaticBody2D
             if (InventoryManager.Items.Contains("UniversityKey"))
             {
                 GD.Print("Ajtó kinyitva!");
+                AudioManager.Instance?.PlayDoor(GlobalPosition);
                 var worldScript = GetTree().Root.FindChild("World", true, false) as WorldController;
                 if (worldScript != null) 
                 {
