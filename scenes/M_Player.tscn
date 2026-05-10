@@ -130,8 +130,8 @@ shape = SubResource("RectangleShape2D_k0juu")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1121726718]
 limit_left = 0
 limit_top = 0
-limit_right = 1786
-limit_bottom = 935
+limit_right = 3569
+limit_bottom = 1248
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=2038176447]
 

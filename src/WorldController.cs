@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 
 public partial class WorldController : Node2D
 {
@@ -515,6 +517,7 @@ public partial class WorldController : Node2D
         if (@event.IsActionPressed("pause"))
         {
             if (_pauseMenu == null) return;
+            if (_pauseMenu == null) return;
             bool openPauseMenu = !GetTree().Paused;
             if (openPauseMenu)
             {
@@ -523,12 +526,15 @@ public partial class WorldController : Node2D
                 Input.MouseMode = Input.MouseModeEnum.Visible;
             }
             else if (_pauseMenu.Visible) OnResumePressed();
+            else if (_pauseMenu.Visible) OnResumePressed();
             GetViewport().SetInputAsHandled();
         }
     }
 
     private void OnResumePressed()
     {
+        AudioManager.Instance?.PlayUiClick();
+        if (_pauseMenu != null) _pauseMenu.Visible = false;
         AudioManager.Instance?.PlayUiClick();
         if (_pauseMenu != null) _pauseMenu.Visible = false;
         GetTree().Paused = false;
