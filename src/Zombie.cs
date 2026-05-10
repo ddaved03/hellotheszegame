@@ -21,6 +21,7 @@ public partial class Zombie : CharacterBody2D
 	private Sprite2D _sprite;
 	private Area2D _performAttack;
 	private Timer _ambientTimer;
+    private Timer _footstepTimer;
 
 	public override void _Ready()
 	{
@@ -42,6 +43,16 @@ public partial class Zombie : CharacterBody2D
 		AddChild(_ambientTimer);
 		_ambientTimer.Timeout += OnAmbientTimerTimeout;
 		ScheduleAmbient();
+
+		// Footstep timer for zombie movement
+		_footstepTimer = new Timer
+		{
+			OneShot = false,
+			WaitTime = 0.55f,
+			Autostart = false
+		};
+		AddChild(_footstepTimer);
+		_footstepTimer.Timeout += () => { if (!GetTree().Paused) AudioManager.Instance?.PlayZombieFootstep(GlobalPosition); };
 		
 		// Csatlakozunk a DetectionArea-hoz a követéshez
 		var detArea = GetNodeOrNull<Area2D>("DetectionArea");
@@ -65,6 +76,8 @@ public partial class Zombie : CharacterBody2D
 			Velocity = direction * Speed;
 			MoveAndSlide();
 
+			if (_footstepTimer != null && _footstepTimer.IsStopped()) _footstepTimer.Start();
+
 			UpdateFacing(direction);
 			UpdateAttackArea(direction);
 
@@ -79,6 +92,8 @@ public partial class Zombie : CharacterBody2D
 		else
 		{
 			Velocity = Vector2.Zero;
+
+			if (_footstepTimer != null && !_footstepTimer.IsStopped()) _footstepTimer.Stop();
 		}
 	}
 

@@ -29,11 +29,27 @@ public partial class AudioManager : Node
     public void PlayZombieAmbient(Vector2 position) => Play2D("zombie_ambient", position, 0.16f);
     public void PlayZombieAttack(Vector2 position) => Play2D("zombie_attack", position, 0.07f);
     public void PlayZombieHit(Vector2 position) => Play2D("zombie_hit", position, 0.10f);
-    public void PlayZombieDeath(Vector2 position) => Play2D("zombie_death", position, 0.08f);
+    public void PlayZombieDeath(Vector2 position) => Play2D("death", position, 0.08f);
     public void PlayDropPotion(Vector2 position) => Play2D("drop_potion", position, 0.04f);
     public void PlayDropXp(Vector2 position) => Play2D("drop_xp", position, 0.06f);
     public void PlayPickupPotion(Vector2 position) => Play2D("pickup_potion", position, 0.05f);
     public void PlayPickupXp(Vector2 position) => Play2D("pickup_xp", position, 0.05f);
+    public void PlayKeyPickup(Vector2 position) => Play2D("key_pickup", position, 0.05f);
+    public void PlayFootstep(Vector2 position) => Play2D("footstep", position, 0.05f);
+    public AudioStreamPlayer PlayBackground()
+    {
+        if (!_streams.TryGetValue("background", out var stream)) return null;
+        var player = new AudioStreamPlayer
+        {
+            Stream = stream,
+            Bus = "Master",
+            ProcessMode = ProcessModeEnum.Always,
+            Autoplay = true
+        };
+        AddChild(player);
+        player.Play();
+        return player;
+    }
 
     private void BuildStreams()
     {
@@ -58,17 +74,49 @@ public partial class AudioManager : Node
         _streams["zombie_hit"] = LoadOrFallback(
             new[] { "res://audio/hit.wav" },
             () => CreateTone(205f, 0.09f, 0.37f, true, 13f, 0.35f));
-        _streams["zombie_death"] = CreateTone(95f, 0.65f, 0.40f, false, 1.9f, 0.50f);
 
-        _streams["drop_potion"] = CreateTone(520f, 0.10f, 0.25f, false, 8f, 0.05f);
-        _streams["drop_xp"] = CreateTone(760f, 0.10f, 0.22f, false, 9f, 0.0f);
+        // Use death.* if available
+        _streams["death"] = LoadOrFallback(
+            new[] { "res://audio/death.wav", "res://audio/death.mp3" },
+            () => CreateTone(95f, 0.65f, 0.40f, false, 1.9f, 0.50f));
+
+        // Drops and pickups
+        _streams["drop_potion"] = LoadOrFallback(
+            new[] { "res://audio/potion.wav" },
+            () => CreateTone(520f, 0.10f, 0.25f, false, 8f, 0.05f));
+        _streams["drop_xp"] = LoadOrFallback(
+            new[] { "res://audio/xp.wav", "res://audio/pickup_xp.wav" },
+            () => CreateTone(760f, 0.10f, 0.22f, false, 9f, 0.0f));
 
         _streams["pickup_potion"] = LoadOrFallback(
-            new[] { "res://audio/pickup_potion.wav" },
+            new[] { "res://audio/pickup_potion.wav", "res://audio/potion.wav" },
             () => CreateTone(420f, 0.13f, 0.28f, false, 6f, 0.03f));
         _streams["pickup_xp"] = LoadOrFallback(
-            new[] { "res://audio/pickup_xp.wav" },
+            new[] { "res://audio/pickup_xp.wav", "res://audio/xp.wav" },
             () => CreateTone(980f, 0.12f, 0.25f, false, 8f, 0.0f));
+
+        // New mappings by filename
+        _streams["background"] = LoadOrFallback(
+            new[] { "res://audio/background.wav" },
+            () => CreateTone(60f, 4f, 0.02f, false, 0.5f, 0.02f));
+        _streams["footstep"] = LoadOrFallback(
+            new[] { "res://audio/footstep.wav" },
+            () => CreateTone(420f, 0.08f, 0.05f, false, 6f, 0.02f));
+        _streams["key_pickup"] = LoadOrFallback(
+            new[] { "res://audio/key.wav", "res://audio/key.mp3" },
+            () => CreateTone(1500f, 0.08f, 0.18f, false, 3f, 0.0f));
+        _streams["door"] = LoadOrFallback(
+            new[] { "res://audio/door.wav", "res://audio/door.mp3" },
+            () => CreateTone(600f, 0.18f, 0.12f, false, 2f, 0.02f));
+        _streams["elevator"] = LoadOrFallback(
+            new[] { "res://audio/elevator.wav", "res://audio/elevator.mp3" },
+            () => CreateTone(220f, 1.2f, 0.06f, false, 0.6f, 0.04f));
+        _streams["zombie_spawn"] = LoadOrFallback(
+            new[] { "res://audio/zombi.wav", "res://audio/zombi.mp3", "res://audio/zombie.wav", "res://audio/zombie.mp3" },
+            () => CreateTone(180f, 0.45f, 0.14f, false, 1.1f, 0.2f));
+        _streams["zombie_footstep"] = LoadOrFallback(
+            new[] { "res://audio/zombie_footstep.wav", "res://audio/zombi_footstep.wav", "res://audio/footstep.wav" },
+            () => CreateTone(220f, 0.06f, 0.05f, false, 2f, 0.02f));
     }
 
     private AudioStream LoadOrFallback(string[] candidates, Func<AudioStream> fallback)
@@ -164,4 +212,9 @@ public partial class AudioManager : Node
         player.Finished += () => player.QueueFree();
         player.Play();
     }
+
+    public void PlayDoor(Vector2 position) => Play2D("door", position, 0.02f);
+    public void PlayElevator(Vector2 position) => Play2D("elevator", position, 0.02f);
+    public void PlayZombieSpawn(Vector2 position) => Play2D("zombie_spawn", position, 0.06f);
+    public void PlayZombieFootstep(Vector2 position) => Play2D("zombie_footstep", position, 0.04f);
 }

@@ -88,6 +88,12 @@ public partial class GroundFloorController : Node2D
             }
         }
 
+        // Start background music for GroundFloor (if present)
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayBackground();
+        }
+
         // 1. PAUSE MENÜ KERESÉSE ÉS BEKÖTÉSE
         if (PauseMenuPath != null)
         {
@@ -182,6 +188,7 @@ public partial class GroundFloorController : Node2D
         if (InventoryManager.Items.Contains("UniversityKey"))
         {
             GD.Print("Liftkulcs megvan, mehet a C100-as terem.");
+            AudioManager.Instance?.PlayElevator(_player != null ? _player.GlobalPosition : GlobalPosition);
             GetTree().ChangeSceneToFile("res://scenes/C100.tscn");
             return;
         }
@@ -295,6 +302,7 @@ public partial class GroundFloorController : Node2D
 
         AddChild(zombie);
         _liftZombiesAlive++;
+        AudioManager.Instance?.PlayZombieSpawn(spawnPosition);
 
         Vector2 dropPosition = spawnPosition;
 
@@ -370,6 +378,7 @@ public partial class GroundFloorController : Node2D
 
         AddChild(zombie);
         _activeBigZombies++;
+        AudioManager.Instance?.PlayZombieSpawn(spawnPos);
 
         bool assignKey = false;
         if (!_globalKeyAssigned)
