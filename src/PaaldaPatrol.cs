@@ -5,8 +5,8 @@ public partial class PaaldaPatrol : CharacterBody2D
 {
     [Export] public float Speed = 120.0f;
     [Export] public float ArriveDistance = 8.0f;
-    [Export] public float PushRadius = 90.0f;
-    [Export] public float PushSpeed = 260.0f;
+    [Export] public float PushRadius = 62.0f;
+    [Export] public float PushSpeed = 210.0f;
     [Export] public Texture2D FrontTexture;
     [Export] public Texture2D BackTexture;
     [Export] public Texture2D SideTexture;

@@ -26,12 +26,12 @@ size = Vector2(36, 81.5)
 size = Vector2(36, 81.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_navigation"]
-size = Vector2(54, 44)
+size = Vector2(88, 82)
 
 [node name="Paalda" type="CharacterBody2D" unique_id=714242388]
 z_index = 30
 y_sort_origin = 104
-collision_layer = 2
+collision_layer = 8
 collision_mask = 1
 script = ExtResource("1_paalda_script")
 FrontTexture = ExtResource("1_paalda")
@@ -76,5 +76,5 @@ shape = SubResource("RectangleShape2D_right_leg")
 disabled = true
 
 [node name="NavigationCollision" type="CollisionShape2D" parent="."]
-position = Vector2(0, 104)
+position = Vector2(0, 95)
 shape = SubResource("RectangleShape2D_navigation")

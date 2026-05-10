@@ -2,14 +2,15 @@
 
 [ext_resource type="Texture2D" uid="uid://7bre2gd4hdn0" path="res://kepek/C100-map-aisle.png" id="1_c100"]
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://scenes/Paalda.tscn" id="3_paalda"]
-[ext_resource type="Texture2D" path="res://kepek/C100-monitor-overlay.png" id="4_monitor_overlay"]
+[ext_resource type="PackedScene" uid="uid://j7o1wuti6nkb" path="res://scenes/Paalda.tscn" id="3_paalda"]
+[ext_resource type="Texture2D" uid="uid://dqlwy8m4lpvac" path="res://kepek/C100-monitor-overlay.png" id="4_monitor_overlay"]
+[ext_resource type="Texture2D" uid="uid://f7qnj35bltya" path="res://kepek/C100-teacher-desk-overlay.png" id="5_teacher_overlay"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(2304, 205)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_bottom"]
-size = Vector2(2304, 60)
+size = Vector2(2304, 41)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_side"]
 size = Vector2(60, 1536)
@@ -18,10 +19,10 @@ size = Vector2(60, 1536)
 radius = 15.297058
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_desk_segment"]
-size = Vector2(718, 58.75)
+size = Vector2(725, 36)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_teacher_desk"]
-size = Vector2(200, 69)
+size = Vector2(200, 71)
 
 [node name="C100" type="Node2D" unique_id=2050255343]
 y_sort_enabled = true
@@ -32,7 +33,13 @@ position = Vector2(1152, 768)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_c100")
 
-[node name="MonitorOverlayL1A" type="Sprite2D" parent="."]
+[node name="TeacherDeskOverlay" type="Sprite2D" parent="." unique_id=585714124]
+z_index = 40
+position = Vector2(273, 322.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("5_teacher_overlay")
+
+[node name="MonitorOverlayL1A" type="Sprite2D" parent="." unique_id=1029319794]
 position = Vector2(377.25, 552)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -40,7 +47,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(226, 311, 51, 57)
 
-[node name="MonitorOverlayL1B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL1B" type="Sprite2D" parent="." unique_id=1249602214]
 position = Vector2(591.75, 552)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -48,7 +55,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(369, 311, 51, 57)
 
-[node name="MonitorOverlayL1C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL1C" type="Sprite2D" parent="." unique_id=1253732917]
 position = Vector2(821.25, 552)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -56,7 +63,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(522, 311, 51, 57)
 
-[node name="MonitorOverlayR1A" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR1A" type="Sprite2D" parent="." unique_id=1922933846]
 position = Vector2(1398.75, 552)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -64,7 +71,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(907, 311, 51, 57)
 
-[node name="MonitorOverlayR1B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR1B" type="Sprite2D" parent="." unique_id=62033374]
 position = Vector2(1623.75, 552)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -72,7 +79,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(1057, 311, 51, 57)
 
-[node name="MonitorOverlayR1C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR1C" type="Sprite2D" parent="." unique_id=1089939834]
 position = Vector2(1842.75, 552)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -80,7 +87,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(1203, 311, 51, 57)
 
-[node name="MonitorOverlayL2A" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL2A" type="Sprite2D" parent="." unique_id=792447422]
 position = Vector2(377.25, 786)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -88,7 +95,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(226, 467, 51, 57)
 
-[node name="MonitorOverlayL2B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL2B" type="Sprite2D" parent="." unique_id=636494896]
 position = Vector2(591.75, 786)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -96,7 +103,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(369, 467, 51, 57)
 
-[node name="MonitorOverlayL2C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL2C" type="Sprite2D" parent="." unique_id=144324910]
 position = Vector2(821.25, 786)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -104,7 +111,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(522, 467, 51, 57)
 
-[node name="MonitorOverlayR2A" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR2A" type="Sprite2D" parent="." unique_id=1192008444]
 position = Vector2(1398.75, 786)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -112,7 +119,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(907, 467, 51, 57)
 
-[node name="MonitorOverlayR2B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR2B" type="Sprite2D" parent="." unique_id=2134345273]
 position = Vector2(1623.75, 786)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -120,7 +127,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(1057, 467, 51, 57)
 
-[node name="MonitorOverlayR2C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR2C" type="Sprite2D" parent="." unique_id=342414493]
 position = Vector2(1842.75, 786)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -128,7 +135,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(1203, 467, 51, 57)
 
-[node name="MonitorOverlayL3A" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL3A" type="Sprite2D" parent="." unique_id=1365415531]
 position = Vector2(377.25, 1057.5)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -136,7 +143,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(226, 648, 51, 57)
 
-[node name="MonitorOverlayL3B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL3B" type="Sprite2D" parent="." unique_id=569959384]
 position = Vector2(591.75, 1057.5)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -144,7 +151,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(369, 648, 51, 57)
 
-[node name="MonitorOverlayL3C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL3C" type="Sprite2D" parent="." unique_id=1613501593]
 position = Vector2(821.25, 1057.5)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -152,7 +159,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(522, 648, 51, 57)
 
-[node name="MonitorOverlayR3A" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR3A" type="Sprite2D" parent="." unique_id=461364175]
 position = Vector2(1398.75, 1057.5)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -160,7 +167,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(907, 648, 51, 57)
 
-[node name="MonitorOverlayR3B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR3B" type="Sprite2D" parent="." unique_id=1976611509]
 position = Vector2(1623.75, 1057.5)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -168,7 +175,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(1057, 648, 51, 57)
 
-[node name="MonitorOverlayR3C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR3C" type="Sprite2D" parent="." unique_id=1227350697]
 position = Vector2(1842.75, 1057.5)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -176,7 +183,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(1203, 648, 51, 57)
 
-[node name="MonitorOverlayL4A" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL4A" type="Sprite2D" parent="." unique_id=363960154]
 position = Vector2(377.25, 1314)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -184,7 +191,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(226, 819, 51, 57)
 
-[node name="MonitorOverlayL4B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL4B" type="Sprite2D" parent="." unique_id=33260890]
 position = Vector2(591.75, 1314)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -192,7 +199,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(369, 819, 51, 57)
 
-[node name="MonitorOverlayL4C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayL4C" type="Sprite2D" parent="." unique_id=131361555]
 position = Vector2(821.25, 1314)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -200,7 +207,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(522, 819, 51, 57)
 
-[node name="MonitorOverlayR4A" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR4A" type="Sprite2D" parent="." unique_id=213448712]
 position = Vector2(1398.75, 1314)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -208,7 +215,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(907, 819, 51, 57)
 
-[node name="MonitorOverlayR4B" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR4B" type="Sprite2D" parent="." unique_id=1976517765]
 position = Vector2(1623.75, 1314)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -216,7 +223,7 @@ offset = Vector2(0, -28.5)
 region_enabled = true
 region_rect = Rect2(1057, 819, 51, 57)
 
-[node name="MonitorOverlayR4C" type="Sprite2D" parent="."]
+[node name="MonitorOverlayR4C" type="Sprite2D" parent="." unique_id=233307280]
 position = Vector2(1842.75, 1314)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("4_monitor_overlay")
@@ -231,7 +238,7 @@ position = Vector2(1152, 102.5)
 shape = SubResource("RectangleShape2D_wall_top")
 
 [node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=653957681]
-position = Vector2(1152, 1506)
+position = Vector2(1152, 1515.5)
 shape = SubResource("RectangleShape2D_wall_bottom")
 
 [node name="CollisionShape2D left" type="CollisionShape2D" parent="MapBoundaries" unique_id=570121330]
@@ -253,108 +260,102 @@ shape = SubResource("CircleShape2D_plant")
 [node name="DeskCollisions" type="StaticBody2D" parent="." unique_id=1188787159]
 
 [node name="CollisionShape2D desk row 1 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1100516282]
-position = Vector2(634, 532.625)
+position = Vector2(633.5, 521)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D desk row 1 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=1230861439]
-position = Vector2(1625, 532)
+position = Vector2(1625, 521)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D desk row 2 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=14817531]
-position = Vector2(637, 762)
+position = Vector2(637, 751)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D desk row 2 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=2049881027]
-position = Vector2(1629, 765)
+position = Vector2(1629, 754)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D desk row 3 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1712624542]
-position = Vector2(634, 1035.75)
+position = Vector2(634, 1024)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D desk row 3 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=962729543]
-position = Vector2(1629, 1035)
+position = Vector2(1629, 1024)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D desk row 4 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1334737540]
-position = Vector2(634, 1290)
+position = Vector2(634, 1279)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D desk row 4 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=267799947]
-position = Vector2(1629, 1290)
+position = Vector2(1629, 1279)
 shape = SubResource("RectangleShape2D_desk_segment")
 
 [node name="CollisionShape2D teacher desk" type="CollisionShape2D" parent="DeskCollisions" unique_id=1045438904]
-position = Vector2(271, 349.5)
+position = Vector2(271, 348.5)
 shape = SubResource("RectangleShape2D_teacher_desk")
 
 [node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
 position = Vector2(1152, 336)
 
-[node name="Paalda" parent="." instance=ExtResource("3_paalda")]
+[node name="Paalda" parent="." unique_id=1296762172 instance=ExtResource("3_paalda")]
 position = Vector2(1152, 768)
 
-[node name="PatrolPoints" type="Node2D" parent="Paalda"]
+[node name="PatrolPoints" type="Node2D" parent="Paalda" unique_id=1368874975]
 
-[node name="CenterTop" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterTop" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1086265325]
 position = Vector2(0, -442)
 
-[node name="CenterTopDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterTopDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=615469112]
 position = Vector2(100, -332)
 
-[node name="CenterGapOne" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1461901440]
 position = Vector2(0, -222)
 
-[node name="LeftGapOne" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="LeftGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=71809832]
 position = Vector2(-982, -222)
 
-[node name="LeftGapTwo" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="LeftGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1879180922]
 position = Vector2(-982, 28)
 
-[node name="CenterGapTwo" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2116323577]
 position = Vector2(0, 28)
 
-[node name="CenterDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1087938612]
 position = Vector2(-100, 158)
 
-[node name="CenterDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1558948111]
 position = Vector2(100, 392)
 
-[node name="CenterGapThree" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1850664886]
 position = Vector2(0, 392)
 
-[node name="LeftGapThree" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="LeftGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2084035899]
 position = Vector2(-982, 392)
 
-[node name="LeftBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="LeftBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=510711043]
 position = Vector2(-982, 560)
 
-[node name="CenterBottom" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="CenterBottom" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=750295725]
 position = Vector2(120, 560)
 
-[node name="BottomDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="BottomDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1520624325]
 position = Vector2(-100, 470)
 
-[node name="BottomDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="BottomDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=923802747]
 position = Vector2(100, 560)
 
-[node name="RightBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="RightBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=135721754]
 position = Vector2(982, 560)
 
-[node name="RightGapThree" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="RightGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=823756907]
 position = Vector2(982, 392)
 
-[node name="RightGapTwo" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="RightGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1788233594]
 position = Vector2(982, 28)
 
-[node name="RightGapOne" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="RightGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1136176302]
 position = Vector2(982, -222)
 
-[node name="RightTopReturn" type="Marker2D" parent="Paalda/PatrolPoints"]
+[node name="RightTopReturn" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2145266138]
 position = Vector2(982, -442)
-
-[node name="Camera2D" parent="Player" index="2"]
-limit_left = 0
-limit_top = 0
-limit_right = 2304
-limit_bottom = 1600
