@@ -285,12 +285,14 @@ QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
 TutorialKeyPartScene = ExtResource("4_e4yt5")
 
 [node name="MapTransitionTrigger" type="Area2D" parent="." unique_id=1778733647]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MapTransitionTrigger" unique_id=977077007]
 position = Vector2(2636, -463)
 shape = SubResource("RectangleShape2D_1w2qq")
 
 [node name="RocksTrigger" type="Area2D" parent="." unique_id=1924491189]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RocksTrigger" unique_id=27399639]
 position = Vector2(1634.75, 203.25)
@@ -305,6 +307,7 @@ shape = SubResource("RectangleShape2D_5w2bu")
 
 [node name="DetectionArea" type="Area2D" parent="UniversityDoor" unique_id=423306120]
 position = Vector2(2636, -415.5)
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UniversityDoor/DetectionArea" unique_id=1491566554]
 position = Vector2(-5, 76)
@@ -373,6 +376,7 @@ position = Vector2(2765.5, -424.5)
 shape = SubResource("RectangleShape2D_1bdwf")
 
 [node name="ParkingTrigger" type="Area2D" parent="." unique_id=287140749]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ParkingTrigger" unique_id=1215314848]
 position = Vector2(257, -26)
@@ -847,4 +851,5 @@ StatAtkLabel = NodePath("../CanvasLayer/Inventory/Label_Attack")
 LvlSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_SpeedLevel")
 LvlAtkSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_Attack_Speed")
 
+[connection signal="area_entered" from="ParkingTrigger" to="." method="_on_parking_trigger_area_entered"]
 [connection signal="pressed" from="CanvasLayer/Inventory/Button" to="CanvasLayer/Inventory" method="CraftUniversityKey"]

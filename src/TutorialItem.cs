@@ -54,6 +54,10 @@ public override void _Ready()
                 if (success) {
                     var world = GetTree().Root.FindChild("World", true, false) as WorldController;
                     if (world != null) world.OnKeyPartCollected(ItemName);
+
+                        var groundFloor = GetTree().Root.FindChild("GroundFloor", true, false) as GroundFloorController;
+                        if (groundFloor != null) groundFloor.OnKeyPartCollected(ItemName);
+
                     QueueFree(); // Eltüntetjük a földről
                 }
             }
