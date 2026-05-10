@@ -21,6 +21,8 @@ bg_color = Color(1, 0, 0, 1)
 [node name="Zombie" type="CharacterBody2D" unique_id=564053419]
 z_index = -1
 position = Vector2(42, -97)
+collision_layer = 2
+collision_mask = 1
 script = ExtResource("1_yaogc")
 FrontTexture = ExtResource("3_yaogc")
 BackTexture = ExtResource("5_back")
@@ -36,12 +38,14 @@ position = Vector2(-3.5, 3.5)
 shape = SubResource("RectangleShape2D_x6lmx")
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=1395997640]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1463033098]
 position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_48w40")
 
 [node name="PerformAttack" type="Area2D" parent="." unique_id=1490662045]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PerformAttack" unique_id=603434404]
 position = Vector2(-4, 3.5)

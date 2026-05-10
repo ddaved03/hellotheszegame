@@ -99,13 +99,15 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k0juu"]
-size = Vector2(58, 111)
+size = Vector2(34, 98)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x6lmx"]
-radius = 55.03635
+radius = 60.00833
 
 [node name="Player" type="CharacterBody2D" unique_id=1544599848]
 position = Vector2(172, 150)
+collision_layer = 4
+collision_mask = 9
 script = ExtResource("1_dpr2a")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=907502933]
@@ -124,16 +126,17 @@ scale = Vector2(0.5226953, 0.5226953)
 texture = ExtResource("20_ppkhy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1894949195]
-position = Vector2(-3, 15.5)
+position = Vector2(-2, 21)
 shape = SubResource("RectangleShape2D_k0juu")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1121726718]
 limit_left = 0
 limit_top = 0
 limit_right = 3569
-limit_bottom = 1248
+limit_bottom = 1600
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=2038176447]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1838615755]
 position = Vector2(-1, 15)
