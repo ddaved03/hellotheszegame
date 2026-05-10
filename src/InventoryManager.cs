@@ -9,8 +9,6 @@ public partial class InventoryManager : Control
 
     public override void _Ready()
     {
-        // KIVETTÜK az Items.Clear()-t, nehogy pályaváltáskor letörölje a kulcsokat!
-        // Helyette egyből frissítjük a kinézetet, ha már lennének benne tárgyak
         CallDeferred(nameof(UpdateUI));
     }
 
@@ -89,6 +87,7 @@ public partial class InventoryManager : Control
         if (name == "KeyPart1") return GD.Load<Texture2D>("res://kepek/kulcs-alja-torott.png");
         if (name == "KeyPart2") return GD.Load<Texture2D>("res://kepek/kulcs-kozepe-torott.png");
         if (name == "KeyPart3") return GD.Load<Texture2D>("res://kepek/kulcs-eleje-torott.png");
+        if (name == "LiftKey") return GD.Load<Texture2D>("res://kepek/kulcs-egybe.png");
         if (name == "UniversityKey") return GD.Load<Texture2D>("res://kepek/kulcs-egybe.png"); 
         
         return null;

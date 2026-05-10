@@ -7,8 +7,6 @@ public partial class UniversityDoor : StaticBody2D
 
     public override void _Ready()
     {
-        // Megpróbáljuk megkeresni a DetectionArea-t. 
-        // Ha nem találja ezen a néven, hibát dobna, ezért teszünk bele egy ellenőrzést.
         var area = GetNodeOrNull<Area2D>("DetectionArea");
         
         if (area != null)
@@ -23,23 +21,38 @@ public partial class UniversityDoor : StaticBody2D
 
     private void OnBodyEntered(Node2D body)
     {
-        if (body is BasePlayer && !_questTriggered)
+        if (body is BasePlayer)
         {
-            _questTriggered = true;
-            UpdateQuest();
+            // 1. ELŐSZÖR megnézzük, nálunk van-e már a kész kulcs!
+            if (InventoryManager.Items.Contains("UniversityKey"))
+            {
+                GD.Print("Ajtó kinyitva!");
+                var worldScript = GetTree().Root.FindChild("World", true, false) as WorldController;
+                if (worldScript != null) 
+                {
+                    worldScript.UpdateQuestText("Küldetés: Lépj be az egyetemre!");
+                }
+                
+                // Ez a sor tünteti el a láthatatlan falat, hogy be tudj menni!
+                QueueFree(); 
+            }
+            // 2. Ha nincs kulcs, és még nem indult el a buszos esemény:
+            else if (!_questTriggered)
+            {
+                _questTriggered = true;
+                UpdateQuest();
+            }
         }
     }
 
     private void UpdateQuest()
     {
-        // Itt a te általad megadott útvonalat használjuk
         var label = GetTree().Root.FindChild("QuestLabel", true, false) as Label;
         if (label != null)
         {
             label.Text = "Küldetés: Szerezd meg a kulcsot a buszról!";
         }
 
-        // Megkeressük a World node-ot (amin a WorldController script van)
         var worldScript = GetTree().Root.FindChild("World", true, false) as WorldController;
         if (worldScript != null)
         {
