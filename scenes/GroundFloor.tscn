@@ -1,0 +1,752 @@
+[gd_scene format=3 uid="uid://cucgu5becbush"]
+
+[ext_resource type="Texture2D" uid="uid://dmwvtbwxnr8of" path="res://kepek/map-2.png" id="1_4fudr"]
+[ext_resource type="Script" uid="uid://bihjirw0ynb5" path="res://src/GroundFloorController.cs" id="1_xj0dy"]
+[ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_0qkuh"]
+[ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="3_sp8j0"]
+[ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="4_xj0dy"]
+[ext_resource type="Texture2D" uid="uid://bhcpe1radangw" path="res://kepek/Hppoti.png" id="5_eqwpu"]
+[ext_resource type="Texture2D" uid="uid://byycym0tadc3u" path="res://kepek/inventoryv4.png" id="6_77qag"]
+[ext_resource type="Script" uid="uid://kn873uhxipbb" path="res://src/InventoryManager.cs" id="7_6ox7e"]
+[ext_resource type="Texture2D" uid="uid://dbi0qhhwd5hke" path="res://kepek/inventoryv3.png" id="8_wjbru"]
+[ext_resource type="Texture2D" uid="uid://dwco2bw21mxde" path="res://kepek/Hero1Idol/Hero1Idol1.png" id="9_puxyy"]
+[ext_resource type="Texture2D" uid="uid://donyumqo25xed" path="res://kepek/Hero1Idol/Hero1Idol2.png" id="10_5nwhk"]
+[ext_resource type="Texture2D" uid="uid://cyqyrlihvcsnv" path="res://kepek/Hero1Idol/Hero1Idol3.png" id="11_xblde"]
+[ext_resource type="Texture2D" uid="uid://b1jefxi6ah8ij" path="res://kepek/Hero1Idol/Hero1Idol4.png" id="12_b5w6i"]
+[ext_resource type="Texture2D" uid="uid://cfna0ix3weda1" path="res://kepek/Hero1Idol/Hero1Idol5.png" id="13_3gf8l"]
+[ext_resource type="Texture2D" uid="uid://b632o2sc7vg57" path="res://kepek/Hero1Idol/Hero1Idol6.png" id="14_fpu53"]
+[ext_resource type="Texture2D" uid="uid://dmyfh3uwnawli" path="res://kepek/Hero1Idol/Hero1Idol7.png" id="15_sekl2"]
+[ext_resource type="Texture2D" uid="uid://c31idm6o4bl16" path="res://kepek/Hero1Idol/Hero1Idol8.png" id="16_30jxp"]
+[ext_resource type="Texture2D" uid="uid://dm2n6a31s67jb" path="res://kepek/Hero1Idol/Hero1Idol9.png" id="17_r2p7q"]
+[ext_resource type="Texture2D" uid="uid://oxcigvspafw0" path="res://kepek/Hero1Idol/Hero1Idol10.png" id="18_ym5wa"]
+[ext_resource type="Texture2D" uid="uid://4g7c2l7s4v8p" path="res://kepek/Hero1Idol/Hero1Idol11.png" id="19_mmac1"]
+[ext_resource type="Texture2D" uid="uid://dbbxllun2dio5" path="res://kepek/Hero1Idol/Hero1Idol12.png" id="20_1v0yi"]
+[ext_resource type="Texture2D" uid="uid://bc0borfd1i87v" path="res://kepek/Hero1Idol/Hero1Idol13.png" id="21_lk0ao"]
+[ext_resource type="Texture2D" uid="uid://dcc4t6gfejhuh" path="res://kepek/Hero1Idol/Hero1Idol14.png" id="22_4ra5n"]
+[ext_resource type="Texture2D" uid="uid://c3kgxupfqaqv2" path="res://kepek/Hero1Idol/Hero1Idol15.png" id="23_ihdeq"]
+[ext_resource type="Texture2D" uid="uid://duin5o1ivbtt3" path="res://kepek/Hero3back1.png" id="24_ng0c7"]
+[ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="25_6q4wt"]
+[ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="26_a7yby"]
+[ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="27_oqmdo"]
+[ext_resource type="Script" uid="uid://by5l66akda3a8" path="res://src/UniversityDoor.cs" id="29_eqwpu"]
+[ext_resource type="Script" path="res://src/ElevatorDoor.cs" id="30_elevator"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4fudr"]
+size = Vector2(3719.5, 35)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cy7w5"]
+size = Vector2(46, 1695)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0qkuh"]
+size = Vector2(3719.5, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tefep"]
+size = Vector2(31, 1689)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3e6iv"]
+size = Vector2(51, 194)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xj0dy"]
+size = Vector2(58, 233)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eqwpu"]
+size = Vector2(50, 234)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_77qag"]
+size = Vector2(53, 232)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ox7e"]
+size = Vector2(56, 236)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjbru"]
+size = Vector2(58, 236)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_puxyy"]
+size = Vector2(54.5, 235.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5nwhk"]
+size = Vector2(176, 684)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xblde"]
+size = Vector2(2141, 318)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5w6i"]
+size = Vector2(2213, 273)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sknf8"]
+texture = ExtResource("4_xj0dy")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c12xo"]
+texture = ExtResource("4_xj0dy")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ont1j"]
+texture = ExtResource("4_xj0dy")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ta0dl"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cenrf"]
+bg_color = Color(0.38431373, 1, 0.2627451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tln53"]
+font_size = 20
+font_color = Color(1, 1, 0, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7eqrl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_puxyy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_5nwhk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_xblde")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_b5w6i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_3gf8l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_fpu53")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_sekl2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_30jxp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_r2p7q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_ym5wa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_mmac1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_1v0yi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_lk0ao")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_4ra5n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_ihdeq")
+}],
+"loop": false,
+"name": &"blink",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_ng0c7")
+}],
+"loop": true,
+"name": &"idle_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_6q4wt")
+}],
+"loop": true,
+"name": &"idle_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_a7yby")
+}],
+"loop": true,
+"name": &"idle_side",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xyiql"]
+texture = ExtResource("27_oqmdo")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2yidn"]
+texture = ExtResource("4_xj0dy")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3gf8l"]
+size = Vector2(162, 128.625)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fpu53"]
+size = Vector2(179.5, 29)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sekl2"]
+radius = 139.01439
+
+[node name="GroundFloor" type="Node2D" unique_id=1265253517]
+script = ExtResource("1_xj0dy")
+PlayerPath = NodePath("Player")
+PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
+QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
+
+[node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=1976753314]
+
+[node name="CollisionShape2D up" type="CollisionShape2D" parent="MapBoundaries" unique_id=136492772]
+position = Vector2(1859.25, -17.5)
+shape = SubResource("RectangleShape2D_4fudr")
+
+[node name="CollisionShape2D r" type="CollisionShape2D" parent="MapBoundaries" unique_id=231753542]
+position = Vector2(3741, 814.5)
+shape = SubResource("RectangleShape2D_cy7w5")
+
+[node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=1989571960]
+position = Vector2(1856, 1646)
+shape = SubResource("RectangleShape2D_0qkuh")
+
+[node name="CollisionShape2D l" type="CollisionShape2D" parent="MapBoundaries" unique_id=1557954756]
+position = Vector2(-15.5, 812)
+shape = SubResource("RectangleShape2D_tefep")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1617667065]
+z_index = -10
+position = Vector2(1862, 833)
+scale = Vector2(5.809375, 6.7958326)
+texture = ExtResource("1_4fudr")
+
+[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode", "StatHPLabel", "StatAtkLabel", "LvlSpeedLabel", "LvlAtkSpeedLabel") instance=ExtResource("2_0qkuh")]
+position = Vector2(168, 1554)
+process_mode = 3
+UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
+BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
+BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
+BtnAtkSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button3")
+InventoryNode = NodePath("../CanvasLayer/Inventory")
+StatHPLabel = NodePath("../CanvasLayer/Inventory/Label_HP")
+StatAtkLabel = NodePath("../CanvasLayer/Inventory/Label_Attack")
+LvlSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_SpeedLevel")
+LvlAtkSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_Attack_Speed")
+
+[node name="Camera2D" parent="Player" index="2" unique_id=1121726718]
+limit_right = 3720
+limit_bottom = 1630
+
+[node name="PadBoundaries" type="StaticBody2D" parent="." unique_id=1859343887]
+
+[node name="CollisionShape2D pad7" type="CollisionShape2D" parent="PadBoundaries" unique_id=504190278]
+position = Vector2(587, 367)
+shape = SubResource("RectangleShape2D_3e6iv")
+
+[node name="CollisionShape2D pad8" type="CollisionShape2D" parent="PadBoundaries" unique_id=16330684]
+position = Vector2(2166, 374)
+shape = SubResource("RectangleShape2D_3e6iv")
+
+[node name="CollisionShape2D pad5" type="CollisionShape2D" parent="PadBoundaries" unique_id=186532610]
+position = Vector2(1853, 376)
+shape = SubResource("RectangleShape2D_3e6iv")
+
+[node name="CollisionShape2D pad6" type="CollisionShape2D" parent="PadBoundaries" unique_id=29745054]
+position = Vector2(2476, 373)
+shape = SubResource("RectangleShape2D_3e6iv")
+
+[node name="CollisionShape2D pad4" type="CollisionShape2D" parent="PadBoundaries" unique_id=1998232829]
+position = Vector2(1534, 376)
+shape = SubResource("RectangleShape2D_3e6iv")
+
+[node name="CollisionShape2D pad3" type="CollisionShape2D" parent="PadBoundaries" unique_id=1566520239]
+position = Vector2(1210, 376)
+shape = SubResource("RectangleShape2D_3e6iv")
+
+[node name="CollisionShape2D pad2" type="CollisionShape2D" parent="PadBoundaries" unique_id=142100488]
+position = Vector2(895, 370)
+shape = SubResource("RectangleShape2D_3e6iv")
+
+[node name="CollisionShape2D pad9" type="CollisionShape2D" parent="PadBoundaries" unique_id=2144651051]
+position = Vector2(586, 1097.5)
+shape = SubResource("RectangleShape2D_xj0dy")
+
+[node name="CollisionShape2D pad10" type="CollisionShape2D" parent="PadBoundaries" unique_id=1255564877]
+position = Vector2(898, 1121)
+shape = SubResource("RectangleShape2D_eqwpu")
+
+[node name="CollisionShape2D pad11" type="CollisionShape2D" parent="PadBoundaries" unique_id=611804067]
+position = Vector2(1218, 1113)
+shape = SubResource("RectangleShape2D_77qag")
+
+[node name="CollisionShape2D pad12" type="CollisionShape2D" parent="PadBoundaries" unique_id=1028416306]
+position = Vector2(1537, 1123)
+shape = SubResource("RectangleShape2D_77qag")
+
+[node name="CollisionShape2D pad13" type="CollisionShape2D" parent="PadBoundaries" unique_id=1321286899]
+position = Vector2(1868, 1116)
+shape = SubResource("RectangleShape2D_6ox7e")
+
+[node name="CollisionShape2D pad14" type="CollisionShape2D" parent="PadBoundaries" unique_id=942544689]
+position = Vector2(2170, 1123)
+shape = SubResource("RectangleShape2D_wjbru")
+
+[node name="CollisionShape2D pad15" type="CollisionShape2D" parent="PadBoundaries" unique_id=1799405194]
+position = Vector2(2483.25, 1121.875)
+shape = SubResource("RectangleShape2D_puxyy")
+
+[node name="CollisionShape2D wall" type="CollisionShape2D" parent="PadBoundaries" unique_id=2058252130]
+position = Vector2(2822, 630)
+shape = SubResource("RectangleShape2D_5nwhk")
+
+[node name="CollisionShape2D rooms_top" type="CollisionShape2D" parent="PadBoundaries" unique_id=462663011]
+position = Vector2(1451.5, 132)
+shape = SubResource("RectangleShape2D_xblde")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PadBoundaries" unique_id=792552927]
+position = Vector2(1486.5, 1508.5)
+shape = SubResource("RectangleShape2D_b5w6i")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=154253571]
+
+[node name="DarknessOverlay" type="ColorRect" parent="CanvasLayer" unique_id=300000001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+color = Color(0, 0, 0, 0.65)
+visible = false
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=2057175291]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="UpgradeMenu" type="Panel" parent="CanvasLayer/Control" unique_id=1051941992]
+process_mode = 3
+visible = false
+layout_mode = 0
+offset_left = 193.0
+offset_top = 80.0
+offset_right = 958.0
+offset_bottom = 509.0
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UpgradeMenu" unique_id=484720527]
+texture_filter = 1
+layout_mode = 0
+offset_right = 764.0
+offset_bottom = 429.0
+texture = ExtResource("3_sp8j0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UpgradeMenu" unique_id=1228289760]
+process_mode = 3
+layout_mode = 0
+offset_left = 174.0
+offset_top = 88.0
+offset_right = 584.0
+offset_bottom = 322.0
+alignment = 1
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=1057638394]
+process_mode = 3
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_sknf8")
+text = "+10% Sebesség"
+
+[node name="Button2" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=2053126691]
+process_mode = 3
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_c12xo")
+text = "+5 Sebzés"
+
+[node name="Button3" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=292424023]
+process_mode = 3
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_ont1j")
+text = "Gyorsabb támadás"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control" unique_id=1241814913]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.0
+offset_top = -12.0
+offset_right = 41.0
+offset_bottom = 32.0
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=356358813]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6790001
+anchor_top = 0.68700004
+anchor_right = 0.74500006
+anchor_bottom = 0.7249999
+offset_left = 88.84
+offset_top = -6.4800014
+offset_right = 250.2
+offset_bottom = 5.000004
+theme_override_styles/fill = SubResource("StyleBoxFlat_ta0dl")
+value = 100.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=1661598764]
+layout_mode = 0
+offset_left = 114.0
+offset_top = 75.0
+offset_right = 282.0
+offset_bottom = 87.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_cenrf")
+show_percentage = false
+
+[node name="Label" type="Label" parent="CanvasLayer/Control" unique_id=1738171580]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 59.0
+offset_right = 62.0
+offset_bottom = 104.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PotionLabel" type="Label" parent="CanvasLayer/Control" unique_id=1361806916]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 594.0
+offset_right = 156.0
+offset_bottom = 622.0
+
+[node name="Potion" type="TextureRect" parent="CanvasLayer/Control" unique_id=1630118371]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 513.0
+offset_right = 149.0
+offset_bottom = 616.0
+texture = ExtResource("5_eqwpu")
+expand_mode = 1
+
+[node name="Resours" type="TextureRect" parent="CanvasLayer/Control" unique_id=94307145]
+z_index = -2
+layout_mode = 0
+offset_left = 3.0
+offset_top = 1.0
+offset_right = 306.0
+offset_bottom = 114.0
+texture = ExtResource("6_77qag")
+
+[node name="QuestLabel" type="Label" parent="CanvasLayer/Control" unique_id=413893458]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 127.0
+offset_right = 369.0
+offset_bottom = 155.0
+pivot_offset = Vector2(685, 155)
+text = "Küldetés: Menj fel a C100-as terembe!"
+label_settings = SubResource("LabelSettings_tln53")
+
+[node name="Inventory" type="Control" parent="CanvasLayer" unique_id=679503839]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 764.0
+offset_top = 515.0
+offset_right = 804.0
+offset_bottom = 555.0
+script = ExtResource("7_6ox7e")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Inventory" unique_id=754467113]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -19.055
+anchor_top = -12.891001
+anchor_right = -19.055
+anchor_bottom = -12.891001
+offset_left = 69.20001
+offset_top = 79.640015
+offset_right = 1088.2
+offset_bottom = 507.64
+texture = ExtResource("8_wjbru")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer/Inventory" unique_id=196493782]
+layout_mode = 0
+offset_left = -649.0
+offset_top = -380.0
+offset_right = -520.0
+offset_bottom = -128.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/Inventory/SubViewportContainer" unique_id=2125496102]
+handle_input_locally = false
+size = Vector2i(129, 252)
+render_target_update_mode = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer/Inventory/SubViewportContainer/SubViewport" unique_id=1155565547]
+position = Vector2(71.99999, 107)
+scale = Vector2(0.18625, 0.24425001)
+sprite_frames = SubResource("SpriteFrames_7eqrl")
+animation = &"blink"
+
+[node name="Weapon" type="Panel" parent="CanvasLayer/Inventory" unique_id=424305878]
+layout_mode = 0
+offset_left = -554.0
+offset_top = -381.0
+offset_right = -361.0
+offset_bottom = -118.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_xyiql")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Inventory" unique_id=1279130199]
+layout_mode = 0
+offset_left = -398.0
+offset_top = -381.0
+offset_right = -327.0
+offset_bottom = -118.0
+
+[node name="Slot_Helmet" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=35578008]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Helmet" unique_id=40055672]
+layout_mode = 0
+offset_right = 71.0
+offset_bottom = 61.0
+
+[node name="Slot_Chest" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1264078615]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Chest" unique_id=1148798990]
+layout_mode = 0
+offset_top = 64.0
+offset_right = 71.0
+offset_bottom = 122.0
+
+[node name="Slot_Legs" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=1888413417]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Legs" unique_id=823663694]
+layout_mode = 0
+offset_top = 126.0
+offset_right = 71.0
+offset_bottom = 186.0
+
+[node name="Slot_Boots" type="Panel" parent="CanvasLayer/Inventory/VBoxContainer" unique_id=876469289]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/VBoxContainer/Slot_Boots" unique_id=278819360]
+layout_mode = 0
+offset_top = 192.0
+offset_right = 71.0
+offset_bottom = 250.0
+
+[node name="Label_HP" type="Label" parent="CanvasLayer/Inventory" unique_id=986205391]
+layout_mode = 0
+offset_left = -288.0
+offset_top = -180.0
+offset_right = -195.0
+offset_bottom = -157.0
+text = "Életerő: 100"
+
+[node name="Label_Attack" type="Label" parent="CanvasLayer/Inventory" unique_id=1464637822]
+layout_mode = 0
+offset_left = -287.0
+offset_top = -164.0
+offset_right = -196.0
+offset_bottom = -139.0
+text = "Sebzés: 20"
+
+[node name="Label_Armor" type="Label" parent="CanvasLayer/Inventory" unique_id=611282805]
+layout_mode = 0
+offset_left = -287.0
+offset_top = -149.0
+offset_right = -196.0
+offset_bottom = -126.0
+text = "Páncél: 5"
+
+[node name="Label_SpeedLevel" type="Label" parent="CanvasLayer/Inventory" unique_id=235657911]
+layout_mode = 0
+offset_left = -288.0
+offset_top = -134.0
+offset_right = -191.0
+offset_bottom = -110.0
+text = "Speed LVL: 1"
+
+[node name="Label_Attack_Speed" type="Label" parent="CanvasLayer/Inventory" unique_id=1326086564]
+layout_mode = 0
+offset_left = -288.0
+offset_top = -118.0
+offset_right = -138.0
+offset_bottom = -91.0
+text = "Attackspeed LVL: 1 "
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Inventory" unique_id=16887247]
+layout_mode = 0
+offset_left = -284.0
+offset_top = -381.0
+offset_right = 13.0
+offset_bottom = -212.0
+columns = 4
+
+[node name="Slot1" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1316941180]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot1" unique_id=200380361]
+layout_mode = 0
+offset_right = 69.0
+offset_bottom = 76.0
+
+[node name="Slot2" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=314815423]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot2" unique_id=63298733]
+layout_mode = 0
+offset_left = 71.0
+offset_right = 140.0
+offset_bottom = 76.0
+
+[node name="Slot3" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=497565304]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot3" unique_id=1258475264]
+layout_mode = 0
+offset_left = 142.0
+offset_right = 212.0
+offset_bottom = 76.0
+
+[node name="Slot4" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=665959740]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot4" unique_id=1723504513]
+layout_mode = 0
+offset_left = 216.0
+offset_right = 285.0
+offset_bottom = 76.0
+
+[node name="Slot5" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1757246361]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot5" unique_id=1760461920]
+layout_mode = 0
+offset_top = 89.0
+offset_right = 69.0
+offset_bottom = 165.0
+
+[node name="Slot6" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=666471447]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot6" unique_id=394071472]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 89.0
+offset_right = 140.0
+offset_bottom = 165.0
+
+[node name="Slot7" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=2024228368]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot7" unique_id=958149886]
+layout_mode = 0
+offset_left = 142.0
+offset_top = 89.0
+offset_right = 212.0
+offset_bottom = 165.0
+
+[node name="Slot8" type="Panel" parent="CanvasLayer/Inventory/GridContainer" unique_id=1261868776]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/Slot8" unique_id=1284510770]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 89.0
+offset_right = 285.0
+offset_bottom = 165.0
+
+[node name="Button" type="Button" parent="CanvasLayer/Inventory" unique_id=1105234345]
+layout_mode = 0
+offset_left = 67.0
+offset_top = -378.0
+offset_right = 274.0
+offset_bottom = -344.0
+text = "Kulcs Készítése"
+
+[node name="PauseMenu" type="Panel" parent="CanvasLayer" unique_id=337131777]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -388.0
+offset_top = -126.0
+offset_right = 12.0
+offset_bottom = 174.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PauseMenu" unique_id=660151541]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_sp8j0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PauseMenu" unique_id=2003649995]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 25.0
+offset_right = 355.0
+offset_bottom = 275.0
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=1963698740]
+layout_mode = 2
+text = "Szuenet"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=139249331]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_2yidn")
+text = "Folytatas"
+
+[node name="SaveButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=322346989]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_2yidn")
+text = "Mentes"
+
+[node name="LoadButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=1569935657]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_2yidn")
+text = "Betoltes"
+
+[node name="MainMenuButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer" unique_id=1116271565]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_2yidn")
+text = "Fomenu"
+
+[node name="MapTransitionTrigger" type="Area2D" parent="." unique_id=1587823077]
+position = Vector2(2, 3)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MapTransitionTrigger" unique_id=1935184124]
+position = Vector2(3614, 1557)
+shape = SubResource("RectangleShape2D_3gf8l")
+
+[node name="ElevatorDoor" type="StaticBody2D" parent="." unique_id=815315741]
+script = ExtResource("30_elevator")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElevatorDoor" unique_id=1270264927]
+position = Vector2(3620, 1389)
+shape = SubResource("RectangleShape2D_fpu53")
+
+[node name="DetectionArea" type="Area2D" parent="ElevatorDoor" unique_id=1971965757]
+position = Vector2(3612, 1447)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElevatorDoor/DetectionArea" unique_id=1214580054]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_sekl2")
+
+[connection signal="pressed" from="CanvasLayer/Inventory/Button" to="CanvasLayer/Inventory" method="CraftUniversityKey"]
+
+[editable path="Player"]

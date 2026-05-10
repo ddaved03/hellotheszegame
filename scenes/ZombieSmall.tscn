@@ -20,6 +20,8 @@ bg_color = Color(1, 0, 0, 1)
 
 [node name="ZombieSmall" type="CharacterBody2D"]
 position = Vector2(42, -97)
+collision_layer = 2
+collision_mask = 1
 script = ExtResource("1_script")
 Speed = 95.0
 MaxHealth = 25
@@ -38,12 +40,14 @@ position = Vector2(-3.5, 3.5)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="DetectionArea" type="Area2D" parent="."]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_detect")
 
 [node name="PerformAttack" type="Area2D" parent="."]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PerformAttack"]
 position = Vector2(-4, 3.5)
