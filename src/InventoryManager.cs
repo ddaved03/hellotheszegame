@@ -7,6 +7,13 @@ public partial class InventoryManager : Control
     public static List<string> Items = new List<string>();
     [Export] public int MaxSlots = 8;
 
+    public override void _Ready()
+    {
+        // KIVETTÜK az Items.Clear()-t, nehogy pályaváltáskor letörölje a kulcsokat!
+        // Helyette egyből frissítjük a kinézetet, ha már lennének benne tárgyak
+        CallDeferred(nameof(UpdateUI));
+    }
+
     public bool AddItem(string itemName)
     {
         if (Items.Count < MaxSlots)
@@ -19,12 +26,6 @@ public partial class InventoryManager : Control
         GD.Print("Az inventory megtelt!");
         return false;
     }
-
-public override void _Ready()
-{
-    // Induláskor mindig kiürítjük a közös hátizsákot, nehogy benne maradjon valami az előző játékból
-    Items.Clear();
-}
 
     public void UpdateUI()
     {
@@ -57,43 +58,37 @@ public override void _Ready()
         }
     }
 
-    // --- ÚJ FÜGGVÉNY: CRAFTOLÁS ---
-public void CraftUniversityKey()
-{
-    // --- EZ A SOR FOGJA LEBUKTATNI A HIBÁT ---
-    GD.Print("Gomb megnyomva! A gomb szerint ezek a tárgyak vannak a zsebben: [" + string.Join("], [", Items) + "]");
-
-    if (Items.Contains("KeyPart1") && Items.Contains("KeyPart2") && Items.Contains("KeyPart3"))
+    public void CraftUniversityKey()
     {
-        Items.Remove("KeyPart1");
-        Items.Remove("KeyPart2");
-        Items.Remove("KeyPart3");
-        
-        AddItem("UniversityKey");
-        
-        GD.Print("Kulcs sikeresen lekraftolva!");
+        GD.Print("Gomb megnyomva! A gomb szerint ezek a tárgyak vannak a zsebben: [" + string.Join("], [", Items) + "]");
 
-        var worldController = GetTree().Root.FindChild("World", true, false) as WorldController;
-        if (worldController != null)
+        if (Items.Contains("KeyPart1") && Items.Contains("KeyPart2") && Items.Contains("KeyPart3"))
         {
-            worldController.UpdateQuestText("Küldetés: Nyisd ki az egyetem ajtaját a kulccsal!");
+            Items.Remove("KeyPart1");
+            Items.Remove("KeyPart2");
+            Items.Remove("KeyPart3");
+            
+            AddItem("UniversityKey");
+            
+            GD.Print("Kulcs sikeresen lekraftolva!");
+
+            var worldController = GetTree().Root.FindChild("World", true, false) as WorldController;
+            if (worldController != null)
+            {
+                worldController.UpdateQuestText("Küldetés: Nyisd ki az egyetem ajtaját a kulccsal!");
+            }
+        }
+        else
+        {
+            GD.Print("Nincs meg minden darab a craftoláshoz!");
         }
     }
-    else
-    {
-        GD.Print("Nincs meg minden darab a craftoláshoz!");
-    }
-}
 
-    // Ez a függvény rendeli hozzá a nevekhez a képeket
     private Texture2D GetTextureForItem(string name)
     {
         if (name == "KeyPart1") return GD.Load<Texture2D>("res://kepek/kulcs-alja-torott.png");
         if (name == "KeyPart2") return GD.Load<Texture2D>("res://kepek/kulcs-kozepe-torott.png");
         if (name == "KeyPart3") return GD.Load<Texture2D>("res://kepek/kulcs-eleje-torott.png");
-        
-        // --- ÚJ: A KÉSZ KULCS KÉPE ---
-        // IDE ÍRD BE A KÉSZ, ÖSSZERAKOTT KULCSOD KÉPÉNEK AZ ELÉRÉSI ÚTJÁT!
         if (name == "UniversityKey") return GD.Load<Texture2D>("res://kepek/kulcs-egybe.png"); 
         
         return null;
