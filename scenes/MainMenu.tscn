@@ -97,7 +97,7 @@ offset_left = 24.0
 offset_top = 20.0
 offset_right = 412.0
 offset_bottom = 58.0
-text = "Beallitasok helye\n(Ide tehetsz hangerot, felbontast, stb.)"
+text = "Beallitasok helye"
 
 [node name="CloseSettingsButton" type="Button" parent="SettingsPanel"]
 layout_mode = 0

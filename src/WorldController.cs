@@ -87,6 +87,12 @@ public partial class WorldController : Node2D
                 StartArrivalCutscene();
             }
         }
+
+        // Start background music if available
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayBackground();
+        }
     }
 
     public void RestoreProgressState()
