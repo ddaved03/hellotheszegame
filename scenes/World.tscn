@@ -23,8 +23,10 @@
 [ext_resource type="Texture2D" uid="uid://b1jefxi6ah8ij" path="res://kepek/Hero1Idol/Hero1Idol4.png" id="10_128ka"]
 [ext_resource type="Texture2D" uid="uid://cfna0ix3weda1" path="res://kepek/Hero1Idol/Hero1Idol5.png" id="11_ngql4"]
 [ext_resource type="Texture2D" uid="uid://b632o2sc7vg57" path="res://kepek/Hero1Idol/Hero1Idol6.png" id="12_b64vv"]
+[ext_resource type="Texture2D" uid="uid://dr6o4gssjdtlk" path="res://kepek/level-hattérv2.png" id="13_1w2qq"]
 [ext_resource type="Texture2D" uid="uid://dmyfh3uwnawli" path="res://kepek/Hero1Idol/Hero1Idol7.png" id="13_agajo"]
 [ext_resource type="Texture2D" uid="uid://c31idm6o4bl16" path="res://kepek/Hero1Idol/Hero1Idol8.png" id="14_2pad8"]
+[ext_resource type="Texture2D" uid="uid://3pywombx8e60" path="res://kepek/level-barv3.3.png" id="14_yd118"]
 [ext_resource type="Texture2D" uid="uid://dm2n6a31s67jb" path="res://kepek/Hero1Idol/Hero1Idol9.png" id="15_e4yt5"]
 [ext_resource type="Texture2D" uid="uid://oxcigvspafw0" path="res://kepek/Hero1Idol/Hero1Idol10.png" id="16_x70b3"]
 [ext_resource type="Script" uid="uid://kn873uhxipbb" path="res://src/InventoryManager.cs" id="17_1bdwf"]
@@ -93,24 +95,40 @@ size = Vector2(79, 29)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4yt5"]
 size = Vector2(2040, 418)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ygioq"]
-texture = ExtResource("3_b3faq")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lffjk"]
+texture = ExtResource("14_yd118")
+texture_margin_bottom = 7.0
+expand_margin_top = 5.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pdh0q"]
-texture = ExtResource("3_b3faq")
+texture = ExtResource("14_yd118")
+texture_margin_bottom = 7.0
+expand_margin_top = 5.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h1bdy"]
-texture = ExtResource("3_b3faq")
+texture = ExtResource("14_yd118")
+texture_margin_bottom = 7.0
+expand_margin_top = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x6lmx"]
 bg_color = Color(1, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1w2qq"]
+bg_color = Color(0, 0, 1, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gqg63"]
 bg_color = Color(0.38431373, 1, 0.2627451, 1)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1w2qq"]
+texture = ExtResource("14_yd118")
+texture_margin_left = 20.0
+texture_margin_top = 2.0
+texture_margin_right = 20.0
+texture_margin_bottom = 7.0
+
 [sub_resource type="LabelSettings" id="LabelSettings_x70b3"]
 font_size = 20
-font_color = Color(1, 1, 0, 1)
+font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_302v5"]
 animations = [{
@@ -191,6 +209,9 @@ animations = [{
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7c4bj"]
 texture = ExtResource("6_ygioq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ygioq"]
+texture = ExtResource("3_b3faq")
 
 [sub_resource type="Animation" id="Animation_2pad8"]
 resource_name = "Arrival"
@@ -281,7 +302,7 @@ VehiclePrefabs = Array[PackedScene]([ExtResource("2_2pad8")])
 ZombieNormalScene = ExtResource("2_d1c63")
 ZombieSmallScene = ExtResource("4_x70b3")
 CarPrefab = ExtResource("2_2pad8")
-QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
+QuestLabelPath = NodePath("CanvasLayer/Control/MarginContainer/QuestLabel")
 TutorialKeyPartScene = ExtResource("4_e4yt5")
 
 [node name="MapTransitionTrigger" type="Area2D" parent="." unique_id=1778733647]
@@ -384,7 +405,7 @@ shape = SubResource("RectangleShape2D_e4yt5")
 
 [node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=1523926591]
 z_index = -10
-position = Vector2(1021, 109.000015)
+position = Vector2(1020, 109.000015)
 scale = Vector2(5.578125, 5.2000003)
 texture = ExtResource("3_2pad8")
 
@@ -434,42 +455,47 @@ offset_bottom = 40.0
 process_mode = 3
 visible = false
 layout_mode = 0
-offset_left = 193.0
-offset_top = 80.0
-offset_right = 958.0
-offset_bottom = 509.0
+offset_left = 331.0
+offset_top = 186.0
+offset_right = 830.0
+offset_bottom = 395.0
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control/UpgradeMenu" unique_id=260148763]
 texture_filter = 1
 layout_mode = 0
-offset_right = 764.0
-offset_bottom = 429.0
-texture = ExtResource("2_0uv0p")
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 499.0
+offset_bottom = 210.0
+texture = ExtResource("13_1w2qq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/UpgradeMenu" unique_id=1438414472]
 process_mode = 3
 layout_mode = 0
-offset_left = 174.0
-offset_top = 88.0
-offset_right = 584.0
-offset_bottom = 322.0
+offset_left = 43.0
+offset_top = -15.0
+offset_right = 453.0
+offset_bottom = 221.0
 alignment = 1
 
 [node name="Button" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=451856229]
 process_mode = 3
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_ygioq")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_lffjk")
 text = "+10% Sebesség"
 
 [node name="Button2" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=1961863842]
 process_mode = 3
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxTexture_pdh0q")
 text = "+5 Sebzés"
 
 [node name="Button3" type="Button" parent="CanvasLayer/Control/UpgradeMenu/VBoxContainer" unique_id=2060859493]
 process_mode = 3
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxTexture_h1bdy")
 text = "Gyorsabb támadás"
 
@@ -500,6 +526,16 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_x6lmx")
 value = 100.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
+
+[node name="ManaBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=987787401]
+layout_mode = 0
+offset_left = 114.0
+offset_top = 50.0
+offset_right = 283.0
+offset_bottom = 61.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_1w2qq")
+value = 100.0
+show_percentage = false
 
 [node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=27813512]
 layout_mode = 0
@@ -544,14 +580,25 @@ offset_right = 306.0
 offset_bottom = 114.0
 texture = ExtResource("5_uni40")
 
-[node name="QuestLabel" type="Label" parent="CanvasLayer/Control" unique_id=1857486560]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 127.0
-offset_right = 319.0
-offset_bottom = 155.0
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=164527023]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 755.0
+offset_top = 4.0
+offset_right = 1108.0
+offset_bottom = 44.0
+grow_horizontal = 0
+
+[node name="QuestLabel" type="Label" parent="CanvasLayer/Control/MarginContainer" unique_id=1857486560]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_1w2qq")
 text = "Küldetés: Menj be az egyetemre!"
 label_settings = SubResource("LabelSettings_x70b3")
+horizontal_alignment = 2
 
 [node name="Inventory" type="Control" parent="CanvasLayer" unique_id=420155089]
 process_mode = 3
@@ -656,36 +703,44 @@ offset_right = -195.0
 offset_bottom = -157.0
 text = "Életerő: 100"
 
+[node name="Label_Mana" type="Label" parent="CanvasLayer/Inventory" unique_id=648377264]
+layout_mode = 0
+offset_left = -288.0
+offset_top = -166.0
+offset_right = -116.0
+offset_bottom = -143.0
+text = "Mana: 100"
+
 [node name="Label_Attack" type="Label" parent="CanvasLayer/Inventory" unique_id=898675115]
 layout_mode = 0
 offset_left = -287.0
-offset_top = -164.0
+offset_top = -153.0
 offset_right = -196.0
-offset_bottom = -139.0
+offset_bottom = -128.0
 text = "Sebzés: 20"
 
 [node name="Label_Armor" type="Label" parent="CanvasLayer/Inventory" unique_id=1386834089]
 layout_mode = 0
 offset_left = -287.0
-offset_top = -149.0
+offset_top = -139.0
 offset_right = -196.0
-offset_bottom = -126.0
+offset_bottom = -116.0
 text = "Páncél: 5"
 
 [node name="Label_SpeedLevel" type="Label" parent="CanvasLayer/Inventory" unique_id=358310315]
 layout_mode = 0
 offset_left = -288.0
-offset_top = -134.0
+offset_top = -124.0
 offset_right = -191.0
-offset_bottom = -110.0
+offset_bottom = -100.0
 text = "Speed LVL: 1"
 
 [node name="Label_Attack_Speed" type="Label" parent="CanvasLayer/Inventory" unique_id=1382148941]
 layout_mode = 0
 offset_left = -288.0
-offset_top = -118.0
+offset_top = -107.0
 offset_right = -138.0
-offset_bottom = -91.0
+offset_bottom = -80.0
 text = "Attackspeed LVL: 1 "
 
 [node name="GridContainer" type="GridContainer" parent="CanvasLayer/Inventory" unique_id=1608979014]
@@ -838,7 +893,7 @@ text = "Fomenu"
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=788776201]
 libraries/ = SubResource("AnimationLibrary_x70b3")
 
-[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode", "StatHPLabel", "StatAtkLabel", "LvlSpeedLabel", "LvlAtkSpeedLabel") instance=ExtResource("1_7g83o")]
+[node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode", "StatHPLabel", "StatManaLabel", "StatAtkLabel", "LvlSpeedLabel", "LvlAtkSpeedLabel") instance=ExtResource("1_7g83o")]
 process_mode = 3
 position = Vector2(3007, 496)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
@@ -847,6 +902,7 @@ BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
 BtnAtkSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button3")
 InventoryNode = NodePath("../CanvasLayer/Inventory")
 StatHPLabel = NodePath("../CanvasLayer/Inventory/Label_HP")
+StatManaLabel = NodePath("../CanvasLayer/Inventory/Label_Mana")
 StatAtkLabel = NodePath("../CanvasLayer/Inventory/Label_Attack")
 LvlSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_SpeedLevel")
 LvlAtkSpeedLabel = NodePath("../CanvasLayer/Inventory/Label_Attack_Speed")

@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://dg8q7i0b68bso" path="res://src/BasePlayer.cs" id="1_dpr2a"]
 [ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="2_xttg7"]
 [ext_resource type="Texture2D" uid="uid://duin5o1ivbtt3" path="res://kepek/Hero3back1.png" id="3_cx2eu"]
-[ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="4_cx2eu"]
 [ext_resource type="Texture2D" uid="uid://dwco2bw21mxde" path="res://kepek/Hero1Idol/Hero1Idol1.png" id="4_xttg7"]
 [ext_resource type="Texture2D" uid="uid://donyumqo25xed" path="res://kepek/Hero1Idol/Hero1Idol2.png" id="5_cx2eu"]
 [ext_resource type="Texture2D" uid="uid://cyqyrlihvcsnv" path="res://kepek/Hero1Idol/Hero1Idol3.png" id="6_ppkhy"]
@@ -19,7 +18,21 @@
 [ext_resource type="Texture2D" uid="uid://bc0borfd1i87v" path="res://kepek/Hero1Idol/Hero1Idol13.png" id="16_ffl24"]
 [ext_resource type="Texture2D" uid="uid://dcc4t6gfejhuh" path="res://kepek/Hero1Idol/Hero1Idol14.png" id="17_i7ph8"]
 [ext_resource type="Texture2D" uid="uid://c3kgxupfqaqv2" path="res://kepek/Hero1Idol/Hero1Idol15.png" id="18_tosfp"]
+[ext_resource type="Texture2D" uid="uid://bjjaxlimhd1wl" path="res://kepek/Idle_Side/serta-iránybav3.png" id="19_tx3lp"]
+[ext_resource type="Texture2D" uid="uid://dfic266pwppae" path="res://kepek/Idle_back/Hero1-seta-backv2-1.png" id="20_apdfg"]
+[ext_resource type="Texture2D" uid="uid://nucp31kxkcin" path="res://kepek/Idle_Side/serta-iránybav4.png" id="20_m1cun"]
 [ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="20_ppkhy"]
+[ext_resource type="Texture2D" uid="uid://cvmxta55fjcem" path="res://kepek/Idle_front/setav3.png" id="20_s668k"]
+[ext_resource type="Texture2D" uid="uid://3t2cltn1l6hc" path="res://kepek/Idle_front/setav4.png" id="21_dhgsa"]
+[ext_resource type="Texture2D" uid="uid://bji8lx1k8emov" path="res://kepek/Idle_back/Hero1-seta-backv2-2.png" id="21_g04mq"]
+[ext_resource type="Texture2D" uid="uid://pasbeofcuk87" path="res://kepek/Idle_Side/serta-iránybav5.png" id="21_n2eat"]
+[ext_resource type="Texture2D" uid="uid://bnddh0jmnvifk" path="res://kepek/Idle_front/setav5.png" id="22_ffl24"]
+[ext_resource type="Texture2D" uid="uid://c5fmhw0vytahq" path="res://kepek/Idle_back/Hero1-seta-backv2-3.png" id="22_n0l7u"]
+[ext_resource type="Texture2D" uid="uid://cssdutcf5r1c0" path="res://kepek/Idle_Side/serta-iránybav6.png" id="22_soh6i"]
+[ext_resource type="Texture2D" uid="uid://dxs2igud4oyh8" path="res://kepek/Idle_back/Hero1-seta-backv2-4.png" id="23_1pq07"]
+[ext_resource type="Texture2D" uid="uid://bw1j137fcw3mh" path="res://kepek/Idle_front/setav6.png" id="23_i7ph8"]
+[ext_resource type="Texture2D" uid="uid://dhim34dvx348u" path="res://kepek/Idle_Side/serta-iránybav7.png" id="23_s668k"]
+[ext_resource type="Texture2D" uid="uid://bbprt1kt70t6h" path="res://kepek/Idle_back/Hero1-seta-backv2-5.png" id="24_xnqr3"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_apdfg"]
 animations = [{
@@ -91,11 +104,68 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_cx2eu")
+"texture": ExtResource("19_tx3lp")
 }],
-"loop": true,
+"loop": false,
 "name": &"idle_side",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_apdfg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_g04mq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_n0l7u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_1pq07")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_xnqr3")
+}],
+"loop": true,
+"name": &"walk_back",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_s668k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_dhgsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_ffl24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_i7ph8")
+}],
+"loop": true,
+"name": &"walk_front",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_tx3lp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_m1cun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_n2eat")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_soh6i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_s668k")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 8.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k0juu"]
@@ -111,10 +181,10 @@ collision_mask = 9
 script = ExtResource("1_dpr2a")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=907502933]
-position = Vector2(0.9999981, 0.9999962)
+position = Vector2(1, 0)
 scale = Vector2(0.10399999, 0.13983192)
 sprite_frames = SubResource("SpriteFrames_apdfg")
-animation = &"idle_side"
+animation = &"walk_back"
 
 [node name="Hand" type="Node2D" parent="AnimatedSprite2D" unique_id=497735284]
 visible = false
@@ -133,7 +203,7 @@ shape = SubResource("RectangleShape2D_k0juu")
 limit_left = 0
 limit_top = 0
 limit_right = 3569
-limit_bottom = 1600
+limit_bottom = 1248
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=2038176447]
 collision_mask = 2
