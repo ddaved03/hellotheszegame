@@ -353,4 +353,39 @@ public partial class BasePlayer : CharacterBody2D
                 body.Call("TakeDamage", AttackDamage);
         }
     }
+
+    // --- FLASHLIGHT (Sprite fallback) ---
+    public void EquipFlashlight()
+    {
+        if (GetNodeOrNull<PointLight2D>("FlashlightLight") != null) return;
+
+        var light = new PointLight2D();
+        light.Name = "FlashlightLight";
+        light.Texture = CreateFlashlightTexture(128, 128);
+        light.Color = new Color(1.0f, 0.97f, 0.9f, 1.0f);
+        light.Energy = 1.15f;
+        light.TextureScale = 0.55f;
+        light.Offset = new Vector2(0, -18);
+        AddChild(light);
+    }
+
+    private Texture2D CreateFlashlightTexture(int width, int height)
+    {
+        var image = Image.CreateEmpty(width, height, false, Image.Format.Rgba8);
+        Vector2 center = new Vector2(width * 0.5f, height * 0.5f);
+        float maxDistance = Mathf.Min(width, height) * 0.5f;
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                float distance = new Vector2(x, y).DistanceTo(center);
+                float normalized = Mathf.Clamp(1.0f - (distance / maxDistance), 0.0f, 1.0f);
+                float alpha = Mathf.Pow(normalized, 2.2f);
+                image.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+
+        return ImageTexture.CreateFromImage(image);
+    }
 }
