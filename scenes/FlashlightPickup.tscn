@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bccg1ms30vwuh"]
+
+[ext_resource type="Script" uid="uid://c4tdbpxo4ysx6" path="res://src/TutorialItem.cs" id="1_tutorial"]
+[ext_resource type="Texture2D" uid="uid://c7gcpw87wdma1" path="res://kepek/flaslight.png" id="2_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_flash"]
+radius = 8.0
+
+[node name="FlashlightPickup" type="Area2D" unique_id=906691972]
+collision_mask = 4
+script = ExtResource("1_tutorial")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1540362942]
+position = Vector2(-1.1920929e-07, -2.2737368e-13)
+scale = Vector2(0.44042063, 0.44042054)
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1149856686]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_flash")

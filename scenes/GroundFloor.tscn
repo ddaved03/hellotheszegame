@@ -28,8 +28,60 @@
 [ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="25_6q4wt"]
 [ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="26_a7yby"]
 [ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="27_oqmdo"]
-[ext_resource type="Script" uid="uid://by5l66akda3a8" path="res://src/UniversityDoor.cs" id="29_eqwpu"]
-[ext_resource type="Script" path="res://src/ElevatorDoor.cs" id="30_elevator"]
+[ext_resource type="Script" uid="uid://ckbgw70ncxwqg" path="res://src/ElevatorDoor.cs" id="30_elevator"]
+
+[sub_resource type="Animation" id="Animation_2pad8_ground"]
+resource_name = "Arrival"
+length = 12.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D busz:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 8, 10, 12),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(3167.0002, 514.99994), Vector2(-295.99976, 518.99994), Vector2(-295.99976, 518.99994), Vector2(-1154, 522.99994)]
+}
+
+[sub_resource type="Animation" id="Animation_e4yt5_ground"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D busz:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3167.0002, 514.99994)]
+}
+
+[sub_resource type="Animation" id="Animation_x70b3_ground"]
+length = 12.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D busz:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 8, 10, 12),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(3167.0002, 514.99994), Vector2(-295.99976, 518.99994), Vector2(-295.99976, 518.99994), Vector2(-1154, 522.99994)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ground"]
+_data = {
+&"Arrival": SubResource("Animation_2pad8_ground"),
+&"RESET": SubResource("Animation_e4yt5_ground"),
+&"ZombieBusArrival": SubResource("Animation_x70b3_ground")
+}
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4fudr"]
 size = Vector2(3719.5, 35)
@@ -66,12 +118,6 @@ size = Vector2(54.5, 235.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nwhk"]
 size = Vector2(176, 684)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xblde"]
-size = Vector2(2141, 318)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5w6i"]
-size = Vector2(2213, 273)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sknf8"]
 texture = ExtResource("4_xj0dy")
@@ -184,11 +230,18 @@ size = Vector2(179.5, 29)
 [sub_resource type="CircleShape2D" id="CircleShape2D_sekl2"]
 radius = 139.01439
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_eqwpu"]
+radius = 93.05912
+
 [node name="GroundFloor" type="Node2D" unique_id=1265253517]
 script = ExtResource("1_xj0dy")
 PlayerPath = NodePath("Player")
 PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
 QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
+AnimationPlayerPath = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=300000002]
+libraries/ = SubResource("AnimationLibrary_ground")
 
 [node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=1976753314]
 
@@ -210,13 +263,13 @@ shape = SubResource("RectangleShape2D_tefep")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1617667065]
 z_index = -10
-position = Vector2(1862, 833)
+position = Vector2(1859, 818.00006)
 scale = Vector2(5.809375, 6.7958326)
 texture = ExtResource("1_4fudr")
 
 [node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode", "StatHPLabel", "StatAtkLabel", "LvlSpeedLabel", "LvlAtkSpeedLabel") instance=ExtResource("2_0qkuh")]
-position = Vector2(168, 1554)
 process_mode = 3
+position = Vector2(168, 1554)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
 BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
 BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
@@ -293,26 +346,17 @@ shape = SubResource("RectangleShape2D_puxyy")
 position = Vector2(2822, 630)
 shape = SubResource("RectangleShape2D_5nwhk")
 
-[node name="CollisionShape2D rooms_top" type="CollisionShape2D" parent="PadBoundaries" unique_id=462663011]
-position = Vector2(1451.5, 132)
-shape = SubResource("RectangleShape2D_xblde")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PadBoundaries" unique_id=792552927]
-position = Vector2(1486.5, 1508.5)
-shape = SubResource("RectangleShape2D_b5w6i")
-
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=154253571]
 
 [node name="DarknessOverlay" type="ColorRect" parent="CanvasLayer" unique_id=300000001]
-layout_mode = 1
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-color = Color(0, 0, 0, 0.65)
-visible = false
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
+color = Color(0, 0, 0, 0.65)
 
 [node name="Control" type="Control" parent="CanvasLayer" unique_id=2057175291]
 layout_mode = 3
@@ -744,8 +788,31 @@ position = Vector2(3612, 1447)
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElevatorDoor/DetectionArea" unique_id=1214580054]
-position = Vector2(0, 0)
 shape = SubResource("CircleShape2D_sekl2")
+
+[node name="EarthquakeTrigger" type="Area2D" parent="." unique_id=1498630912]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EarthquakeTrigger" unique_id=1547669719]
+position = Vector2(208, 1000)
+shape = SubResource("CircleShape2D_eqwpu")
+
+[node name="RockLandingPoints" type="Node2D" parent="." unique_id=287841045]
+
+[node name="Point1" type="Marker2D" parent="RockLandingPoints" unique_id=502613642]
+position = Vector2(524, 547)
+gizmo_extents = 50.0
+
+[node name="Point2" type="Marker2D" parent="RockLandingPoints" unique_id=191545874]
+position = Vector2(469, 699)
+gizmo_extents = 50.0
+
+[node name="Point3" type="Marker2D" parent="RockLandingPoints" unique_id=1407533000]
+position = Vector2(527, 834)
+gizmo_extents = 50.0
+
+[node name="Point4" type="Marker2D" parent="RockLandingPoints" unique_id=152537013]
+position = Vector2(736, 905)
+gizmo_extents = 50.0
 
 [connection signal="pressed" from="CanvasLayer/Inventory/Button" to="CanvasLayer/Inventory" method="CraftUniversityKey"]
 

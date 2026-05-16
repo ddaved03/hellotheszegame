@@ -1,16 +1,20 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class GroundFloorController : Node2D
 {
     [Export] public NodePath PlayerPath;
     [Export] public NodePath PauseMenuPath;
     [Export] public NodePath QuestLabelPath;
+    [Export] public NodePath AnimationPlayerPath;
 
     private BasePlayer _player;
     private Control _pauseMenu;
     private Label _questLabel;
     private ColorRect _darknessOverlay;
+    private ShaderMaterial _darknessMaterial;
+    private AnimationPlayer _sceneAnimPlayer;
 
     private PackedScene _zombieNormalScene;
     private PackedScene _zombieSmallScene;
@@ -36,6 +40,9 @@ public partial class GroundFloorController : Node2D
     private int _liftZombiesAlive = 0;
     private Vector2 _liftSpawnCenter = Vector2.Zero;
     private bool _liftKeySpawned = false;
+    // Earthquake approach trigger
+    private float _earthquakeTriggerX = float.MaxValue;
+    private bool _earthquakeTriggered = false;
 
     public override void _Ready()
     {
@@ -105,7 +112,7 @@ public partial class GroundFloorController : Node2D
                 _pauseMenu.ProcessMode = ProcessModeEnum.WhenPaused;
 
                 // Gombok bekötése pontosan úgy, ahogy a World-ben van!
-                try 
+                try
                 {
                     _pauseMenu.GetNode<Button>("VBoxContainer/ResumeButton").Pressed += OnResumePressed;
                     _pauseMenu.GetNode<Button>("VBoxContainer/SaveButton").Pressed += OnSavePressed;
@@ -130,13 +137,77 @@ public partial class GroundFloorController : Node2D
 
         if (_darknessOverlay != null)
         {
-            _darknessOverlay.Visible = true;
+            _darknessOverlay.Visible = false;
             _darknessOverlay.MouseFilter = Control.MouseFilterEnum.Ignore;
-            _darknessOverlay.Color = new Color(0f, 0f, 0f, 0.88f);
+            _darknessOverlay.Color = new Color(0f, 0f, 0f, 0f);
+            SetupDarknessOverlayShader();
         }
+
+        if (AnimationPlayerPath != null)
+        {
+            _sceneAnimPlayer = GetNodeOrNull<AnimationPlayer>(AnimationPlayerPath);
+            if (_sceneAnimPlayer != null) GD.Print("[GroundFloor] AnimationPlayer assigned from inspector.");
+        }
+
+        // Determine a simple X position to trigger the earthquake when the player approaches the elevator
+        var elevatorTriggerNode = GetNodeOrNull<Area2D>("ElevatorDoor/DetectionArea");
+        if (elevatorTriggerNode != null)
+        {
+            _earthquakeTriggerX = elevatorTriggerNode.GlobalPosition.X - 120f;
+            GD.Print($"[GroundFloor] Earthquake trigger X set to {_earthquakeTriggerX}");
+        }
+        else if (_player != null)
+        {
+            // fallback: trigger a bit ahead of player's start position
+            _earthquakeTriggerX = _player.GlobalPosition.X + 300f;
+            GD.Print($"[GroundFloor] Elevator trigger not found, fallback earthquake X set to {_earthquakeTriggerX}");
+        }
+
+        // Also try to connect to a dedicated Area2D named "EarthquakeTrigger" (place it in the scene to specify exact spot)
+        var quakeArea = GetNodeOrNull<Area2D>("EarthquakeTrigger");
+        if (quakeArea == null) quakeArea = GetNodeOrNull<Area2D>("ElevatorDoor/DetectionArea");
+        if (quakeArea != null)
+        {
+            // If the trigger is far away from player start, move it to player's position for easier testing
+            if (_player != null)
+            {
+                float dist = _player.GlobalPosition.DistanceTo(quakeArea.GlobalPosition);
+                if (dist > 200f)
+                {
+                    GD.Print($"[GroundFloor] Moving EarthquakeTrigger above player for testing (dist={dist}).");
+                    // place the trigger slightly above the player so it doesn't immediately overlap
+                    quakeArea.GlobalPosition = _player.GlobalPosition + new Vector2(0, -150);
+                    // disable immediate monitoring and defer connecting to avoid immediate BodyEntered firing
+                    quakeArea.Monitoring = false;
+                    CallDeferred(nameof(DeferredConnectQuakeArea), quakeArea);
+                }
+            }
+
+            quakeArea.BodyEntered += OnEarthquakeTriggerBodyEntered;
+            GD.Print("[GroundFloor] Connected earthquake trigger area.");
+        }
+
+    
 
         // Kezdeti küldetés beállítása a földszinten
         UpdateQuestText("Küldetés: Menj a lifthez!");
+
+        // Spawn a flashlight slightly ahead of the player and auto-pick it up
+        if (_player != null && !InventoryManager.Items.Contains("Flashlight"))
+        {
+            var flashScene = GD.Load<PackedScene>("res://scenes/FlashlightPickup.tscn");
+            if (flashScene != null)
+            {
+                var flashInst = (Area2D)flashScene.Instantiate();
+                // If the script is accessible, set its ItemName to Flashlight
+                if (flashInst is TutorialItem ti) ti.ItemName = "Flashlight";
+
+                flashInst.GlobalPosition = _player.GlobalPosition + new Vector2(48, 0);
+                flashInst.Scale = new Vector2(0.35f, 0.35f);
+                flashInst.ZIndex = 200;
+                AddChild(flashInst);
+            }
+        }
 
         // Betöltés ellenőrzése
         if (SaveSystem.LoadRequested)
@@ -152,8 +223,11 @@ public partial class GroundFloorController : Node2D
         _liftEventCompleted = InventoryManager.Items.Contains("UniversityKey");
         _liftEventStarted = _liftEventCompleted;
 
-        // Keep darkness overlay state as-is. We don't automatically clear darkness
-        // when the key exists — the user requested the darkness remain.
+        if (_darknessOverlay != null)
+        {
+            _darknessOverlay.Visible = false;
+            _darknessOverlay.Color = new Color(0f, 0f, 0f, 0f);
+        }
 
         if (_liftEventCompleted)
         {
@@ -177,8 +251,11 @@ public partial class GroundFloorController : Node2D
         _liftEventCompleted = true;
 
 
-        // Intentionally do NOT hide the darkness overlay here. The scene
-        // remains dark even after picking up the key.
+        if (_darknessOverlay != null)
+        {
+            _darknessOverlay.Visible = false;
+            _darknessOverlay.Color = new Color(0f, 0f, 0f, 0f);
+        }
 
         UpdateQuestText("Küldetés: Nyisd ki a liftet a kulccsal!");
     }
@@ -187,9 +264,8 @@ public partial class GroundFloorController : Node2D
     {
         if (InventoryManager.Items.Contains("UniversityKey"))
         {
-            GD.Print("Liftkulcs megvan, mehet a C100-as terem.");
-            AudioManager.Instance?.PlayElevator(_player != null ? _player.GlobalPosition : GlobalPosition);
-            GetTree().ChangeSceneToFile("res://scenes/C100.tscn");
+            GD.Print("Liftkulcs megvan, indítom a földrengés eseményt...");
+            StartEarthquakeSequence();
             return;
         }
 
@@ -203,6 +279,271 @@ public partial class GroundFloorController : Node2D
         {
             UpdateQuestText("Küldetés: Győzd le a 3 nagy zombit a kulcsért!");
         }
+    }
+
+    private async void StartEarthquakeSequence()
+    {
+        // Darken the scene to simulate power outage
+        if (_darknessOverlay != null)
+        {
+            _darknessOverlay.Visible = true;
+            _darknessOverlay.Color = new Color(0f, 0f, 0f, 0.88f);
+            UpdateDarknessFocus();
+        }
+
+        // Turn on player's flashlight so they can see
+        if (_player != null) _player.EquipFlashlight();
+
+        // Spawn falling rocks to form a rough labyrinth toward the elevator
+        var rockScene = GD.Load<PackedScene>("res://scenes/Rock.tscn");
+        if (rockScene == null)
+        {
+            GD.PrintErr("Nem találom a Rock.tscn scene-t — nem spawnolok köveket.");
+            await ToSignal(GetTree().CreateTimer(1.0f), "timeout");
+            GetTree().ChangeSceneToFile("res://scenes/C100.tscn");
+            return;
+        }
+
+        // Determine a right-side zone around the elevator so the labyrinth forms where the screenshot shows
+        var elevatorTrigger = GetNodeOrNull<Area2D>("ElevatorDoor/DetectionArea");
+        Vector2 elevatorPos = elevatorTrigger != null ? elevatorTrigger.GlobalPosition : (_player != null ? _player.GlobalPosition + new Vector2(300, 0) : GlobalPosition + new Vector2(300, 0));
+
+        float right = elevatorPos.X + 180f;
+        float left = elevatorPos.X - 1200f;
+        float top = elevatorPos.Y - 760f;
+        if (_player != null)
+        {
+            left = Mathf.Min(left, _player.GlobalPosition.X + 120f);
+        }
+        if (left < 0f) left = 0f;
+
+        // Use the bus arrival animation as a centerline for a carved corridor.
+        Vector2[] busPoints = null;
+
+        if (_sceneAnimPlayer != null)
+        {
+            try
+            {
+                Animation anim = _sceneAnimPlayer.HasAnimation("Arrival") ? _sceneAnimPlayer.GetAnimation("Arrival") : _sceneAnimPlayer.GetAnimation("ZombieBusArrival");
+                if (anim != null)
+                {
+                    for (int t = 0; t < anim.GetTrackCount(); t++)
+                    {
+                        var path = anim.TrackGetPath(t);
+                        if (path != null && path.ToString().Contains("busz"))
+                        {
+                            int keyCount = anim.TrackGetKeyCount(t);
+                            busPoints = new Vector2[keyCount];
+                            for (int k = 0; k < keyCount; k++)
+                            {
+                                try
+                                {
+                                    var raw = anim.TrackGetKeyValue(t, k);
+                                    busPoints[k] = (Vector2)raw;
+                                }
+                                catch
+                                {
+                                    busPoints[k] = Vector2.Zero;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr("Hiba az AnimationPlayer animáció beolvasásakor: " + e.Message);
+            }
+        }
+        else
+        {
+            try
+            {
+                var worldPacked = GD.Load<PackedScene>("res://scenes/World.tscn");
+                if (worldPacked != null)
+                {
+                    var worldInst = (Node2D)worldPacked.Instantiate();
+                    var animPlayer = worldInst.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+                    if (animPlayer != null)
+                    {
+                        // prefer the Arrival animation, fall back to ZombieBusArrival
+                        Animation anim = animPlayer.HasAnimation("Arrival") ? animPlayer.GetAnimation("Arrival") : animPlayer.GetAnimation("ZombieBusArrival");
+                        if (anim != null)
+                        {
+                            // find the track that targets the bus position
+                            for (int t = 0; t < anim.GetTrackCount(); t++)
+                            {
+                                var path = anim.TrackGetPath(t);
+                                if (path != null && path.ToString().Contains("busz"))
+                                {
+                                    int keyCount = anim.TrackGetKeyCount(t);
+                                    busPoints = new Vector2[keyCount];
+                                    for (int k = 0; k < keyCount; k++)
+                                    {
+                                        try
+                                        {
+                                            var raw = anim.TrackGetKeyValue(t, k);
+                                            busPoints[k] = (Vector2)raw;
+                                        }
+                                        catch
+                                        {
+                                            busPoints[k] = Vector2.Zero;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // free the temporary instance
+                    worldInst.QueueFree();
+                }
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr("Hiba a World.tscn animáció beolvasásakor: " + e.Message);
+            }
+        }
+
+        int cols = 18;
+        int rows = 6;
+        float cellW = (right - left) / (cols - 1);
+        float cellH = 40f;
+
+        // helper: sample the bus path's Y at given X by linear interpolation of nearest keys
+        float SamplePathY(float x)
+        {
+            if (busPoints == null || busPoints.Length == 0) return elevatorPos.Y;
+
+            // if x before first or after last, clamp
+            if (x <= busPoints[0].X) return busPoints[0].Y;
+            if (x >= busPoints[busPoints.Length - 1].X) return busPoints[busPoints.Length - 1].Y;
+
+            for (int i = 0; i < busPoints.Length - 1; i++)
+            {
+                var a = busPoints[i];
+                var b = busPoints[i + 1];
+                if ((a.X <= x && x <= b.X) || (b.X <= x && x <= a.X))
+                {
+                    float t = (x - a.X) / (b.X - a.X);
+                    return Mathf.Lerp(a.Y, b.Y, t);
+                }
+            }
+
+            return busPoints[0].Y;
+        }
+
+        // corridor half-height — cells within this vertical distance from path center will be left empty
+        float corridorHalf = 64f;
+
+        var rockStaticPacked = GD.Load<PackedScene>("res://scenes/RockStatic.tscn");
+
+        // Preferred mode: use designer-defined marker points from RockLandingPoints
+        var landingRoot = GetNodeOrNull<Node2D>("RockLandingPoints");
+        var landingPoints = new List<Vector2>();
+        if (landingRoot != null)
+        {
+            foreach (var child in landingRoot.GetChildren())
+            {
+                if (child is Marker2D marker)
+                {
+                    landingPoints.Add(marker.GlobalPosition);
+                }
+                else if (child is Node2D node2D)
+                {
+                    landingPoints.Add(node2D.GlobalPosition);
+                }
+            }
+        }
+
+        if (landingPoints.Count > 0)
+        {
+            GD.Print($"[GroundFloor] Marker-based rock spawn: {landingPoints.Count} point(s)");
+
+            foreach (var landing in landingPoints)
+            {
+                Vector2 targetPos = landing;
+                var rock = (RigidBody2D)rockScene.Instantiate();
+                float spawnAbove = (float)GD.RandRange(160, 280);
+                rock.GlobalPosition = targetPos + new Vector2(0, -spawnAbove);
+                AddChild(rock);
+
+                var fallTime = (float)GD.RandRange(0.45, 0.95);
+                var tween = CreateTween();
+                tween.TweenProperty(rock, "global_position", targetPos, fallTime)
+                     .SetTrans(Tween.TransitionType.Quad)
+                     .SetEase(Tween.EaseType.In);
+                tween.Finished += () => {
+                    try
+                    {
+                        if (rockStaticPacked != null)
+                        {
+                            var staticRock = (Node2D)rockStaticPacked.Instantiate();
+                            staticRock.GlobalPosition = targetPos;
+                            AddChild(staticRock);
+                        }
+                    }
+                    catch { }
+                    rock.QueueFree();
+                };
+
+                await ToSignal(GetTree().CreateTimer(0.06f), "timeout");
+            }
+        }
+        else
+        {
+            // Fallback mode: generated grid with carved corridor
+            for (int c = 0; c < cols; c++)
+            {
+                float x = left + c * cellW;
+                float pathY = SamplePathY(x);
+
+                for (int r = 0; r < rows; r++)
+                {
+                    float y = top + r * cellH;
+
+                    // carve corridor: skip spawn if cell is close to sampled path Y
+                    if (Mathf.Abs(y - pathY) <= corridorHalf) continue;
+                    var rock = (RigidBody2D)rockScene.Instantiate();
+                    // compute target landing position and spawn above so it "falls"
+                    Vector2 targetPos = new Vector2(x + (float)GD.RandRange(-6, 6), y + (float)GD.RandRange(-6, 6));
+                    float spawnAbove = (float)GD.RandRange(160, 280);
+                    Vector2 spawnPos = targetPos + new Vector2(0, -spawnAbove);
+                    rock.GlobalPosition = spawnPos;
+                    AddChild(rock);
+
+                    // Tween the rock down to the fixed landing spot, then replace with a static rock
+                    var fallTime = (float)GD.RandRange(0.45, 0.95);
+                    var tween = CreateTween();
+                    tween.TweenProperty(rock, "global_position", targetPos, fallTime)
+                         .SetTrans(Tween.TransitionType.Quad)
+                         .SetEase(Tween.EaseType.In);
+                    tween.Finished += () => {
+                        try
+                        {
+                            if (rockStaticPacked != null)
+                            {
+                                var staticRock = (Node2D)rockStaticPacked.Instantiate();
+                                staticRock.GlobalPosition = targetPos;
+                                AddChild(staticRock);
+                            }
+                        }
+                        catch { }
+                        rock.QueueFree();
+                    };
+
+                    await ToSignal(GetTree().CreateTimer(0.02f), "timeout");
+                }
+            }
+        }
+
+        // Let rocks settle for a moment, keep darkness but flashlight on
+        await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
+
+        // Keep the player on GroundFloor; the earthquake only creates the blackout and obstacle event.
+        return;
     }
 
     // --- PAUSE MENÜ GOMBOK ÉS BILLENTYŰZET ---
@@ -259,7 +600,8 @@ public partial class GroundFloorController : Node2D
     {
         if (_darknessOverlay != null)
         {
-            _darknessOverlay.Visible = true;
+            _darknessOverlay.Visible = false;
+            _darknessOverlay.Color = new Color(0f, 0f, 0f, 0f);
         }
 
         var elevatorTrigger = GetNodeOrNull<Area2D>("ElevatorDoor/DetectionArea");
@@ -267,7 +609,7 @@ public partial class GroundFloorController : Node2D
 
         if (_questLabel != null)
         {
-            _questLabel.Text = "Küldetés: A sötétben el kell intézni a 3 nagy zombit!";
+            _questLabel.Text = "Küldetés: Intézd el a 3 nagy zombit!";
         }
 
         for (int i = 0; i < 3; i++)
@@ -334,6 +676,115 @@ public partial class GroundFloorController : Node2D
         if (_activeBigZombies >= MaxBigZombies) return;
 
         SpawnGlobalBigZombie();
+    }
+
+    public override void _Process(double delta)
+    {
+        UpdateDarknessFocus();
+        CheckEarthquakeApproach();
+    }
+
+    private void SetupDarknessOverlayShader()
+    {
+        if (_darknessOverlay == null) return;
+        if (_darknessMaterial != null) return;
+
+        var shader = new Shader();
+        shader.Code = @"
+shader_type canvas_item;
+
+uniform vec2 focus_pos = vec2(0.0, 0.0);
+uniform float hole_radius = 95.0;
+uniform float softness = 70.0;
+uniform float darkness_alpha = 0.88;
+
+void fragment() {
+    float dist = distance(FRAGCOORD.xy, focus_pos);
+    float reveal = 1.0 - smoothstep(hole_radius, hole_radius + softness, dist);
+    float alpha = darkness_alpha * (1.0 - reveal);
+    COLOR = vec4(0.0, 0.0, 0.0, alpha);
+}
+";
+
+        _darknessMaterial = new ShaderMaterial();
+        _darknessMaterial.Shader = shader;
+        _darknessOverlay.Material = _darknessMaterial;
+    }
+
+    private void UpdateDarknessFocus()
+    {
+        if (_darknessOverlay == null || _darknessMaterial == null || _player == null) return;
+
+        Vector2 focusPos = GetViewport().GetCanvasTransform() * (_player.GlobalPosition + new Vector2(0, -10));
+        _darknessMaterial.SetShaderParameter("focus_pos", focusPos);
+    }
+
+    private void CheckEarthquakeApproach()
+    {
+        if (_earthquakeTriggered) return;
+        if (_player == null) return;
+
+        // First, if there's a named Area2D trigger, check precise overlap (works even if signals didn't fire)
+        var quakeArea = GetNodeOrNull<Area2D>("EarthquakeTrigger");
+        if (quakeArea != null)
+        {
+            var cs = quakeArea.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
+            if (cs != null && cs.Shape != null)
+            {
+                bool inside = false;
+                if (cs.Shape is CircleShape2D circle)
+                {
+                    float radius = circle.Radius;
+                    inside = _player.GlobalPosition.DistanceTo(quakeArea.GlobalPosition) <= radius;
+                }
+                else if (cs.Shape is RectangleShape2D rect)
+                {
+                    Vector2 local = _player.GlobalPosition - quakeArea.GlobalPosition;
+                    Vector2 half = rect.Size * 0.5f;
+                    inside = Math.Abs(local.X) <= half.X && Math.Abs(local.Y) <= half.Y;
+                }
+
+                if (inside)
+                {
+                    _earthquakeTriggered = true;
+                    GD.Print("Játékos beállt az EarthquakeTrigger területre — indítom a rengést.");
+                    _liftEventStarted = true;
+                    StartEarthquakeSequence();
+                    return;
+                }
+            }
+        }
+
+        // Fallback: horizontal threshold — requires UniversityKey to activate
+        if (!InventoryManager.Items.Contains("UniversityKey")) return;
+
+        if (_player.GlobalPosition.X >= _earthquakeTriggerX)
+        {
+            _earthquakeTriggered = true;
+            GD.Print("Játékos elérte a rengés trigger küszöböt — indítom a rengést.");
+            _liftEventStarted = true;
+            StartEarthquakeSequence();
+        }
+    }
+
+    private void OnEarthquakeTriggerBodyEntered(Node body)
+    {
+        if (_earthquakeTriggered) return;
+        if (body is BasePlayer)
+        {
+            _earthquakeTriggered = true;
+            GD.Print("Játékos belépett a rengés trigger területre — indítom a rengést.");
+            _liftEventStarted = true;
+            StartEarthquakeSequence();
+        }
+    }
+
+    private void DeferredConnectQuakeArea(Area2D quakeArea)
+    {
+        if (quakeArea == null) return;
+        quakeArea.BodyEntered += OnEarthquakeTriggerBodyEntered;
+        quakeArea.Monitoring = true;
+        GD.Print("[GroundFloor] Deferred-connected earthquake trigger.");
     }
 
     private void SpawnGlobalBigZombie()
