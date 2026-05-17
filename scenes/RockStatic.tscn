@@ -1,15 +1,18 @@
 [gd_scene format=3 uid="uid://rockstatic"]
 
-[ext_resource type="Texture2D" path="res://kepek/rock.png" id="1_rock"]
+[ext_resource type="Texture2D" uid="uid://ct21xrghmhph7" path="res://kepek/rock.png" id="1_rock"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rock"]
-extents = Vector2(12, 12)
+size = Vector2(100.8364, 73.922325)
 
 [node name="RockStatic" type="StaticBody2D" unique_id=210000001]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=210000002]
+position = Vector2(-0.9999995, -2.3841858e-07)
+scale = Vector2(0.31058282, 0.31058288)
 texture = ExtResource("1_rock")
-scale = Vector2(0.5, 0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=210000003]
+position = Vector2(-2.3841858e-07, 9.000001)
+scale = Vector2(0.8268383, 0.78592914)
 shape = SubResource("RectangleShape2D_rock")
