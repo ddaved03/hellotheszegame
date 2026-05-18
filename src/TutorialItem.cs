@@ -52,13 +52,22 @@ public override void _Ready()
                 bool success = player.Inventory.AddItem(ItemName); 
                 
                 if (success) {
+                            // Ha a tárgy egy lámpa, akkor azonnal kapcsoljuk fel, hogy a játékos lásson a sötétben, és hogy a lámpa fénye azonnal megjelenjen a sötétség shader alatt.
+                            if (ItemName == "Flashlight") {
+                                player.EquipFlashlight();
+                                var gf = GetTree().Root.FindChild("GroundFloor", true, false) as Node;
+                                if (gf != null && gf.HasMethod("UpdateDarknessFocus"))
+                                {
+                                    gf.Call("UpdateDarknessFocus");
+                                }
+                    }
+
                     var world = GetTree().Root.FindChild("World", true, false) as WorldController;
                     if (world != null) world.OnKeyPartCollected(ItemName);
 
                         var groundFloor = GetTree().Root.FindChild("GroundFloor", true, false) as GroundFloorController;
-                        if (groundFloor != null) groundFloor.OnKeyPartCollected(ItemName);
 
-                    // Play pickup sound based on item name
+                    // Játsszuk le a megfelelő hangot a tárgy típusától függően
                     if (AudioManager.Instance != null)
                     {
                         if (ItemName != null && ItemName.ToLower().Contains("key"))

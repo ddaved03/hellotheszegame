@@ -29,70 +29,60 @@
 [ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="26_a7yby"]
 [ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="27_oqmdo"]
 [ext_resource type="Script" uid="uid://ckbgw70ncxwqg" path="res://src/ElevatorDoor.cs" id="30_elevator"]
-
-[sub_resource type="Animation" id="Animation_2pad8_ground"]
-resource_name = "Arrival"
-length = 12.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D busz:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 8, 10, 12),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(3167.0002, 514.99994), Vector2(-295.99976, 518.99994), Vector2(-295.99976, 518.99994), Vector2(-1154, 522.99994)]
-}
-
-[sub_resource type="Animation" id="Animation_e4yt5_ground"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D busz:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(3167.0002, 514.99994)]
-}
-
-[sub_resource type="Animation" id="Animation_x70b3_ground"]
-length = 12.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D busz:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 8, 10, 12),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(3167.0002, 514.99994), Vector2(-295.99976, 518.99994), Vector2(-295.99976, 518.99994), Vector2(-1154, 522.99994)]
-}
+[ext_resource type="Script" uid="uid://da35hwjbqhgtp" path="res://src/RoomDoor.cs" id="31_roomdoor"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ground"]
-_data = {}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xblde"]
+size = Vector2(23, 176)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5w6i"]
+size = Vector2(1528, 41)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sekl2"]
+size = Vector2(28, 153)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_30jxp"]
+size = Vector2(24, 159.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r2p7q"]
+size = Vector2(133, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ym5wa"]
+size = Vector2(949, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmac1"]
+size = Vector2(853, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1v0yi"]
+size = Vector2(123, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lk0ao"]
+size = Vector2(23, 177)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ra5n"]
+size = Vector2(41, 159)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ihdeq"]
+size = Vector2(40, 147)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ng0c7"]
+size = Vector2(523, 42)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4fudr"]
-size = Vector2(3719.5, 35)
+size = Vector2(3719.5, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cy7w5"]
-size = Vector2(46, 1695)
+size = Vector2(48, 1695)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0qkuh"]
 size = Vector2(3719.5, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tefep"]
-size = Vector2(31, 1689)
+size = Vector2(30, 1689.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3e6iv"]
-size = Vector2(51, 194)
+size = Vector2(57, 201)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xj0dy"]
 size = Vector2(58, 233)
@@ -218,10 +208,10 @@ texture = ExtResource("27_oqmdo")
 texture = ExtResource("4_xj0dy")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3gf8l"]
-size = Vector2(231, 149.3125)
+size = Vector2(249.5, 156.65625)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fpu53"]
-size = Vector2(179.5, 29.5)
+size = Vector2(73, 7)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sekl2"]
 radius = 85.98837
@@ -233,20 +223,70 @@ radius = 93.05912
 script = ExtResource("1_xj0dy")
 PlayerPath = NodePath("Player")
 PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
-QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
+QuestLabelPath = NodePath("CanvasLayer/Control/MarginContainer/QuestLabel")
 AnimationPlayerPath = NodePath("AnimationPlayer")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=300000002]
 libraries/ = SubResource("AnimationLibrary_ground")
 
+[node name="RoomBoundaries" type="StaticBody2D" parent="." unique_id=1210719585]
+
+[node name="RoomCollisionShape1" type="CollisionShape2D" parent="RoomBoundaries" unique_id=246054229]
+position = Vector2(389.5, 78)
+shape = SubResource("RectangleShape2D_xblde")
+
+[node name="RoomCollisionShape2" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1592598306]
+position = Vector2(1142, 158.5)
+shape = SubResource("RectangleShape2D_b5w6i")
+
+[node name="RoomCollisionShape3" type="CollisionShape2D" parent="RoomBoundaries" unique_id=209917587]
+position = Vector2(2507, 66.5)
+shape = SubResource("RectangleShape2D_sekl2")
+
+[node name="RoomCollisionShape4" type="CollisionShape2D" parent="RoomBoundaries" unique_id=942976600]
+position = Vector2(384, 1567.75)
+shape = SubResource("RectangleShape2D_30jxp")
+
+[node name="RoomCollisionShape5" type="CollisionShape2D" parent="RoomBoundaries" unique_id=25626777]
+position = Vector2(456.5, 1487.5)
+shape = SubResource("RectangleShape2D_r2p7q")
+
+[node name="RoomCollisionShape6" type="CollisionShape2D" parent="RoomBoundaries" unique_id=2024958338]
+position = Vector2(1071.5, 1487.5)
+shape = SubResource("RectangleShape2D_ym5wa")
+
+[node name="RoomCollisionShape7" type="CollisionShape2D" parent="RoomBoundaries" unique_id=215944169]
+position = Vector2(1971.5, 1487.5)
+shape = SubResource("RectangleShape2D_mmac1")
+
+[node name="RoomCollisionShape8" type="CollisionShape2D" parent="RoomBoundaries" unique_id=2057529885]
+position = Vector2(2530.5, 1487.5)
+shape = SubResource("RectangleShape2D_1v0yi")
+
+[node name="RoomCollisionShape9" type="CollisionShape2D" parent="RoomBoundaries" unique_id=104611112]
+position = Vector2(2579.5, 1577.5)
+shape = SubResource("RectangleShape2D_lk0ao")
+
+[node name="RoomCollisionShape10" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1972881534]
+position = Vector2(1112.5, 1566.5)
+shape = SubResource("RectangleShape2D_4ra5n")
+
+[node name="RoomCollisionShape11" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1584768118]
+position = Vector2(1850, 1563.5)
+shape = SubResource("RectangleShape2D_ihdeq")
+
+[node name="RoomCollisionShape12" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1648898546]
+position = Vector2(2236.5, 159)
+shape = SubResource("RectangleShape2D_ng0c7")
+
 [node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=1976753314]
 
 [node name="CollisionShape2D up" type="CollisionShape2D" parent="MapBoundaries" unique_id=136492772]
-position = Vector2(1859.25, -17.5)
+position = Vector2(1859.25, -15)
 shape = SubResource("RectangleShape2D_4fudr")
 
 [node name="CollisionShape2D r" type="CollisionShape2D" parent="MapBoundaries" unique_id=231753542]
-position = Vector2(3741, 814.5)
+position = Vector2(3740, 814.5)
 shape = SubResource("RectangleShape2D_cy7w5")
 
 [node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=1989571960]
@@ -254,7 +294,7 @@ position = Vector2(1856, 1646)
 shape = SubResource("RectangleShape2D_0qkuh")
 
 [node name="CollisionShape2D l" type="CollisionShape2D" parent="MapBoundaries" unique_id=1557954756]
-position = Vector2(-15.5, 812)
+position = Vector2(-14, 810.75)
 shape = SubResource("RectangleShape2D_tefep")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1617667065]
@@ -284,7 +324,7 @@ limit_bottom = 1630
 [node name="PadBoundaries" type="StaticBody2D" parent="." unique_id=1859343887]
 
 [node name="CollisionShape2D pad7" type="CollisionShape2D" parent="PadBoundaries" unique_id=504190278]
-position = Vector2(587, 367)
+position = Vector2(586.5, 370.5)
 shape = SubResource("RectangleShape2D_3e6iv")
 
 [node name="CollisionShape2D pad8" type="CollisionShape2D" parent="PadBoundaries" unique_id=16330684]
@@ -475,13 +515,14 @@ offset_right = 306.0
 offset_bottom = 114.0
 texture = ExtResource("6_77qag")
 
-[node name="QuestLabel" type="Label" parent="CanvasLayer/Control" unique_id=413893458]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=6628375]
 layout_mode = 0
-offset_left = 6.0
-offset_top = 127.0
-offset_right = 369.0
-offset_bottom = 155.0
-pivot_offset = Vector2(685, 155)
+offset_top = 114.0
+offset_right = 363.0
+offset_bottom = 143.0
+
+[node name="QuestLabel" type="Label" parent="CanvasLayer/Control/MarginContainer" unique_id=413893458]
+layout_mode = 2
 text = "Küldetés: Menj fel a C100-as terembe!"
 label_settings = SubResource("LabelSettings_tln53")
 
@@ -770,14 +811,14 @@ position = Vector2(2, 3)
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MapTransitionTrigger" unique_id=1935184124]
-position = Vector2(3626, 1545)
+position = Vector2(3632.25, 1559.3281)
 shape = SubResource("RectangleShape2D_3gf8l")
 
 [node name="ElevatorDoor" type="StaticBody2D" parent="." unique_id=815315741]
 script = ExtResource("30_elevator")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElevatorDoor" unique_id=1270264927]
-position = Vector2(3622, 1460.75)
+position = Vector2(3611.5, 1464.5)
 shape = SubResource("RectangleShape2D_fpu53")
 
 [node name="DetectionArea" type="Area2D" parent="ElevatorDoor" unique_id=1971965757]
@@ -785,7 +826,7 @@ position = Vector2(3609, 1413)
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElevatorDoor/DetectionArea" unique_id=1214580054]
-position = Vector2(4, -7)
+position = Vector2(4, 4)
 shape = SubResource("CircleShape2D_sekl2")
 
 [node name="EarthquakeTrigger" type="Area2D" parent="." unique_id=1498630912]
@@ -837,7 +878,7 @@ position = Vector2(1698, 1186)
 gizmo_extents = 50.0
 
 [node name="Point40" type="Marker2D" parent="RockLandingPoints" unique_id=877832033]
-position = Vector2(1672, 1311)
+position = Vector2(1682, 1283)
 gizmo_extents = 50.0
 
 [node name="Point41" type="Marker2D" parent="RockLandingPoints" unique_id=1498280774]
@@ -889,7 +930,7 @@ position = Vector2(1963, 833)
 gizmo_extents = 50.0
 
 [node name="Point53" type="Marker2D" parent="RockLandingPoints" unique_id=688503630]
-position = Vector2(1848, 1294)
+position = Vector2(1870, 1299)
 gizmo_extents = 50.0
 
 [node name="Point54" type="Marker2D" parent="RockLandingPoints" unique_id=1924714264]
@@ -1124,8 +1165,48 @@ gizmo_extents = 50.0
 position = Vector2(1052, 1060)
 gizmo_extents = 50.0
 
+[node name="Point132" type="Marker2D" parent="RockLandingPoints" unique_id=1924371133]
+position = Vector2(928, 1382)
+gizmo_extents = 50.0
+
+[node name="Point134" type="Marker2D" parent="RockLandingPoints" unique_id=869285813]
+position = Vector2(1672, 1365)
+gizmo_extents = 50.0
+
+[node name="Point135" type="Marker2D" parent="RockLandingPoints" unique_id=581605353]
+position = Vector2(952, 1431)
+gizmo_extents = 50.0
+
+[node name="Point133" type="Marker2D" parent="RockLandingPoints" unique_id=1908038502]
+position = Vector2(865, 1446)
+gizmo_extents = 50.0
+
+[node name="Point137" type="Marker2D" parent="RockLandingPoints" unique_id=937562424]
+position = Vector2(2291, 1462)
+gizmo_extents = 50.0
+
+[node name="Point138" type="Marker2D" parent="RockLandingPoints" unique_id=1926847584]
+position = Vector2(2327, 1402)
+gizmo_extents = 50.0
+
+[node name="Point139" type="Marker2D" parent="RockLandingPoints" unique_id=1813707688]
+position = Vector2(1725, 1420)
+gizmo_extents = 50.0
+
+[node name="Point140" type="Marker2D" parent="RockLandingPoints" unique_id=1706243430]
+position = Vector2(2163, 1370)
+gizmo_extents = 50.0
+
+[node name="Point141" type="Marker2D" parent="RockLandingPoints" unique_id=2118206593]
+position = Vector2(1645, 1439)
+gizmo_extents = 50.0
+
+[node name="Point136" type="Marker2D" parent="RockLandingPoints" unique_id=871831625]
+position = Vector2(947, 1316)
+gizmo_extents = 50.0
+
 [node name="Point23" type="Marker2D" parent="RockLandingPoints" unique_id=229202388]
-position = Vector2(935, 1296)
+position = Vector2(937, 1260)
 gizmo_extents = 50.0
 
 [node name="Point84" type="Marker2D" parent="RockLandingPoints" unique_id=204939944]
@@ -1141,7 +1222,7 @@ position = Vector2(3374, 1237)
 gizmo_extents = 50.0
 
 [node name="Point87" type="Marker2D" parent="RockLandingPoints" unique_id=346894323]
-position = Vector2(2775, 1272)
+position = Vector2(2825, 1127)
 gizmo_extents = 50.0
 
 [node name="Point88" type="Marker2D" parent="RockLandingPoints" unique_id=1826916820]
@@ -1161,7 +1242,7 @@ position = Vector2(3040, 1225)
 gizmo_extents = 50.0
 
 [node name="Point92" type="Marker2D" parent="RockLandingPoints" unique_id=471676427]
-position = Vector2(2648, 1373)
+position = Vector2(2636, 1551)
 gizmo_extents = 50.0
 
 [node name="Point93" type="Marker2D" parent="RockLandingPoints" unique_id=1044597674]
@@ -1209,7 +1290,7 @@ position = Vector2(3375, 235)
 gizmo_extents = 50.0
 
 [node name="Point105" type="Marker2D" parent="RockLandingPoints" unique_id=880393445]
-position = Vector2(2741, 1432)
+position = Vector2(2676, 1463)
 gizmo_extents = 50.0
 
 [node name="Point106" type="Marker2D" parent="RockLandingPoints" unique_id=1925816858]
@@ -1229,7 +1310,7 @@ position = Vector2(3185, 1565)
 gizmo_extents = 50.0
 
 [node name="Point110" type="Marker2D" parent="RockLandingPoints" unique_id=1444349319]
-position = Vector2(2718, 1324)
+position = Vector2(2748, 1434)
 gizmo_extents = 50.0
 
 [node name="Point111" type="Marker2D" parent="RockLandingPoints" unique_id=2110523759]
@@ -1319,6 +1400,83 @@ gizmo_extents = 50.0
 [node name="Point68" type="Marker2D" parent="RockLandingPoints" unique_id=473401136]
 position = Vector2(735, 722)
 gizmo_extents = 50.0
+
+[node name="RoomPortals" type="Node2D" parent="." unique_id=2100000001]
+
+[node name="TopRoomOutside" type="Marker2D" parent="RoomPortals" unique_id=2100000002]
+position = Vector2(1942, 232)
+gizmo_extents = 50.0
+
+[node name="TopRoomInside" type="Marker2D" parent="RoomPortals" unique_id=2100000003]
+position = Vector2(1951, 73)
+gizmo_extents = 50.0
+
+[node name="BottomLeftOutside" type="Marker2D" parent="RoomPortals" unique_id=2100000004]
+position = Vector2(568, 1423)
+gizmo_extents = 50.0
+
+[node name="BottomLeftInside" type="Marker2D" parent="RoomPortals" unique_id=2100000005]
+position = Vector2(563, 1523)
+gizmo_extents = 50.0
+
+[node name="BottomRightOutside" type="Marker2D" parent="RoomPortals" unique_id=2100000006]
+position = Vector2(2436, 1419)
+gizmo_extents = 50.0
+
+[node name="BottomRightInside" type="Marker2D" parent="RoomPortals" unique_id=2100000007]
+position = Vector2(2447, 1519)
+gizmo_extents = 50.0
+
+[node name="TopRoomDoor" type="StaticBody2D" parent="." unique_id=2100000101]
+position = Vector2(1934, 167)
+script = ExtResource("31_roomdoor")
+DoorId = &"TopRoom"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopRoomDoor" unique_id=2100000102]
+position = Vector2(9, -8)
+shape = SubResource("RectangleShape2D_fpu53")
+
+[node name="DetectionArea" type="Area2D" parent="TopRoomDoor" unique_id=2100000103]
+position = Vector2(10, 6)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopRoomDoor/DetectionArea" unique_id=2100000104]
+position = Vector2(-2, -14)
+shape = SubResource("CircleShape2D_sekl2")
+
+[node name="BottomLeftDoor" type="StaticBody2D" parent="." unique_id=2100000105]
+position = Vector2(633, 1421)
+script = ExtResource("31_roomdoor")
+DoorId = &"BottomLeftRoom"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomLeftDoor" unique_id=2100000106]
+position = Vector2(-73.5, 66.375)
+shape = SubResource("RectangleShape2D_fpu53")
+
+[node name="DetectionArea" type="Area2D" parent="BottomLeftDoor" unique_id=2100000107]
+position = Vector2(-4, 9)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomLeftDoor/DetectionArea" unique_id=2100000108]
+position = Vector2(-70, 57)
+shape = SubResource("CircleShape2D_sekl2")
+
+[node name="BottomRightDoor" type="StaticBody2D" parent="." unique_id=2100000109]
+position = Vector2(2434, 1473)
+script = ExtResource("31_roomdoor")
+DoorId = &"BottomRightRoom"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomRightDoor" unique_id=2100000110]
+position = Vector2(0, 14.5)
+shape = SubResource("RectangleShape2D_fpu53")
+
+[node name="DetectionArea" type="Area2D" parent="BottomRightDoor" unique_id=2100000111]
+position = Vector2(406, -51)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomRightDoor/DetectionArea" unique_id=2100000112]
+position = Vector2(-405, 58)
+shape = SubResource("CircleShape2D_sekl2")
 
 [connection signal="pressed" from="CanvasLayer/Inventory/Button" to="CanvasLayer/Inventory" method="CraftUniversityKey"]
 
