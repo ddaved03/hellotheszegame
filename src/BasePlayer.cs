@@ -307,17 +307,29 @@ public partial class BasePlayer : CharacterBody2D
 
     private void UpdateUI()
     {
-        var hudHP = GetNodeOrNull<ProgressBar>("/root/World/CanvasLayer/Control/HealthBar"); 
+        var hudHP = GetNodeOrNull<ProgressBar>("/root/World/CanvasLayer/Control/HealthBar");
         var hudXP = GetNodeOrNull<ProgressBar>("/root/World/CanvasLayer/Control/ProgressBar");
         var potLabel = GetNodeOrNull<Label>("/root/World/CanvasLayer/Control/PotionLabel");
         var lvlLabel = GetNodeOrNull<Label>("/root/World/CanvasLayer/Control/Label");
 
         // --- ÚJ: MANA SÁV FRISSÍTÉSE ---
-        // (Feltételezve, hogy csinálsz majd egy ManaBar-t a HealthBar alá!)
         var hudMana = GetNodeOrNull<ProgressBar>("/root/World/CanvasLayer/Control/ManaBar");
-        if (hudMana != null) { hudMana.MaxValue = MaxMana; hudMana.Value = CurrentMana; }
-        // -------------------------------
 
+        // Ha bármelyik elem nem található, megpróbáljuk újra megtalálni őket a gyökeres Control alatt (ez hasznos lehet, ha a jelenetstruktúra változik)
+        if (hudHP == null || hudXP == null || potLabel == null || lvlLabel == null || hudMana == null)
+        {
+            var control = GetTree().Root.FindChild("Control", true, false) as Control;
+            if (control != null)
+            {
+                hudHP = hudHP ?? control.GetNodeOrNull<ProgressBar>("HealthBar");
+                hudXP = hudXP ?? control.GetNodeOrNull<ProgressBar>("ProgressBar");
+                potLabel = potLabel ?? control.GetNodeOrNull<Label>("PotionLabel");
+                lvlLabel = lvlLabel ?? control.GetNodeOrNull<Label>("Label");
+                hudMana = hudMana ?? control.GetNodeOrNull<ProgressBar>("ManaBar");
+            }
+        }
+
+        if (hudMana != null) { hudMana.MaxValue = MaxMana; hudMana.Value = CurrentMana; }
         if (hudHP != null) { hudHP.MaxValue = MaxHealth; hudHP.Value = CurrentHealth; }
         if (hudXP != null) { hudXP.MaxValue = MaxXP; hudXP.Value = CurrentXP; }
         if (lvlLabel != null) { lvlLabel.Text = "LVL " + Level; }
@@ -354,19 +366,42 @@ public partial class BasePlayer : CharacterBody2D
         }
     }
 
-    // --- FLASHLIGHT (Sprite fallback) ---
+    // --- FLASHLIGHT  ---
     public void EquipFlashlight()
     {
         if (GetNodeOrNull<PointLight2D>("FlashlightLight") != null) return;
 
         var light = new PointLight2D();
         light.Name = "FlashlightLight";
-        light.Texture = CreateFlashlightTexture(128, 128);
+        // Egyszerű kör alakú textúrát generálunk a lámpához, ahol a közepén erős fény van, és a szélek felé fokozatosan halványul.
+        light.Texture = CreateFlashlightTexture(100, 100);
         light.Color = new Color(1.0f, 0.97f, 0.9f, 1.0f);
-        light.Energy = 1.15f;
+        light.Energy = 0.9f;
         light.TextureScale = 0.55f;
-        light.Offset = new Vector2(0, -18);
+        light.Offset = new Vector2(0, -14);
         AddChild(light);
+        // Itt frissítjük a GroundFloorController-t is, hogy újra kiszámolja a sötétség fókuszát a lámpa miatt
+        var groundFloor = GetTree().Root.FindChild("GroundFloor", true, false) as Godot.Node;
+        if (groundFloor is Godot.Node)
+        {
+            var gfc = groundFloor as Godot.Node;
+            // Mivel a GroundFloorController-ben van egy UpdateDarknessFocus függvény, amit a lámpa hatásának frissítésére használunk, itt is meghívjuk, hogy az új lámpa hatása azonnal érvényesüljön.
+            if (gfc.HasMethod("UpdateDarknessFocus")) gfc.Call("UpdateDarknessFocus");
+        }
+    }
+
+    public void UnequipFlashlight()
+    {
+        var light = GetNodeOrNull<PointLight2D>("FlashlightLight");
+        if (light == null) return;
+
+        light.QueueFree();
+
+        var groundFloor = GetTree().Root.FindChild("GroundFloor", true, false) as Godot.Node;
+        if (groundFloor != null && groundFloor.HasMethod("UpdateDarknessFocus"))
+        {
+            groundFloor.Call("UpdateDarknessFocus");
+        }
     }
 
     private Texture2D CreateFlashlightTexture(int width, int height)
