@@ -2,15 +2,16 @@
 
 [ext_resource type="Texture2D" uid="uid://7bre2gd4hdn0" path="res://kepek/C100-map-aisle.png" id="1_c100"]
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_player"]
-[ext_resource type="PackedScene" uid="uid://j7o1wuti6nkb" path="res://scenes/Paalda.tscn" id="3_paalda"]
 [ext_resource type="Texture2D" uid="uid://dqlwy8m4lpvac" path="res://kepek/C100-monitor-overlay.png" id="4_monitor_overlay"]
 [ext_resource type="Texture2D" uid="uid://f7qnj35bltya" path="res://kepek/C100-teacher-desk-overlay.png" id="5_teacher_overlay"]
+[ext_resource type="Script" path="res://src/SceneDoor.cs" id="6_scene_door"]
+[ext_resource type="Texture2D" path="res://kepek/C100-bottom-door.png" id="7_bottom_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(2304, 205)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_bottom"]
-size = Vector2(2304, 41)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_bottom_side"]
+size = Vector2(1032, 41)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_side"]
 size = Vector2(60, 1536)
@@ -23,6 +24,9 @@ size = Vector2(725, 36)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_teacher_desk"]
 size = Vector2(200, 71)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_trigger"]
+size = Vector2(220, 90)
 
 [node name="C100" type="Node2D" unique_id=2050255343]
 y_sort_enabled = true
@@ -237,9 +241,13 @@ region_rect = Rect2(1203, 819, 51, 57)
 position = Vector2(1152, 102.5)
 shape = SubResource("RectangleShape2D_wall_top")
 
-[node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=653957681]
-position = Vector2(1152, 1515.5)
-shape = SubResource("RectangleShape2D_wall_bottom")
+[node name="CollisionShape2D down left" type="CollisionShape2D" parent="MapBoundaries" unique_id=653957681]
+position = Vector2(516, 1515.5)
+shape = SubResource("RectangleShape2D_wall_bottom_side")
+
+[node name="CollisionShape2D down right" type="CollisionShape2D" parent="MapBoundaries" unique_id=1919245363]
+position = Vector2(1788, 1515.5)
+shape = SubResource("RectangleShape2D_wall_bottom_side")
 
 [node name="CollisionShape2D left" type="CollisionShape2D" parent="MapBoundaries" unique_id=570121330]
 position = Vector2(30, 768)
@@ -298,64 +306,16 @@ shape = SubResource("RectangleShape2D_teacher_desk")
 [node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
 position = Vector2(1152, 336)
 
-[node name="Paalda" parent="." unique_id=1296762172 instance=ExtResource("3_paalda")]
-position = Vector2(1152, 768)
+[node name="BottomDoorSprite" type="Sprite2D" parent="."]
+z_index = 22
+position = Vector2(1152, 1416)
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("7_bottom_door")
 
-[node name="PatrolPoints" type="Node2D" parent="Paalda" unique_id=1368874975]
+[node name="BottomDoor" type="Area2D" parent="."]
+position = Vector2(1152, 1498)
+script = ExtResource("6_scene_door")
+TargetScene = "res://scenes/GroundFloor.tscn"
 
-[node name="CenterTop" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1086265325]
-position = Vector2(0, -442)
-
-[node name="CenterTopDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=615469112]
-position = Vector2(100, -332)
-
-[node name="CenterGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1461901440]
-position = Vector2(0, -222)
-
-[node name="LeftGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=71809832]
-position = Vector2(-982, -222)
-
-[node name="LeftGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1879180922]
-position = Vector2(-982, 28)
-
-[node name="CenterGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2116323577]
-position = Vector2(0, 28)
-
-[node name="CenterDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1087938612]
-position = Vector2(-100, 158)
-
-[node name="CenterDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1558948111]
-position = Vector2(100, 392)
-
-[node name="CenterGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1850664886]
-position = Vector2(0, 392)
-
-[node name="LeftGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2084035899]
-position = Vector2(-982, 392)
-
-[node name="LeftBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=510711043]
-position = Vector2(-982, 560)
-
-[node name="CenterBottom" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=750295725]
-position = Vector2(120, 560)
-
-[node name="BottomDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1520624325]
-position = Vector2(-100, 470)
-
-[node name="BottomDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=923802747]
-position = Vector2(100, 560)
-
-[node name="RightBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=135721754]
-position = Vector2(982, 560)
-
-[node name="RightGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=823756907]
-position = Vector2(982, 392)
-
-[node name="RightGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1788233594]
-position = Vector2(982, 28)
-
-[node name="RightGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1136176302]
-position = Vector2(982, -222)
-
-[node name="RightTopReturn" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2145266138]
-position = Vector2(982, -442)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomDoor"]
+shape = SubResource("RectangleShape2D_door_trigger")
