@@ -16,6 +16,8 @@ public partial class BasePlayer : CharacterBody2D
 
     [Export] public int PotionsCount = 0;
     public int MaxPotionSlots = 3; 
+    [Export] public string InitialIdleAnimation = "idle_front";
+    [Export] public bool InitialFlipH = false;
 
     [ExportGroup("Menus")]
     [Export] public Control UpgradeMenuNode; 
@@ -70,6 +72,16 @@ public partial class BasePlayer : CharacterBody2D
         if (UpgradeMenuNode != null) UpgradeMenuNode.Visible = false;
 
         _animSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
+        if (_animSprite != null)
+        {
+            if (_animSprite.SpriteFrames.HasAnimation(InitialIdleAnimation))
+            {
+                _currentDirAnim = InitialIdleAnimation;
+            }
+
+            _animSprite.FlipH = InitialFlipH;
+            _animSprite.Play(_currentDirAnim);
+        }
         
         _blinkTimer = new Timer();
         _blinkTimer.OneShot = true;
@@ -147,6 +159,10 @@ public partial class BasePlayer : CharacterBody2D
             if (baseDir == "side")
             {
                 _animSprite.FlipH = direction.X < 0;
+            }
+            else
+            {
+                _animSprite.FlipH = false;
             }
         }
         else
