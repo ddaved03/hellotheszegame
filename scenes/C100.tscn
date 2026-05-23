@@ -6,9 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://f7qnj35bltya" path="res://kepek/C100-teacher-desk-overlay.png" id="5_teacher_overlay"]
 [ext_resource type="Script" path="res://src/SceneDoor.cs" id="6_scene_door"]
 [ext_resource type="Texture2D" path="res://kepek/C100-bottom-door.png" id="7_bottom_door"]
-[ext_resource type="Script" path="res://src/PauseMenuController.cs" id="8_pause_menu"]
-[ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="9_pause_bg"]
-[ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="10_pause_button"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(2304, 205)
@@ -31,14 +28,8 @@ size = Vector2(200, 71)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_trigger"]
 size = Vector2(220, 90)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pause_button"]
-texture = ExtResource("10_pause_button")
-
 [node name="C100" type="Node2D" unique_id=2050255343]
 y_sort_enabled = true
-script = ExtResource("8_pause_menu")
-PlayerPath = NodePath("Player")
-PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
 
 [node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=163658260]
 z_index = -10
@@ -315,10 +306,6 @@ shape = SubResource("RectangleShape2D_teacher_desk")
 [node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
 position = Vector2(1152, 336)
 
-[node name="Camera2D" parent="Player" index="2"]
-limit_right = 2304
-limit_bottom = 1536
-
 [node name="BottomDoorSprite" type="Sprite2D" parent="."]
 z_index = 22
 position = Vector2(1152, 1416)
@@ -332,62 +319,3 @@ TargetScene = "res://scenes/GroundFloor.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomDoor"]
 shape = SubResource("RectangleShape2D_door_trigger")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="PauseMenu" type="Panel" parent="CanvasLayer"]
-process_mode = 3
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -150.0
-offset_right = 200.0
-offset_bottom = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PauseMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_pause_bg")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PauseMenu"]
-layout_mode = 0
-offset_left = 45.0
-offset_top = 25.0
-offset_right = 355.0
-offset_bottom = 275.0
-theme_override_constants/separation = 10
-
-[node name="Title" type="Label" parent="CanvasLayer/PauseMenu/VBoxContainer"]
-layout_mode = 2
-text = "Szuenet"
-horizontal_alignment = 1
-
-[node name="ResumeButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
-text = "Folytatas"
-
-[node name="SaveButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
-text = "Mentes"
-
-[node name="LoadButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
-text = "Betoltes"
-
-[node name="MainMenuButton" type="Button" parent="CanvasLayer/PauseMenu/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
-text = "Fomenu"
