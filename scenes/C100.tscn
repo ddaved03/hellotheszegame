@@ -1,0 +1,424 @@
+[gd_scene format=3 uid="uid://c2vdk2hgipqu6"]
+
+[ext_resource type="Texture2D" uid="uid://7bre2gd4hdn0" path="res://kepek/C100-map-aisle.png" id="1_c100"]
+[ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://j7o1wuti6nkb" path="res://scenes/Paalda.tscn" id="3_paalda"]
+[ext_resource type="Texture2D" uid="uid://dqlwy8m4lpvac" path="res://kepek/C100-monitor-overlay.png" id="4_monitor_overlay"]
+[ext_resource type="Texture2D" uid="uid://f7qnj35bltya" path="res://kepek/C100-teacher-desk-overlay.png" id="5_teacher_overlay"]
+[ext_resource type="Script" path="res://src/C100DialogueController.cs" id="6_c100_dialogue"]
+[ext_resource type="Script" path="res://src/PixelDialogueBox.cs" id="7_pixel_dialogue_box"]
+[ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="8_pause_bg"]
+[ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="9_pause_button"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
+size = Vector2(2304, 205)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_bottom"]
+size = Vector2(2304, 41)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_side"]
+size = Vector2(60, 1536)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_plant"]
+radius = 15.297058
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_desk_segment"]
+size = Vector2(725, 36)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_teacher_desk"]
+size = Vector2(200, 71)
+
+[sub_resource type="SystemFont" id="SystemFont_dialogue"]
+font_names = PackedStringArray("Consolas", "Courier New")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pause_button"]
+texture = ExtResource("9_pause_button")
+
+[node name="C100" type="Node2D" unique_id=2050255343]
+y_sort_enabled = true
+script = ExtResource("6_c100_dialogue")
+
+[node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=163658260]
+z_index = -10
+position = Vector2(1152, 768)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_c100")
+
+[node name="TeacherDeskOverlay" type="Sprite2D" parent="." unique_id=585714124]
+z_index = 40
+position = Vector2(273, 322.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("5_teacher_overlay")
+
+[node name="MonitorOverlayL1A" type="Sprite2D" parent="." unique_id=1029319794]
+position = Vector2(377.25, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 311, 51, 57)
+
+[node name="MonitorOverlayL1B" type="Sprite2D" parent="." unique_id=1249602214]
+position = Vector2(591.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 311, 51, 57)
+
+[node name="MonitorOverlayL1C" type="Sprite2D" parent="." unique_id=1253732917]
+position = Vector2(821.25, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 311, 51, 57)
+
+[node name="MonitorOverlayR1A" type="Sprite2D" parent="." unique_id=1922933846]
+position = Vector2(1398.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 311, 51, 57)
+
+[node name="MonitorOverlayR1B" type="Sprite2D" parent="." unique_id=62033374]
+position = Vector2(1623.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 311, 51, 57)
+
+[node name="MonitorOverlayR1C" type="Sprite2D" parent="." unique_id=1089939834]
+position = Vector2(1842.75, 552)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 311, 51, 57)
+
+[node name="MonitorOverlayL2A" type="Sprite2D" parent="." unique_id=792447422]
+position = Vector2(377.25, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 467, 51, 57)
+
+[node name="MonitorOverlayL2B" type="Sprite2D" parent="." unique_id=636494896]
+position = Vector2(591.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 467, 51, 57)
+
+[node name="MonitorOverlayL2C" type="Sprite2D" parent="." unique_id=144324910]
+position = Vector2(821.25, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 467, 51, 57)
+
+[node name="MonitorOverlayR2A" type="Sprite2D" parent="." unique_id=1192008444]
+position = Vector2(1398.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 467, 51, 57)
+
+[node name="MonitorOverlayR2B" type="Sprite2D" parent="." unique_id=2134345273]
+position = Vector2(1623.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 467, 51, 57)
+
+[node name="MonitorOverlayR2C" type="Sprite2D" parent="." unique_id=342414493]
+position = Vector2(1842.75, 786)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 467, 51, 57)
+
+[node name="MonitorOverlayL3A" type="Sprite2D" parent="." unique_id=1365415531]
+position = Vector2(377.25, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 648, 51, 57)
+
+[node name="MonitorOverlayL3B" type="Sprite2D" parent="." unique_id=569959384]
+position = Vector2(591.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 648, 51, 57)
+
+[node name="MonitorOverlayL3C" type="Sprite2D" parent="." unique_id=1613501593]
+position = Vector2(821.25, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 648, 51, 57)
+
+[node name="MonitorOverlayR3A" type="Sprite2D" parent="." unique_id=461364175]
+position = Vector2(1398.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 648, 51, 57)
+
+[node name="MonitorOverlayR3B" type="Sprite2D" parent="." unique_id=1976611509]
+position = Vector2(1623.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 648, 51, 57)
+
+[node name="MonitorOverlayR3C" type="Sprite2D" parent="." unique_id=1227350697]
+position = Vector2(1842.75, 1057.5)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 648, 51, 57)
+
+[node name="MonitorOverlayL4A" type="Sprite2D" parent="." unique_id=363960154]
+position = Vector2(377.25, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(226, 819, 51, 57)
+
+[node name="MonitorOverlayL4B" type="Sprite2D" parent="." unique_id=33260890]
+position = Vector2(591.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(369, 819, 51, 57)
+
+[node name="MonitorOverlayL4C" type="Sprite2D" parent="." unique_id=131361555]
+position = Vector2(821.25, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(522, 819, 51, 57)
+
+[node name="MonitorOverlayR4A" type="Sprite2D" parent="." unique_id=213448712]
+position = Vector2(1398.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(907, 819, 51, 57)
+
+[node name="MonitorOverlayR4B" type="Sprite2D" parent="." unique_id=1976517765]
+position = Vector2(1623.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1057, 819, 51, 57)
+
+[node name="MonitorOverlayR4C" type="Sprite2D" parent="." unique_id=233307280]
+position = Vector2(1842.75, 1314)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("4_monitor_overlay")
+offset = Vector2(0, -28.5)
+region_enabled = true
+region_rect = Rect2(1203, 819, 51, 57)
+
+[node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=71792524]
+
+[node name="CollisionShape2D up" type="CollisionShape2D" parent="MapBoundaries" unique_id=1894892702]
+position = Vector2(1152, 102.5)
+shape = SubResource("RectangleShape2D_wall_top")
+
+[node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=653957681]
+position = Vector2(1152, 1515.5)
+shape = SubResource("RectangleShape2D_wall_bottom")
+
+[node name="CollisionShape2D left" type="CollisionShape2D" parent="MapBoundaries" unique_id=570121330]
+position = Vector2(30, 768)
+shape = SubResource("RectangleShape2D_wall_side")
+
+[node name="CollisionShape2D right" type="CollisionShape2D" parent="MapBoundaries" unique_id=397827598]
+position = Vector2(2274, 768)
+shape = SubResource("RectangleShape2D_wall_side")
+
+[node name="CollisionShape2D left plant" type="CollisionShape2D" parent="MapBoundaries" unique_id=2019690488]
+position = Vector2(106, 222)
+shape = SubResource("CircleShape2D_plant")
+
+[node name="CollisionShape2D right plant" type="CollisionShape2D" parent="MapBoundaries" unique_id=2059008345]
+position = Vector2(2195, 223)
+shape = SubResource("CircleShape2D_plant")
+
+[node name="DeskCollisions" type="StaticBody2D" parent="." unique_id=1188787159]
+
+[node name="CollisionShape2D desk row 1 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1100516282]
+position = Vector2(633.5, 521)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 1 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=1230861439]
+position = Vector2(1625, 521)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 2 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=14817531]
+position = Vector2(637, 751)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 2 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=2049881027]
+position = Vector2(1629, 754)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 3 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1712624542]
+position = Vector2(634, 1024)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 3 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=962729543]
+position = Vector2(1629, 1024)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 4 left" type="CollisionShape2D" parent="DeskCollisions" unique_id=1334737540]
+position = Vector2(634, 1279)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D desk row 4 right" type="CollisionShape2D" parent="DeskCollisions" unique_id=267799947]
+position = Vector2(1629, 1279)
+shape = SubResource("RectangleShape2D_desk_segment")
+
+[node name="CollisionShape2D teacher desk" type="CollisionShape2D" parent="DeskCollisions" unique_id=1045438904]
+position = Vector2(271, 348.5)
+shape = SubResource("RectangleShape2D_teacher_desk")
+
+[node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
+position = Vector2(1152, 336)
+InitialIdleAnimation = "idle_side"
+InitialFlipH = true
+
+[node name="Camera2D" parent="Player" index="2" unique_id=1121726718]
+limit_right = 2304
+limit_bottom = 1536
+
+[node name="Paalda" parent="." unique_id=1296762172 instance=ExtResource("3_paalda")]
+position = Vector2(470, 350)
+Speed = 0.0
+
+[node name="PatrolPoints" type="Node2D" parent="Paalda" unique_id=1368874975]
+
+[node name="DialogueCanvas" type="CanvasLayer" parent="."]
+process_mode = 3
+visible = false
+layer = 100
+
+[node name="DialogueRoot" type="Control" parent="DialogueCanvas"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextBox" type="Control" parent="DialogueCanvas/DialogueRoot"]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.055
+anchor_top = 0.69
+anchor_right = 0.945
+anchor_bottom = 0.92
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("7_pixel_dialogue_box")
+
+[node name="DialogueText" type="Label" parent="DialogueCanvas/DialogueRoot/TextBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 78.0
+offset_top = 30.0
+offset_right = -42.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("SystemFont_dialogue")
+theme_override_font_sizes/font_size = 38
+text = "> Szia, mar vartalak!"
+autowrap_mode = 2
+
+[node name="PauseCanvas" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 120
+
+[node name="PauseMenu" type="Panel" parent="PauseCanvas"]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="PauseCanvas/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_pause_bg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseCanvas/PauseMenu"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 25.0
+offset_right = 355.0
+offset_bottom = 275.0
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+text = "Szuenet"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Folytatas"
+
+[node name="SaveButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Mentes"
+
+[node name="LoadButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Betoltes"
+
+[node name="MainMenuButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Fomenu"

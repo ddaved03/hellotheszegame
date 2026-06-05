@@ -1,6 +1,4 @@
-[node name="SettingsLabel" type="Label" parent="SettingsPanel"]
-...
-text = "Beallitasok helye, ha lesz"[gd_scene format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://src/MainMenuController.cs" id="1_main"]
 [ext_resource type="Texture2D" path="res://src/level-hattér.png" id="2_panel_bg"]
@@ -99,7 +97,7 @@ offset_left = 24.0
 offset_top = 20.0
 offset_right = 412.0
 offset_bottom = 58.0
-text = "Beallitasok helye\n(Ide tehetsz hangerot, felbontast, stb.)"
+text = "Beallitasok helye"
 
 [node name="CloseSettingsButton" type="Button" parent="SettingsPanel"]
 layout_mode = 0

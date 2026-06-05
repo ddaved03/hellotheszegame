@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://j7o1wuti6nkb"]
+
+[ext_resource type="Script" path="res://src/PaaldaPatrol.cs" id="1_paalda_script"]
+[ext_resource type="Texture2D" uid="uid://dp5w8ygykp3f3" path="res://kepek/Paalda.png" id="1_paalda"]
+[ext_resource type="Texture2D" path="res://kepek/Paalda_back.png" id="2_paalda_back"]
+[ext_resource type="Texture2D" path="res://kepek/Paalda_side.png" id="3_paalda_side"]
+[ext_resource type="Texture2D" path="res://kepek/Paalda_diag_back.png" id="4_paalda_diag_back"]
+[ext_resource type="Texture2D" path="res://kepek/Paalda_diag_front.png" id="5_paalda_diag_front"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_head"]
+radius = 43.011627
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_torso"]
+size = Vector2(83, 99)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left_arm"]
+size = Vector2(16, 77)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right_arm"]
+size = Vector2(17.75, 77)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left_leg"]
+size = Vector2(36, 81.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right_leg"]
+size = Vector2(36, 81.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_navigation"]
+size = Vector2(88, 82)
+
+[node name="Paalda" type="CharacterBody2D" unique_id=714242388]
+z_index = 30
+y_sort_origin = 104
+collision_layer = 8
+collision_mask = 1
+script = ExtResource("1_paalda_script")
+FrontTexture = ExtResource("1_paalda")
+BackTexture = ExtResource("2_paalda_back")
+SideTexture = ExtResource("3_paalda_side")
+DiagonalFrontTexture = ExtResource("5_paalda_diag_front")
+DiagonalBackTexture = ExtResource("4_paalda_diag_back")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1872256109]
+z_index = 30
+scale = Vector2(0.26, 0.26)
+texture = ExtResource("1_paalda")
+
+[node name="HeadCollision" type="CollisionShape2D" parent="." unique_id=1881152103]
+position = Vector2(0, -88)
+shape = SubResource("CircleShape2D_head")
+disabled = true
+
+[node name="TorsoCollision" type="CollisionShape2D" parent="." unique_id=29264411]
+position = Vector2(-2.5, 8.5)
+shape = SubResource("RectangleShape2D_torso")
+disabled = true
+
+[node name="LeftArmCollision" type="CollisionShape2D" parent="." unique_id=1455369329]
+position = Vector2(-49, 14.5)
+shape = SubResource("RectangleShape2D_left_arm")
+disabled = true
+
+[node name="RightArmCollision" type="CollisionShape2D" parent="." unique_id=1320221691]
+position = Vector2(46.125, 14.5)
+shape = SubResource("RectangleShape2D_right_arm")
+disabled = true
+
+[node name="LeftLegCollision" type="CollisionShape2D" parent="." unique_id=1855238844]
+position = Vector2(-24, 95.25)
+shape = SubResource("RectangleShape2D_left_leg")
+disabled = true
+
+[node name="RightLegCollision" type="CollisionShape2D" parent="." unique_id=404055194]
+position = Vector2(24, 95.25)
+shape = SubResource("RectangleShape2D_right_leg")
+disabled = true
+
+[node name="NavigationCollision" type="CollisionShape2D" parent="."]
+position = Vector2(0, 95)
+shape = SubResource("RectangleShape2D_navigation")

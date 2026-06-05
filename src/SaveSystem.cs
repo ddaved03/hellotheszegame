@@ -1,15 +1,50 @@
 using Godot;
 using System;
+using System.IO;
 using System.Text.Json;
+using System.Collections.Generic;
 
 public static class SaveSystem
 {
-    private const string SavePath = "user://savegame.json";
+    public static string CurrentSaveFileName { get; set; } = "savegame.json";
+    private const string RelativeSaveDirectory = "saves";
+
+    private static string _saveDirectory;
+    private static string SaveDirectory
+    {
+        get
+        {
+            if (_saveDirectory == null)
+            {
+                string baseDir;
+
+                // Ellenőrizzük, hogy a szerkesztőből futtatjuk-e a játékot
+                if (OS.HasFeature("editor"))
+                {
+                    baseDir = ProjectSettings.GlobalizePath("res://");
+                }
+                else
+                {
+                    baseDir = OS.GetExecutablePath().GetBaseDir();
+                }
+
+                _saveDirectory = Path.Combine(baseDir, RelativeSaveDirectory).Replace("\\", "/");
+
+                if (!Directory.Exists(_saveDirectory))
+                {
+                    Directory.CreateDirectory(_saveDirectory);
+                }
+            }
+            return _saveDirectory;
+        }
+    }
+
+    private static string FullSavePath => Path.Combine(SaveDirectory, CurrentSaveFileName).Replace("\\", "/");
 
     public static bool LoadRequested { get; set; } = false;
 
-    // JSON-ba könnyű serializable adatszerkezet — csak az alap statokat tárolunk
-    private class SaveData
+    // 1. JAVÍTÁS: A private szót public-ra cseréltük, hogy a JSON mentés működjön!
+    public class SaveData
     {
         public float PlayerX { get; set; }
         public float PlayerY { get; set; }
@@ -21,85 +56,84 @@ public static class SaveSystem
         public float Speed { get; set; }
         public int AttackDamage { get; set; }
         public float AttackCooldown { get; set; }
-        // TODO: eventualmente timestamp + multiple slots kellene
+        public List<string> InventoryItems { get; set; } // Hátizsák tartalma
     }
 
-    public static bool HasSave()
+    public static List<string> GetSaveFiles()
     {
-        return FileAccess.FileExists(SavePath);
+        List<string> saveFiles = new List<string>();
+        if (Directory.Exists(SaveDirectory))
+        {
+            string[] files = Directory.GetFiles(SaveDirectory, "*.json");
+            foreach (string file in files) saveFiles.Add(Path.GetFileName(file));
+        }
+        return saveFiles;
     }
+
+    public static DateTime GetSaveDate(string fileName)
+    {
+        string path = Path.Combine(SaveDirectory, fileName);
+        if (File.Exists(path)) return File.GetLastWriteTime(path);
+        return DateTime.MinValue;
+    }
+
+    public static void DeleteSave(string fileName)
+    {
+        string path = Path.Combine(SaveDirectory, fileName);
+        if (File.Exists(path)) File.Delete(path);
+    }
+
+    public static bool RenameSave(string oldFileName, string newFileName)
+    {
+        if (!newFileName.EndsWith(".json")) newFileName += ".json";
+        string oldPath = Path.Combine(SaveDirectory, oldFileName);
+        string newPath = Path.Combine(SaveDirectory, newFileName);
+
+        if (File.Exists(oldPath) && !File.Exists(newPath))
+        {
+            File.Move(oldPath, newPath);
+            return true;
+        }
+        return false;
+    }
+
+    public static void SetNewSaveFile() { CurrentSaveFileName = $"Mentés_{DateTime.Now:yyyyMMdd_HHmmss}.json"; }
+    
+    public static bool HasAnySave() { return GetSaveFiles().Count > 0; }
 
     public static void Save(BasePlayer player)
     {
-        // Előbb nézzük meg, van-e player
-        if (player == null)
-        {
-            GD.PrintErr("Nem sikerült menteni: nincs player!");
-            return;
-        }
-
+        if (player == null) return;
         try
         {
             var data = new SaveData
             {
-                PlayerX = player.GlobalPosition.X,
-                PlayerY = player.GlobalPosition.Y,
-                CurrentHealth = player.CurrentHealth,
-                CurrentXP = player.CurrentXP,
-                MaxXP = player.MaxXP,
-                Level = player.Level,
-                PotionsCount = player.PotionsCount,
-                Speed = player.Speed,
-                AttackDamage = player.AttackDamage,
-                AttackCooldown = player.AttackCooldown
+                PlayerX = player.GlobalPosition.X, PlayerY = player.GlobalPosition.Y,
+                CurrentHealth = player.CurrentHealth, CurrentXP = player.CurrentXP, MaxXP = player.MaxXP,
+                Level = player.Level, PotionsCount = player.PotionsCount, Speed = player.Speed,
+                AttackDamage = player.AttackDamage, AttackCooldown = player.AttackCooldown,
+                InventoryItems = new List<string>(InventoryManager.Items)
             };
 
-            string json = JsonSerializer.Serialize(data);
-            using FileAccess file = FileAccess.Open(SavePath, FileAccess.ModeFlags.Write);
-            if (file == null)
-            {
-                GD.PrintErr("Nem lehet a fájlt megnyitni: " + SavePath);
-                return;
-            }
-            file.StoreString(json);
-            GD.Print("✓ Mentve!");
+            // 2. JAVÍTÁS: Stabil, hagyományos fájlírás a Godot FileAccess helyett.
+            string jsonString = JsonSerializer.Serialize(data);
+            File.WriteAllText(FullSavePath, jsonString);
+            
+            GD.Print("\n✅ SIKERES MENTÉS! Cél: " + FullSavePath);
         }
-        catch (Exception ex)
-        {
-            GD.PrintErr("Hiba a mentes kozben: " + ex.Message);
-        }
+        catch (Exception ex) { GD.PrintErr("SaveSystem Hiba mentéskor: " + ex.Message); }
     }
 
     public static bool Load(BasePlayer player)
     {
-        if (player == null)
-        {
-            GD.PrintErr("Load hiba: nincs player!");
-            return false;
-        }
-
-        if (!FileAccess.FileExists(SavePath))
-        {
-            GD.Print("Nincs mentett játék.");
-            return false;
-        }
-
+        // 2. JAVÍTÁS: Fájl beolvasása a File.ReadAllText segítségével
+        if (player == null || !File.Exists(FullSavePath)) return false;
         try
         {
-            using FileAccess file = FileAccess.Open(SavePath, FileAccess.ModeFlags.Read);
-            if (file == null)
-                return false;
-                
-            string json = file.GetAsText();
-            SaveData data = JsonSerializer.Deserialize<SaveData>(json);
+            string jsonString = File.ReadAllText(FullSavePath);
+            SaveData data = JsonSerializer.Deserialize<SaveData>(jsonString);
+            if (data == null) return false;
 
-            if (data == null)
-            {
-                GD.PrintErr("Mentés sérült vagy üres.");
-                return false;
-            }
-
-            // Helyreállítjuk az összes adatot
             player.GlobalPosition = new Vector2(data.PlayerX, data.PlayerY);
             player.CurrentHealth = Mathf.Clamp(data.CurrentHealth, 0, player.MaxHealth);
             player.CurrentXP = Mathf.Max(0, data.CurrentXP);
@@ -110,19 +144,15 @@ public static class SaveSystem
             player.AttackDamage = data.AttackDamage;
             player.AttackCooldown = Mathf.Max(0.05f, data.AttackCooldown);
 
-            // UI frissítés, ha létezik
-            if (player.HasMethod("RefreshUI"))
-            {
-                player.Call("RefreshUI");
-            }
+            InventoryManager.Items.Clear();
+            if (data.InventoryItems != null) InventoryManager.Items.AddRange(data.InventoryItems);
 
-            GD.Print("✓ Betöltve!");
+            if (player.HasMethod("RefreshUI")) player.Call("RefreshUI");
+            if (player.Inventory != null) player.Inventory.UpdateUI();
+
+            GD.Print($"SaveSystem: ✓ {CurrentSaveFileName} betöltve!");
             return true;
         }
-        catch (Exception ex)
-        {
-            GD.PrintErr("Betöltés hiba: " + ex.Message);
-            return false;
-        }
+        catch (Exception ex) { GD.PrintErr("SaveSystem Hiba betöltéskor: " + ex.Message); return false; }
     }
 }

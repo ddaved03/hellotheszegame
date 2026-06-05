@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/XpOrb.tscn" id="2_xporb"]
 [ext_resource type="PackedScene" path="res://scenes/Potion.tscn" id="3_potion"]
 [ext_resource type="Texture2D" path="res://kepek/Zombi_large.png" id="4_texture"]
+[ext_resource type="Texture2D" path="res://kepek/Zombi_large_back.png" id="5_back"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(93, 103)
@@ -19,12 +20,16 @@ bg_color = Color(1, 0, 0, 1)
 
 [node name="ZombieBig" type="CharacterBody2D"]
 position = Vector2(42, -97)
+collision_layer = 2
+collision_mask = 1
 script = ExtResource("1_script")
 Speed = 40.0
 MaxHealth = 120
 Damage = 24
 XpOrbScene = ExtResource("2_xporb")
 PotionScene = ExtResource("3_potion")
+FrontTexture = ExtResource("4_texture")
+BackTexture = ExtResource("5_back")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.18457031, 0.17834473)
@@ -35,12 +40,14 @@ position = Vector2(-3.5, 3.5)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="DetectionArea" type="Area2D" parent="."]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_detect")
 
 [node name="PerformAttack" type="Area2D" parent="."]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PerformAttack"]
 position = Vector2(-4, 3.5)

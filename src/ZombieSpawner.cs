@@ -3,71 +3,77 @@ using System;
 
 public partial class ZombieSpawner : Node2D
 {
-	[Export] public PackedScene ZombieNormalScene;
-	[Export] public PackedScene ZombieSmallScene;
-	[Export] public PackedScene ZombieBigScene;
-	
-	// Milyen messze a spawnertől szülessenek a zombik (véletlenszerűen)
-	[Export] public float SpawnRadius = 500.0f;
+    [Export] public PackedScene ZombieNormalScene;
+    [Export] public PackedScene ZombieSmallScene;
+    [Export] public PackedScene ZombieBigScene;
+    
+    // Milyen messze a spawnertől szülessenek a zombik (véletlenszerűen)
+    [Export] public float SpawnRadius = 500.0f;
 
-	private readonly RandomNumberGenerator _rng = new();
+    private readonly RandomNumberGenerator _rng = new();
 
-	private enum ZombieType
-	{
-		Small,
-		Normal,
-		Big
-	}
+    private enum ZombieType
+    {
+        Small,
+        Normal,
+        Big
+    }
 
-	public override void _Ready()
-	{
-		_rng.Randomize();
+    public override void _Ready()
+    {
+        _rng.Randomize();
 
-		// Összekötjük a Timer "timeout" jelét a zombi lerakással
-		var timer = GetNode<Timer>("Timer");
-		timer.Timeout += OnTimerTimeout;
-	}
+        // AUTOMATIKUS JAVÍTÁS: Ha a Reload miatt üresek lennének a mezők, betöltjük őket fájlból
+        if (ZombieNormalScene == null) ZombieNormalScene = GD.Load<PackedScene>("res://scenes/Zombie.tscn");
+        if (ZombieSmallScene == null) ZombieSmallScene = GD.Load<PackedScene>("res://scenes/ZombieSmall.tscn");
+        if (ZombieBigScene == null) ZombieBigScene = GD.Load<PackedScene>("res://scenes/ZombieBig.tscn");
 
-	private void OnTimerTimeout()
-	{
-		if (ZombieNormalScene == null || ZombieSmallScene == null || ZombieBigScene == null)
-		{
-			GD.Print("HIBA: A három zombi scene közül legalább egy nincs behúzva a Spawner Inspectorában!");
-			return;
-		}
+        // Összekötjük a Timer "timeout" jelét a zombi lerakással
+        var timer = GetNode<Timer>("Timer");
+        timer.Timeout += OnTimerTimeout;
+    }
 
-		// 1. Véletlenszerű zombi típus kiválasztása
-		ZombieType zombieType = (ZombieType)_rng.RandiRange(0, 2);
-		PackedScene selectedScene = zombieType switch
-		{
-			ZombieType.Small => ZombieSmallScene,
-			ZombieType.Big => ZombieBigScene,
-			_ => ZombieNormalScene
-		};
+    private void OnTimerTimeout()
+    {
+        // Dupla ellenőrzés a biztonság kedvéért
+        if (ZombieNormalScene == null || ZombieSmallScene == null || ZombieBigScene == null)
+        {
+            GD.PrintErr("HIBA: A zombi scene-ek elérési útja hibás a kódban, vagy hiányoznak a fájlok!");
+            return;
+        }
 
-		var zombie = (Node2D)selectedScene.Instantiate();
+        // 1. Véletlenszerű zombi típus kiválasztása
+        ZombieType zombieType = (ZombieType)_rng.RandiRange(0, 2);
+        PackedScene selectedScene = zombieType switch
+        {
+            ZombieType.Small => ZombieSmallScene,
+            ZombieType.Big => ZombieBigScene,
+            _ => ZombieNormalScene
+        };
 
-		// 2. Véletlenszerű pozíció kiszámítása a körvonalon
-		float angle = (float)GD.RandRange(0, Math.PI * 2);
-		Vector2 offset = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * SpawnRadius;
-		
-		zombie.GlobalPosition = GlobalPosition + offset;
+        var zombie = (Node2D)selectedScene.Instantiate();
 
-		// 3. Log, melyik típusból jött létre
-		switch (zombieType)
-		{
-			case ZombieType.Small:
-				GD.Print("Kicsi zombi megjelent!");
-				break;
-			case ZombieType.Big:
-				GD.Print("Nagy zombi megjelent!");
-				break;
-			default:
-				GD.Print("Normál zombi megjelent!");
-				break;
-		}
+        // 2. Véletlenszerű pozíció kiszámítása a körvonalon
+        float angle = (float)GD.RandRange(0, Math.PI * 2);
+        Vector2 offset = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * SpawnRadius;
+        
+        zombie.GlobalPosition = GlobalPosition + offset;
 
-		// 4. Hozzáadás a pályához
-		GetParent().AddChild(zombie);
-	}
+        // 3. Log, melyik típusból jött létre
+        switch (zombieType)
+        {
+            case ZombieType.Small:
+                GD.Print("Kicsi zombi megjelent!");
+                break;
+            case ZombieType.Big:
+                GD.Print("Nagy zombi megjelent!");
+                break;
+            default:
+                GD.Print("Normál zombi megjelent!");
+                break;
+        }
+
+        // 4. Hozzáadás a pályához
+        GetParent().AddChild(zombie);
+    }
 }

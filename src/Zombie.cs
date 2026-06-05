@@ -8,6 +8,9 @@ public partial class Zombie : CharacterBody2D
 	public int CurrentHealth;
 	[Export] public int Damage = 15;
 	[Export] public float AttackCooldown = 1.5f;
+	[Export] public Texture2D FrontTexture;
+	[Export] public Texture2D BackTexture;
+	[Export] public float AttackOffsetDistance = 35.0f;
 
 	// Tárgyak, amiket a zombi eldobhat
 	[Export] public PackedScene XpOrbScene;
@@ -15,11 +18,41 @@ public partial class Zombie : CharacterBody2D
 
 	private BasePlayer _playerTarget;
 	private float _attackTimer = 0.0f;
+	private Sprite2D _sprite;
+	private Area2D _performAttack;
+	private Timer _ambientTimer;
+    private Timer _footstepTimer;
 
 	public override void _Ready()
 	{
 		CurrentHealth = MaxHealth;
 		UpdateUI();
+		_sprite = GetNodeOrNull<Sprite2D>("Sprite2D");
+		_performAttack = GetNodeOrNull<Area2D>("PerformAttack");
+
+		if (FrontTexture == null && _sprite != null)
+		{
+			FrontTexture = _sprite.Texture;
+		}
+
+		_ambientTimer = new Timer
+		{
+			OneShot = true,
+			Autostart = false
+		};
+		AddChild(_ambientTimer);
+		_ambientTimer.Timeout += OnAmbientTimerTimeout;
+		ScheduleAmbient();
+
+		// Footstep timer for zombie movement
+		_footstepTimer = new Timer
+		{
+			OneShot = false,
+			WaitTime = 0.55f,
+			Autostart = false
+		};
+		AddChild(_footstepTimer);
+		_footstepTimer.Timeout += () => { if (!GetTree().Paused) AudioManager.Instance?.PlayZombieFootstep(GlobalPosition); };
 		
 		// Csatlakozunk a DetectionArea-hoz a követéshez
 		var detArea = GetNodeOrNull<Area2D>("DetectionArea");
@@ -43,25 +76,15 @@ public partial class Zombie : CharacterBody2D
 			Velocity = direction * Speed;
 			MoveAndSlide();
 
-			// --- IRÁNYÍTÁS: Sprite és Támadó négyzet kezelése (A te működő kódod alapján) ---
-			var sprite = GetNodeOrNull<Sprite2D>("Sprite2D");
-			var performAttack = GetNodeOrNull<Area2D>("PerformAttack");
+			if (_footstepTimer != null && _footstepTimer.IsStopped()) _footstepTimer.Start();
 
-			if (Velocity.X != 0)
-			{
-				bool facingLeft = Velocity.X < 0;
-				if (sprite != null) sprite.FlipH = facingLeft;
-
-				// A támadó területet (piros négyzet) eltoljuk a mozgás irányába
-				if (performAttack != null)
-				{
-					performAttack.Position = new Vector2(facingLeft ? -35 : 35, 0);
-				}
-			}
+			UpdateFacing(direction);
+			UpdateAttackArea(direction);
 
 			// Tényleges támadás ellenőrzése a PerformAttack terület segítségével
-			if (performAttack != null && performAttack.OverlapsBody(_playerTarget) && _attackTimer >= AttackCooldown)
+			if (_performAttack != null && _performAttack.OverlapsBody(_playerTarget) && _attackTimer >= AttackCooldown)
 			{
+				AudioManager.Instance?.PlayZombieAttack(GlobalPosition);
 				_playerTarget.TakeDamage(Damage);
 				_attackTimer = 0.0f;
 			}
@@ -69,44 +92,112 @@ public partial class Zombie : CharacterBody2D
 		else
 		{
 			Velocity = Vector2.Zero;
+
+			if (_footstepTimer != null && !_footstepTimer.IsStopped()) _footstepTimer.Stop();
 		}
+	}
+
+	private void UpdateFacing(Vector2 direction)
+	{
+		if (_sprite == null)
+		{
+			return;
+		}
+
+		if (Mathf.Abs(direction.Y) > Mathf.Abs(direction.X) && direction.Y < 0 && BackTexture != null)
+		{
+			_sprite.Texture = BackTexture;
+		}
+		else if (FrontTexture != null)
+		{
+			_sprite.Texture = FrontTexture;
+		}
+
+		if (Mathf.Abs(direction.X) > 0.01f)
+		{
+			_sprite.FlipH = direction.X < 0;
+		}
+	}
+
+	private void UpdateAttackArea(Vector2 direction)
+	{
+		if (_performAttack == null)
+		{
+			return;
+		}
+
+		Vector2 attackDir = direction;
+		if (attackDir == Vector2.Zero)
+		{
+			attackDir = Vector2.Right;
+		}
+
+		attackDir = attackDir.Normalized();
+		_performAttack.Position = attackDir * AttackOffsetDistance;
 	}
 
 	public void TakeDamage(int amount)
 	{
+		AudioManager.Instance?.PlayZombieHit(GlobalPosition);
 		CurrentHealth -= amount;
 		UpdateUI();
 		if (CurrentHealth <= 0) Die();
 	}
 
+	private void OnAmbientTimerTimeout()
+	{
+		if (!IsQueuedForDeletion() && IsInsideTree() && !GetTree().Paused)
+		{
+			AudioManager.Instance?.PlayZombieAmbient(GlobalPosition);
+		}
+
+		ScheduleAmbient();
+	}
+
+	private void ScheduleAmbient()
+	{
+		if (_ambientTimer == null)
+		{
+			return;
+		}
+
+		_ambientTimer.Start((float)GD.RandRange(2.2f, 6.0f));
+	}
+
 	private void Die()
-{
-	GD.Print("Zombi meghalt!"); // Látnod kell a konzolon
-
-	if (XpOrbScene != null)
 	{
-		var orb = (Node2D)XpOrbScene.Instantiate();
-		orb.GlobalPosition = GlobalPosition;
-		GetTree().Root.AddChild(orb);
-	}
-	else { GD.Print("HIBA: XpOrbScene nincs behúzva az Inspectorban!"); }
+		AudioManager.Instance?.PlayZombieDeath(GlobalPosition);
+		GD.Print("Zombi meghalt!");
 
-	// Potion dobás ellenőrzése
-	if (GD.Randf() <= 0.25f && PotionScene != null)
-	{
-		GD.Print("Potion létrehozása..."); 
-		var potion = (Node2D)PotionScene.Instantiate();
-		potion.GlobalPosition = GlobalPosition + new Vector2(10, 10);
-		GetTree().Root.AddChild(potion);
-		GD.Print("Potion sikeresen kidobva!");
-	}
-	else 
-	{ 
-		GD.Print("HIBA: PotionScene nincs behúzva az Inspectorban!"); 
-	}
+		if (XpOrbScene != null)
+		{
+			var orb = (Node2D)XpOrbScene.Instantiate();
+			orb.GlobalPosition = GlobalPosition;
+			GetTree().Root.AddChild(orb);
+			AudioManager.Instance?.PlayDropXp(GlobalPosition);
+		}
+		else
+		{
+			GD.Print("HIBA: XpOrbScene nincs behúzva az Inspectorban!");
+		}
 
-	QueueFree();
-}
+		if (GD.Randf() <= 0.25f)
+		{
+			if (PotionScene != null)
+			{
+				var potion = (Node2D)PotionScene.Instantiate();
+				potion.GlobalPosition = GlobalPosition + new Vector2(10, 10);
+				GetTree().Root.AddChild(potion);
+				AudioManager.Instance?.PlayDropPotion(potion.GlobalPosition);
+			}
+			else
+			{
+				GD.Print("HIBA: PotionScene nincs behúzva az Inspectorban!");
+			}
+		}
+
+		QueueFree();
+	}
 
 	private void UpdateUI()
 	{
