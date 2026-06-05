@@ -93,7 +93,10 @@ public partial class WorldController : Node2D
         {
             AudioManager.Instance.PlayBackground();
         }
+
+        // First-run modal removed: introduction handled in main menu now.
     }
+
 
     public void RestoreProgressState()
     {

@@ -8,6 +8,10 @@ public partial class AudioManager : Node
 
     private readonly RandomNumberGenerator _rng = new();
     private readonly Dictionary<string, AudioStream> _streams = new();
+    private AudioStreamPlayer _backgroundPlayer;
+
+    public float MasterVolume { get; private set; } = 1f;
+    public float MusicVolume { get; private set; } = 1f;
 
     public override void _Ready()
     {
@@ -21,6 +25,7 @@ public partial class AudioManager : Node
         ProcessMode = ProcessModeEnum.Always;
         _rng.Randomize();
         BuildStreams();
+        ApplyMasterVolume();
     }
 
     public void PlayUiClick() => PlayGlobal("ui_click", 0.03f);
@@ -39,16 +44,59 @@ public partial class AudioManager : Node
     public AudioStreamPlayer PlayBackground()
     {
         if (!_streams.TryGetValue("background", out var stream)) return null;
-        var player = new AudioStreamPlayer
+
+        if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
+        {
+            _backgroundPlayer.QueueFree();
+            _backgroundPlayer = null;
+        }
+
+        _backgroundPlayer = new AudioStreamPlayer
         {
             Stream = stream,
             Bus = "Master",
             ProcessMode = ProcessModeEnum.Always,
             Autoplay = true
         };
-        AddChild(player);
-        player.Play();
-        return player;
+
+        AddChild(_backgroundPlayer);
+        ApplyMusicVolume();
+        _backgroundPlayer.Play();
+        return _backgroundPlayer;
+    }
+
+    public void SetMasterVolume(float volume)
+    {
+        MasterVolume = Mathf.Clamp(volume, 0f, 1f);
+        ApplyMasterVolume();
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        MusicVolume = Mathf.Clamp(volume, 0f, 1f);
+        ApplyMusicVolume();
+    }
+
+    private void ApplyMasterVolume()
+    {
+        int masterBus = AudioServer.GetBusIndex("Master");
+        if (masterBus >= 0)
+        {
+            AudioServer.SetBusVolumeDb(masterBus, LinearToDb(MasterVolume));
+        }
+    }
+
+    private void ApplyMusicVolume()
+    {
+        if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
+        {
+            _backgroundPlayer.VolumeDb = LinearToDb(MusicVolume);
+        }
+    }
+
+    private static float LinearToDb(float volume)
+    {
+        return volume <= 0.0001f ? -80f : (float)(20f * Math.Log10(volume));
     }
 
     private void BuildStreams()
