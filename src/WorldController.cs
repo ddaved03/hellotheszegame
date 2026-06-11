@@ -40,6 +40,7 @@ public partial class WorldController : Node2D
 
     public override void _Ready()
     {
+        GD.Print("WORLDCONTROLLER READY");
         if (PlayerPath != null) _player = GetNodeOrNull<BasePlayer>(PlayerPath);
         if (PauseMenuPath != null) _pauseMenu = GetNodeOrNull<Control>(PauseMenuPath);
         if (QuestLabelPath != null) _questLabel = GetNodeOrNull<Label>(QuestLabelPath);
@@ -89,14 +90,36 @@ public partial class WorldController : Node2D
         }
 
         // Start background music if available
-        if (AudioManager.Instance != null)
+        var backgroundPlayer = AudioManager.EnsureInstance()?.PlayBackground();
+        if (backgroundPlayer == null)
         {
-            AudioManager.Instance.PlayBackground();
+            PlayFallbackBackgroundMusic();
         }
 
         // First-run modal removed: introduction handled in main menu now.
     }
 
+    private void PlayFallbackBackgroundMusic()
+    {
+        var stream = ResourceLoader.Load<AudioStream>("res://audio/background.wav");
+        if (stream == null)
+        {
+            GD.PrintErr("[WorldController] Fallback background.wav load failed.");
+            return;
+        }
+
+        var player = new AudioStreamPlayer
+        {
+            Stream = stream,
+            Bus = "Master",
+            ProcessMode = ProcessModeEnum.Always,
+            Autoplay = true
+        };
+
+        AddChild(player);
+        player.Play();
+        GD.Print("[WorldController] Fallback background music started.");
+    }
 
     public void RestoreProgressState()
     {

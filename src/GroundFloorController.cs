@@ -77,11 +77,8 @@ public partial class GroundFloorController : Node2D
         _zombieSmallScene = GD.Load<PackedScene>("res://scenes/ZombieSmall.tscn");
         _zombieBigScene = GD.Load<PackedScene>("res://scenes/ZombieBig.tscn");
 
-        // Ha van egy AudioManager singleton, elindul a háttérzene a földszinten
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayBackground();
-        }
+        // Ha a pályát közvetlenül indítjuk Godotból, az AudioManager singleton még hiányozhat.
+        AudioManager.EnsureInstance()?.PlayBackground();
 
         // 1. PAUSE MENÜ KERESÉSE ÉS BEKÖTÉSE
         if (PauseMenuPath != null)

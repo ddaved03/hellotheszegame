@@ -9,11 +9,13 @@ public partial class AudioManager : Node
     private readonly RandomNumberGenerator _rng = new();
     private readonly Dictionary<string, AudioStream> _streams = new();
     private AudioStreamPlayer _backgroundPlayer;
+    private string _currentMusicKey;
+    private const float MusicGainDb = 12f;
 
     public float MasterVolume { get; private set; } = 1f;
     public float MusicVolume { get; private set; } = 1f;
 
-    public override void _Ready()
+    public override void _EnterTree()
     {
         if (Instance != null && Instance != this)
         {
@@ -22,10 +24,27 @@ public partial class AudioManager : Node
         }
 
         Instance = this;
+    }
+
+    private bool _initialized;
+
+    public override void _Ready()
+    {
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        if (_initialized)
+        {
+            return;
+        }
+
         ProcessMode = ProcessModeEnum.Always;
         _rng.Randomize();
         BuildStreams();
         ApplyMasterVolume();
+        _initialized = true;
     }
 
     public void PlayUiClick() => PlayGlobal("ui_click", 0.03f);
@@ -65,6 +84,70 @@ public partial class AudioManager : Node
         return _backgroundPlayer;
     }
 
+    public AudioStreamPlayer PlayC100Theme()
+    {
+        return PlayMusic("c100_theme");
+    }
+
+    private AudioStreamPlayer PlayMusic(string key)
+    {
+        Initialize();
+
+        if (!_streams.TryGetValue(key, out var stream))
+        {
+            GD.PrintErr($"[AudioManager] Music key not found: {key}");
+            return null;
+        }
+
+        if (stream == null)
+        {
+            GD.PrintErr($"[AudioManager] Music stream is null: {key}");
+            return null;
+        }
+
+        EnableLoop(stream);
+
+        if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer) && _currentMusicKey == key)
+        {
+            ApplyMusicVolume();
+            if (!_backgroundPlayer.Playing)
+            {
+                GD.Print($"[AudioManager] Restarting background music: {key}");
+                _backgroundPlayer.Play();
+            }
+
+            return _backgroundPlayer;
+        }
+
+        if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
+        {
+            _backgroundPlayer.QueueFree();
+            _backgroundPlayer = null;
+        }
+
+        int masterBusIndex = AudioServer.GetBusIndex("Master");
+        string targetBus = masterBusIndex >= 0 ? "Master" : string.Empty;
+        if (string.IsNullOrEmpty(targetBus))
+        {
+            GD.PrintErr("[AudioManager] Master audio bus not found; using default bus.");
+        }
+
+        _backgroundPlayer = new AudioStreamPlayer
+        {
+            Stream = stream,
+            Bus = targetBus,
+            ProcessMode = ProcessModeEnum.Always,
+            Autoplay = true
+        };
+
+        AddChild(_backgroundPlayer);
+        _currentMusicKey = key;
+        ApplyMusicVolume();
+        GD.Print($"[AudioManager] Playing background music: {key}, Stream={stream.GetType().Name}, VolumeDb={_backgroundPlayer.VolumeDb}");
+        _backgroundPlayer.Play();
+        return _backgroundPlayer;
+    }
+
     public void SetMasterVolume(float volume)
     {
         MasterVolume = Mathf.Clamp(volume, 0f, 1f);
@@ -90,8 +173,37 @@ public partial class AudioManager : Node
     {
         if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
         {
-            _backgroundPlayer.VolumeDb = LinearToDb(MusicVolume);
+            _backgroundPlayer.VolumeDb = 0f;
         }
+    }
+
+    public static AudioManager EnsureInstance()
+    {
+        if (Instance != null)
+        {
+            Instance.Initialize();
+            GD.Print("[AudioManager] EnsureInstance found existing instance.");
+            return Instance;
+        }
+
+        if (Engine.GetMainLoop() is SceneTree tree)
+        {
+            GD.Print("[AudioManager] EnsureInstance creating new instance.");
+            var audioManager = new AudioManager();
+            tree.Root.AddChild(audioManager);
+            if (Instance != null)
+            {
+                Instance.Initialize();
+            }
+            else
+            {
+                audioManager.Initialize();
+            }
+            return Instance;
+        }
+
+        GD.PrintErr("[AudioManager] EnsureInstance failed: no SceneTree available.");
+        return null;
     }
 
     private static float LinearToDb(float volume)
@@ -145,8 +257,11 @@ public partial class AudioManager : Node
 
         // New mappings by filename
         _streams["background"] = LoadOrFallback(
-            new[] { "res://audio/background.wav" },
-            () => CreateTone(60f, 4f, 0.02f, false, 0.5f, 0.02f));
+            new[] { "res://audio/background.wav", "res://audio/background.mp3" },
+            () => null);
+        _streams["c100_theme"] = LoadOrFallback(
+            new[] { "res://audio/paalda_boss_theme_2_with_ending.mp3" },
+            () => CreateTone(72f, 4f, 0.03f, false, 0.5f, 0.02f));
         _streams["footstep"] = LoadOrFallback(
             new[] { "res://audio/footstep.wav" },
             () => CreateTone(420f, 0.08f, 0.05f, false, 6f, 0.02f));
@@ -183,7 +298,23 @@ public partial class AudioManager : Node
             }
         }
 
-        return fallback();
+        return fallback?.Invoke();
+    }
+
+    private static void EnableLoop(AudioStream stream)
+    {
+        if (stream is AudioStreamMP3 mp3)
+        {
+            mp3.Loop = true;
+        }
+        else if (stream is AudioStreamWav wav)
+        {
+            wav.LoopMode = AudioStreamWav.LoopModeEnum.Forward;
+        }
+        else if (stream is AudioStreamOggVorbis ogg)
+        {
+            ogg.Loop = true;
+        }
     }
 
     private AudioStream CreateTone(float frequency, float duration, float volume, bool square, float decay, float noise)
@@ -221,6 +352,8 @@ public partial class AudioManager : Node
 
     private void PlayGlobal(string key, float pitchJitter)
     {
+        Initialize();
+
         if (!_streams.TryGetValue(key, out AudioStream stream))
         {
             return;
@@ -241,6 +374,8 @@ public partial class AudioManager : Node
 
     private void Play2D(string key, Vector2 worldPosition, float pitchJitter)
     {
+        Initialize();
+
         if (!_streams.TryGetValue(key, out AudioStream stream))
         {
             return;
