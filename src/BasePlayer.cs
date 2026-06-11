@@ -272,7 +272,11 @@ public partial class BasePlayer : CharacterBody2D
                 _animSprite.SelfModulate = new Color(1, 1, 1); 
         }
 
-        if (CurrentHealth <= 0) GetTree().ReloadCurrentScene();
+        if (CurrentHealth <= 0)
+        {
+            AudioManager.Instance?.RestartCurrentMusic();
+            GetTree().ReloadCurrentScene();
+        }
     }
 
     public void CollectPotion() { if (PotionsCount < MaxPotionSlots) { PotionsCount++; UpdateUI(); } }

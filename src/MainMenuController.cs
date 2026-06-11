@@ -19,6 +19,12 @@ public partial class MainMenuController : Control
 
     public override void _Ready()
     {
+        var audioManager = AudioManager.EnsureInstance();
+        if (audioManager != null && !audioManager.HasActiveMusic())
+        {
+            audioManager.PlayBackground();
+        }
+
         var newGameBtn = GetNode<Button>("CenterContainer/VBoxContainer/NewGameButton");
         newGameBtn.Pressed += OnNewGamePressed;
 

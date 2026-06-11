@@ -89,6 +89,20 @@ public partial class AudioManager : Node
         return PlayMusic("c100_theme");
     }
 
+    public void RestartCurrentMusic()
+    {
+        if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
+        {
+            _backgroundPlayer.Stop();
+            _backgroundPlayer.Play();
+        }
+    }
+
+    public bool HasActiveMusic()
+    {
+        return _backgroundPlayer != null && IsInstanceValid(_backgroundPlayer) && _backgroundPlayer.Playing;
+    }
+
     private AudioStreamPlayer PlayMusic(string key)
     {
         Initialize();
