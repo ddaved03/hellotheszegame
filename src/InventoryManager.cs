@@ -45,6 +45,10 @@ public partial class InventoryManager : Control
                 if (i < Items.Count)
                 {
                     iconDisplay.Texture = GetTextureForItem(Items[i]);
+                    // Ezzel biztosítjuk, hogy a kép ne lógjon ki a beállított keretből, 
+                    // hanem méretarányosan zsugorodjon össze a TextureRect méretére.
+                    iconDisplay.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
+                    iconDisplay.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
                     iconDisplay.Visible = true;
                 }
                 else
@@ -89,6 +93,8 @@ public partial class InventoryManager : Control
         if (name == "KeyPart3") return GD.Load<Texture2D>("res://kepek/kulcs-eleje-torott.png");
         if (name == "LiftKey") return GD.Load<Texture2D>("res://kepek/kulcs-egybe.png");
         if (name == "UniversityKey") return GD.Load<Texture2D>("res://kepek/kulcs-egybe.png"); 
+        if (name == "Fuse") return GD.Load<Texture2D>("res://kepek/fuse.png");
+        if (name == "Cable") return GD.Load<Texture2D>("res://kepek/cable.png");
         
         return null;
     }

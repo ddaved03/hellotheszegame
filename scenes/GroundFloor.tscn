@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cjyiem1gwscc0" path="res://scenes/M_Player.tscn" id="2_0qkuh"]
 [ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="3_sp8j0"]
 [ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="4_xj0dy"]
+[ext_resource type="Texture2D" uid="uid://3pywombx8e60" path="res://kepek/level-barv3.3.png" id="5_yd118"]
 [ext_resource type="Texture2D" uid="uid://bhcpe1radangw" path="res://kepek/Hppoti.png" id="5_eqwpu"]
 [ext_resource type="Texture2D" uid="uid://byycym0tadc3u" path="res://kepek/inventoryv4.png" id="6_77qag"]
 [ext_resource type="Script" uid="uid://kn873uhxipbb" path="res://src/InventoryManager.cs" id="7_6ox7e"]
@@ -28,23 +29,61 @@
 [ext_resource type="Texture2D" uid="uid://ci70435h3rx8" path="res://kepek/Hero3.png" id="25_6q4wt"]
 [ext_resource type="Texture2D" uid="uid://uk0qm74hkv0k" path="res://kepek/Hero1jobbra.png" id="26_a7yby"]
 [ext_resource type="Texture2D" uid="uid://dyrsuxjw3w3a" path="res://kepek/kard1.png" id="27_oqmdo"]
-[ext_resource type="Script" uid="uid://by5l66akda3a8" path="res://src/UniversityDoor.cs" id="29_eqwpu"]
-[ext_resource type="Script" path="res://src/ElevatorDoor.cs" id="30_elevator"]
+[ext_resource type="Script" uid="uid://ckbgw70ncxwqg" path="res://src/ElevatorDoor.cs" id="30_elevator"]
+[ext_resource type="Script" uid="uid://da35hwjbqhgtp" path="res://src/RoomDoor.cs" id="31_roomdoor"]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ground"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xblde"]
+size = Vector2(23, 176)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5w6i"]
+size = Vector2(1528, 41)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sekl2"]
+size = Vector2(28, 153)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_30jxp"]
+size = Vector2(24, 159.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r2p7q"]
+size = Vector2(133, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ym5wa"]
+size = Vector2(949, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmac1"]
+size = Vector2(853, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1v0yi"]
+size = Vector2(123, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lk0ao"]
+size = Vector2(23, 177)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ra5n"]
+size = Vector2(41, 159)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ihdeq"]
+size = Vector2(40, 147)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ng0c7"]
+size = Vector2(523, 42)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4fudr"]
-size = Vector2(3719.5, 35)
+size = Vector2(3719.5, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cy7w5"]
-size = Vector2(46, 1695)
+size = Vector2(48, 1695)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0qkuh"]
 size = Vector2(3719.5, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tefep"]
-size = Vector2(31, 1689)
+size = Vector2(30, 1689.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3e6iv"]
-size = Vector2(51, 194)
+size = Vector2(57, 201)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xj0dy"]
 size = Vector2(58, 233)
@@ -67,12 +106,6 @@ size = Vector2(54.5, 235.75)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nwhk"]
 size = Vector2(176, 684)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xblde"]
-size = Vector2(2141, 318)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5w6i"]
-size = Vector2(2213, 273)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sknf8"]
 texture = ExtResource("4_xj0dy")
 
@@ -90,7 +123,7 @@ bg_color = Color(0.38431373, 1, 0.2627451, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tln53"]
 font_size = 20
-font_color = Color(1, 1, 0, 1)
+font_color = Color(0, 0, 0, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7eqrl"]
 animations = [{
@@ -175,29 +208,94 @@ texture = ExtResource("27_oqmdo")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2yidn"]
 texture = ExtResource("4_xj0dy")
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_quest"]
+texture = ExtResource("5_yd118")
+texture_margin_left = 20.0
+texture_margin_top = 2.0
+texture_margin_right = 20.0
+texture_margin_bottom = 7.0
+expand_margin_top = 5.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3gf8l"]
-size = Vector2(162, 128.625)
+size = Vector2(249.5, 156.65625)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fpu53"]
-size = Vector2(179.5, 29)
+size = Vector2(73, 7)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sekl2"]
-radius = 139.01439
+radius = 85.98837
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_eqwpu"]
+radius = 93.05912
 
 [node name="GroundFloor" type="Node2D" unique_id=1265253517]
 script = ExtResource("1_xj0dy")
 PlayerPath = NodePath("Player")
 PauseMenuPath = NodePath("CanvasLayer/PauseMenu")
-QuestLabelPath = NodePath("CanvasLayer/Control/QuestLabel")
+QuestLabelPath = NodePath("CanvasLayer/Control/MarginContainer/QuestLabel")
+AnimationPlayerPath = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=300000002]
+libraries/ = SubResource("AnimationLibrary_ground")
+
+[node name="RoomBoundaries" type="StaticBody2D" parent="." unique_id=1210719585]
+
+[node name="RoomCollisionShape1" type="CollisionShape2D" parent="RoomBoundaries" unique_id=246054229]
+position = Vector2(389.5, 78)
+shape = SubResource("RectangleShape2D_xblde")
+
+[node name="RoomCollisionShape2" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1592598306]
+position = Vector2(1142, 158.5)
+shape = SubResource("RectangleShape2D_b5w6i")
+
+[node name="RoomCollisionShape3" type="CollisionShape2D" parent="RoomBoundaries" unique_id=209917587]
+position = Vector2(2507, 66.5)
+shape = SubResource("RectangleShape2D_sekl2")
+
+[node name="RoomCollisionShape4" type="CollisionShape2D" parent="RoomBoundaries" unique_id=942976600]
+position = Vector2(384, 1567.75)
+shape = SubResource("RectangleShape2D_30jxp")
+
+[node name="RoomCollisionShape5" type="CollisionShape2D" parent="RoomBoundaries" unique_id=25626777]
+position = Vector2(456.5, 1487.5)
+shape = SubResource("RectangleShape2D_r2p7q")
+
+[node name="RoomCollisionShape6" type="CollisionShape2D" parent="RoomBoundaries" unique_id=2024958338]
+position = Vector2(1071.5, 1487.5)
+shape = SubResource("RectangleShape2D_ym5wa")
+
+[node name="RoomCollisionShape7" type="CollisionShape2D" parent="RoomBoundaries" unique_id=215944169]
+position = Vector2(1971.5, 1487.5)
+shape = SubResource("RectangleShape2D_mmac1")
+
+[node name="RoomCollisionShape8" type="CollisionShape2D" parent="RoomBoundaries" unique_id=2057529885]
+position = Vector2(2530.5, 1487.5)
+shape = SubResource("RectangleShape2D_1v0yi")
+
+[node name="RoomCollisionShape9" type="CollisionShape2D" parent="RoomBoundaries" unique_id=104611112]
+position = Vector2(2579.5, 1577.5)
+shape = SubResource("RectangleShape2D_lk0ao")
+
+[node name="RoomCollisionShape10" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1972881534]
+position = Vector2(1112.5, 1566.5)
+shape = SubResource("RectangleShape2D_4ra5n")
+
+[node name="RoomCollisionShape11" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1584768118]
+position = Vector2(1850, 1563.5)
+shape = SubResource("RectangleShape2D_ihdeq")
+
+[node name="RoomCollisionShape12" type="CollisionShape2D" parent="RoomBoundaries" unique_id=1648898546]
+position = Vector2(2236.5, 159)
+shape = SubResource("RectangleShape2D_ng0c7")
 
 [node name="MapBoundaries" type="StaticBody2D" parent="." unique_id=1976753314]
 
 [node name="CollisionShape2D up" type="CollisionShape2D" parent="MapBoundaries" unique_id=136492772]
-position = Vector2(1859.25, -17.5)
+position = Vector2(1859.25, -15)
 shape = SubResource("RectangleShape2D_4fudr")
 
 [node name="CollisionShape2D r" type="CollisionShape2D" parent="MapBoundaries" unique_id=231753542]
-position = Vector2(3741, 814.5)
+position = Vector2(3740, 814.5)
 shape = SubResource("RectangleShape2D_cy7w5")
 
 [node name="CollisionShape2D down" type="CollisionShape2D" parent="MapBoundaries" unique_id=1989571960]
@@ -205,18 +303,19 @@ position = Vector2(1856, 1646)
 shape = SubResource("RectangleShape2D_0qkuh")
 
 [node name="CollisionShape2D l" type="CollisionShape2D" parent="MapBoundaries" unique_id=1557954756]
-position = Vector2(-15.5, 812)
+position = Vector2(-14, 810.75)
 shape = SubResource("RectangleShape2D_tefep")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1617667065]
 z_index = -10
-position = Vector2(1862, 833)
+position = Vector2(-278, 855.00006)
 scale = Vector2(5.809375, 6.7958326)
 texture = ExtResource("1_4fudr")
+offset = Vector2(367.8537, -5.4445114)
 
 [node name="Player" parent="." unique_id=1544599848 node_paths=PackedStringArray("UpgradeMenuNode", "BtnSpeed", "BtnDamage", "BtnAtkSpeed", "InventoryNode", "StatHPLabel", "StatAtkLabel", "LvlSpeedLabel", "LvlAtkSpeedLabel") instance=ExtResource("2_0qkuh")]
-position = Vector2(168, 1554)
 process_mode = 3
+position = Vector2(168, 1554)
 UpgradeMenuNode = NodePath("../CanvasLayer/Control/UpgradeMenu")
 BtnSpeed = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button")
 BtnDamage = NodePath("../CanvasLayer/Control/UpgradeMenu/VBoxContainer/Button2")
@@ -234,7 +333,7 @@ limit_bottom = 1630
 [node name="PadBoundaries" type="StaticBody2D" parent="." unique_id=1859343887]
 
 [node name="CollisionShape2D pad7" type="CollisionShape2D" parent="PadBoundaries" unique_id=504190278]
-position = Vector2(587, 367)
+position = Vector2(586.5, 370.5)
 shape = SubResource("RectangleShape2D_3e6iv")
 
 [node name="CollisionShape2D pad8" type="CollisionShape2D" parent="PadBoundaries" unique_id=16330684]
@@ -266,53 +365,44 @@ position = Vector2(586, 1097.5)
 shape = SubResource("RectangleShape2D_xj0dy")
 
 [node name="CollisionShape2D pad10" type="CollisionShape2D" parent="PadBoundaries" unique_id=1255564877]
-position = Vector2(898, 1121)
+position = Vector2(893, 1107)
 shape = SubResource("RectangleShape2D_eqwpu")
 
 [node name="CollisionShape2D pad11" type="CollisionShape2D" parent="PadBoundaries" unique_id=611804067]
-position = Vector2(1218, 1113)
+position = Vector2(1217, 1101)
 shape = SubResource("RectangleShape2D_77qag")
 
 [node name="CollisionShape2D pad12" type="CollisionShape2D" parent="PadBoundaries" unique_id=1028416306]
-position = Vector2(1537, 1123)
+position = Vector2(1535, 1106)
 shape = SubResource("RectangleShape2D_77qag")
 
 [node name="CollisionShape2D pad13" type="CollisionShape2D" parent="PadBoundaries" unique_id=1321286899]
-position = Vector2(1868, 1116)
+position = Vector2(1866, 1101)
 shape = SubResource("RectangleShape2D_6ox7e")
 
 [node name="CollisionShape2D pad14" type="CollisionShape2D" parent="PadBoundaries" unique_id=942544689]
-position = Vector2(2170, 1123)
+position = Vector2(2170, 1102)
 shape = SubResource("RectangleShape2D_wjbru")
 
 [node name="CollisionShape2D pad15" type="CollisionShape2D" parent="PadBoundaries" unique_id=1799405194]
-position = Vector2(2483.25, 1121.875)
+position = Vector2(2479, 1105)
 shape = SubResource("RectangleShape2D_puxyy")
 
 [node name="CollisionShape2D wall" type="CollisionShape2D" parent="PadBoundaries" unique_id=2058252130]
-position = Vector2(2822, 630)
+position = Vector2(2819, 622)
 shape = SubResource("RectangleShape2D_5nwhk")
-
-[node name="CollisionShape2D rooms_top" type="CollisionShape2D" parent="PadBoundaries" unique_id=462663011]
-position = Vector2(1451.5, 132)
-shape = SubResource("RectangleShape2D_xblde")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PadBoundaries" unique_id=792552927]
-position = Vector2(1486.5, 1508.5)
-shape = SubResource("RectangleShape2D_b5w6i")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=154253571]
 
 [node name="DarknessOverlay" type="ColorRect" parent="CanvasLayer" unique_id=300000001]
-layout_mode = 1
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-color = Color(0, 0, 0, 0.65)
-visible = false
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
+color = Color(0, 0, 0, 0.65)
 
 [node name="Control" type="Control" parent="CanvasLayer" unique_id=2057175291]
 layout_mode = 3
@@ -434,15 +524,25 @@ offset_right = 306.0
 offset_bottom = 114.0
 texture = ExtResource("6_77qag")
 
-[node name="QuestLabel" type="Label" parent="CanvasLayer/Control" unique_id=413893458]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 127.0
-offset_right = 369.0
-offset_bottom = 155.0
-pivot_offset = Vector2(685, 155)
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=6628375]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 755.0
+offset_top = 4.0
+offset_right = 1108.0
+offset_bottom = 44.0
+grow_horizontal = 0
+
+[node name="QuestLabel" type="Label" parent="CanvasLayer/Control/MarginContainer" unique_id=413893458]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_quest")
 text = "Küldetés: Menj fel a C100-as terembe!"
 label_settings = SubResource("LabelSettings_tln53")
+horizontal_alignment = 2
 
 [node name="Inventory" type="Control" parent="CanvasLayer" unique_id=679503839]
 process_mode = 3
@@ -729,22 +829,671 @@ position = Vector2(2, 3)
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MapTransitionTrigger" unique_id=1935184124]
-position = Vector2(3614, 1557)
+position = Vector2(3632.25, 1559.3281)
 shape = SubResource("RectangleShape2D_3gf8l")
 
 [node name="ElevatorDoor" type="StaticBody2D" parent="." unique_id=815315741]
 script = ExtResource("30_elevator")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElevatorDoor" unique_id=1270264927]
-position = Vector2(3620, 1389)
+position = Vector2(3611.5, 1464.5)
 shape = SubResource("RectangleShape2D_fpu53")
 
 [node name="DetectionArea" type="Area2D" parent="ElevatorDoor" unique_id=1971965757]
-position = Vector2(3612, 1447)
+position = Vector2(3609, 1413)
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElevatorDoor/DetectionArea" unique_id=1214580054]
-position = Vector2(0, 0)
+position = Vector2(4, 4)
+shape = SubResource("CircleShape2D_sekl2")
+
+[node name="EarthquakeTrigger" type="Area2D" parent="." unique_id=1498630912]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EarthquakeTrigger" unique_id=1547669719]
+position = Vector2(208, 1000)
+shape = SubResource("CircleShape2D_eqwpu")
+
+[node name="RockLandingPoints" type="Node2D" parent="." unique_id=287841045]
+
+[node name="Point1" type="Marker2D" parent="RockLandingPoints" unique_id=502613642]
+position = Vector2(530, 493)
+gizmo_extents = 50.0
+
+[node name="Point2" type="Marker2D" parent="RockLandingPoints" unique_id=191545874]
+position = Vector2(496, 559)
+gizmo_extents = 50.0
+
+[node name="Point3" type="Marker2D" parent="RockLandingPoints" unique_id=1407533000]
+position = Vector2(474, 632)
+gizmo_extents = 50.0
+
+[node name="Point4" type="Marker2D" parent="RockLandingPoints" unique_id=152537013]
+position = Vector2(524, 681)
+gizmo_extents = 50.0
+
+[node name="Point5" type="Marker2D" parent="RockLandingPoints" unique_id=562236700]
+position = Vector2(574, 731)
+gizmo_extents = 50.0
+
+[node name="Point6" type="Marker2D" parent="RockLandingPoints" unique_id=2029947887]
+position = Vector2(575, 812)
+gizmo_extents = 50.0
+
+[node name="Point7" type="Marker2D" parent="RockLandingPoints" unique_id=1872057696]
+position = Vector2(566, 899)
+gizmo_extents = 50.0
+
+[node name="Point8" type="Marker2D" parent="RockLandingPoints" unique_id=424254277]
+position = Vector2(630, 925)
+gizmo_extents = 50.0
+
+[node name="Point38" type="Marker2D" parent="RockLandingPoints" unique_id=1612674140]
+position = Vector2(1431, 789)
+gizmo_extents = 50.0
+
+[node name="Point39" type="Marker2D" parent="RockLandingPoints" unique_id=1882982587]
+position = Vector2(1698, 1186)
+gizmo_extents = 50.0
+
+[node name="Point40" type="Marker2D" parent="RockLandingPoints" unique_id=877832033]
+position = Vector2(1682, 1283)
+gizmo_extents = 50.0
+
+[node name="Point41" type="Marker2D" parent="RockLandingPoints" unique_id=1498280774]
+position = Vector2(1745, 827)
+gizmo_extents = 50.0
+
+[node name="Point42" type="Marker2D" parent="RockLandingPoints" unique_id=1884558162]
+position = Vector2(1746, 908)
+gizmo_extents = 50.0
+
+[node name="Point43" type="Marker2D" parent="RockLandingPoints" unique_id=1042013613]
+position = Vector2(1737, 995)
+gizmo_extents = 50.0
+
+[node name="Point44" type="Marker2D" parent="RockLandingPoints" unique_id=1576800611]
+position = Vector2(1969, 455)
+gizmo_extents = 50.0
+
+[node name="Point45" type="Marker2D" parent="RockLandingPoints" unique_id=479023074]
+position = Vector2(1703, 466)
+gizmo_extents = 50.0
+
+[node name="Point46" type="Marker2D" parent="RockLandingPoints" unique_id=337834674]
+position = Vector2(1921, 753)
+gizmo_extents = 50.0
+
+[node name="Point47" type="Marker2D" parent="RockLandingPoints" unique_id=653630857]
+position = Vector2(1917, 649)
+gizmo_extents = 50.0
+
+[node name="Point48" type="Marker2D" parent="RockLandingPoints" unique_id=659038384]
+position = Vector2(1900, 488)
+gizmo_extents = 50.0
+
+[node name="Point49" type="Marker2D" parent="RockLandingPoints" unique_id=89585122]
+position = Vector2(1405, 376)
+gizmo_extents = 50.0
+
+[node name="Point50" type="Marker2D" parent="RockLandingPoints" unique_id=1581938489]
+position = Vector2(1727, 1095)
+gizmo_extents = 50.0
+
+[node name="Point51" type="Marker2D" parent="RockLandingPoints" unique_id=1114473716]
+position = Vector2(1744, 724)
+gizmo_extents = 50.0
+
+[node name="Point52" type="Marker2D" parent="RockLandingPoints" unique_id=1438730867]
+position = Vector2(1963, 833)
+gizmo_extents = 50.0
+
+[node name="Point53" type="Marker2D" parent="RockLandingPoints" unique_id=688503630]
+position = Vector2(1870, 1299)
+gizmo_extents = 50.0
+
+[node name="Point54" type="Marker2D" parent="RockLandingPoints" unique_id=1924714264]
+position = Vector2(1940, 556)
+gizmo_extents = 50.0
+
+[node name="Point56" type="Marker2D" parent="RockLandingPoints" unique_id=277838332]
+position = Vector2(2281, 564)
+gizmo_extents = 50.0
+
+[node name="Point57" type="Marker2D" parent="RockLandingPoints" unique_id=2118161604]
+position = Vector2(2013, 1013)
+gizmo_extents = 50.0
+
+[node name="Point58" type="Marker2D" parent="RockLandingPoints" unique_id=9200703]
+position = Vector2(2238, 866)
+gizmo_extents = 50.0
+
+[node name="Point59" type="Marker2D" parent="RockLandingPoints" unique_id=175946246]
+position = Vector2(2302, 803)
+gizmo_extents = 50.0
+
+[node name="Point60" type="Marker2D" parent="RockLandingPoints" unique_id=1521063101]
+position = Vector2(2281, 702)
+gizmo_extents = 50.0
+
+[node name="Point61" type="Marker2D" parent="RockLandingPoints" unique_id=707385517]
+position = Vector2(1996, 921)
+gizmo_extents = 50.0
+
+[node name="Point62" type="Marker2D" parent="RockLandingPoints" unique_id=1706698867]
+position = Vector2(2026, 1202)
+gizmo_extents = 50.0
+
+[node name="Point63" type="Marker2D" parent="RockLandingPoints" unique_id=1793837374]
+position = Vector2(2017, 1098)
+gizmo_extents = 50.0
+
+[node name="Point69" type="Marker2D" parent="RockLandingPoints" unique_id=955479353]
+position = Vector2(2303, 1154)
+gizmo_extents = 50.0
+
+[node name="Point70" type="Marker2D" parent="RockLandingPoints" unique_id=1814947977]
+position = Vector2(2604, 736)
+gizmo_extents = 50.0
+
+[node name="Point71" type="Marker2D" parent="RockLandingPoints" unique_id=435987232]
+position = Vector2(2892, 123)
+gizmo_extents = 50.0
+
+[node name="Point72" type="Marker2D" parent="RockLandingPoints" unique_id=972506138]
+position = Vector2(2107, 664)
+gizmo_extents = 50.0
+
+[node name="Point131" type="Marker2D" parent="RockLandingPoints" unique_id=1613774671]
+position = Vector2(2628, 940)
+gizmo_extents = 50.0
+
+[node name="Point73" type="Marker2D" parent="RockLandingPoints" unique_id=578818432]
+position = Vector2(2562, 922)
+gizmo_extents = 50.0
+
+[node name="Point74" type="Marker2D" parent="RockLandingPoints" unique_id=541665055]
+position = Vector2(2522, 970)
+gizmo_extents = 50.0
+
+[node name="Point75" type="Marker2D" parent="RockLandingPoints" unique_id=122008090]
+position = Vector2(2335, 1316)
+gizmo_extents = 50.0
+
+[node name="Point76" type="Marker2D" parent="RockLandingPoints" unique_id=1195846111]
+position = Vector2(2317, 1082)
+gizmo_extents = 50.0
+
+[node name="Point77" type="Marker2D" parent="RockLandingPoints" unique_id=649353701]
+position = Vector2(2682, 984)
+gizmo_extents = 50.0
+
+[node name="Point78" type="Marker2D" parent="RockLandingPoints" unique_id=2000440479]
+position = Vector2(2545, 480)
+gizmo_extents = 50.0
+
+[node name="Point79" type="Marker2D" parent="RockLandingPoints" unique_id=598405037]
+position = Vector2(2538, 578)
+gizmo_extents = 50.0
+
+[node name="Point80" type="Marker2D" parent="RockLandingPoints" unique_id=584243565]
+position = Vector2(3429, 1567)
+gizmo_extents = 50.0
+
+[node name="Point81" type="Marker2D" parent="RockLandingPoints" unique_id=908820000]
+position = Vector2(3432, 1384)
+gizmo_extents = 50.0
+
+[node name="Point82" type="Marker2D" parent="RockLandingPoints" unique_id=673499759]
+position = Vector2(2553, 662)
+gizmo_extents = 50.0
+
+[node name="Point83" type="Marker2D" parent="RockLandingPoints" unique_id=305782288]
+position = Vector2(3449, 1478)
+gizmo_extents = 50.0
+
+[node name="Point66" type="Marker2D" parent="RockLandingPoints" unique_id=1162091476]
+position = Vector2(2306, 1250)
+gizmo_extents = 50.0
+
+[node name="Point64" type="Marker2D" parent="RockLandingPoints" unique_id=415716183]
+position = Vector2(2184, 928)
+gizmo_extents = 50.0
+
+[node name="Point65" type="Marker2D" parent="RockLandingPoints" unique_id=1143475267]
+position = Vector2(2321, 642)
+gizmo_extents = 50.0
+
+[node name="Point67" type="Marker2D" parent="RockLandingPoints" unique_id=13372349]
+position = Vector2(2243, 471)
+gizmo_extents = 50.0
+
+[node name="Point55" type="Marker2D" parent="RockLandingPoints" unique_id=154598461]
+position = Vector2(1789, 1024)
+gizmo_extents = 50.0
+
+[node name="Point9" type="Marker2D" parent="RockLandingPoints" unique_id=46156557]
+position = Vector2(737, 477)
+gizmo_extents = 50.0
+
+[node name="Point10" type="Marker2D" parent="RockLandingPoints" unique_id=659433209]
+position = Vector2(738, 563)
+gizmo_extents = 50.0
+
+[node name="Point11" type="Marker2D" parent="RockLandingPoints" unique_id=1196032325]
+position = Vector2(737, 647)
+gizmo_extents = 50.0
+
+[node name="Point12" type="Marker2D" parent="RockLandingPoints" unique_id=1938531268]
+position = Vector2(734, 808)
+gizmo_extents = 50.0
+
+[node name="Point13" type="Marker2D" parent="RockLandingPoints" unique_id=1649758454]
+position = Vector2(740, 919)
+gizmo_extents = 50.0
+
+[node name="Point25" type="Marker2D" parent="RockLandingPoints" unique_id=605740664]
+position = Vector2(1061, 1233)
+gizmo_extents = 50.0
+
+[node name="Point26" type="Marker2D" parent="RockLandingPoints" unique_id=1303730943]
+position = Vector2(1222, 860)
+gizmo_extents = 50.0
+
+[node name="Point27" type="Marker2D" parent="RockLandingPoints" unique_id=1289409062]
+position = Vector2(1210, 547)
+gizmo_extents = 50.0
+
+[node name="Point28" type="Marker2D" parent="RockLandingPoints" unique_id=1746208976]
+position = Vector2(1194, 650)
+gizmo_extents = 50.0
+
+[node name="Point30" type="Marker2D" parent="RockLandingPoints" unique_id=637705110]
+position = Vector2(1229, 737)
+gizmo_extents = 50.0
+
+[node name="Point31" type="Marker2D" parent="RockLandingPoints" unique_id=11338988]
+position = Vector2(1261, 795)
+gizmo_extents = 50.0
+
+[node name="Point32" type="Marker2D" parent="RockLandingPoints" unique_id=86672482]
+position = Vector2(1513, 826)
+gizmo_extents = 50.0
+
+[node name="Point33" type="Marker2D" parent="RockLandingPoints" unique_id=1574320927]
+position = Vector2(1054, 416)
+gizmo_extents = 50.0
+
+[node name="Point34" type="Marker2D" parent="RockLandingPoints" unique_id=1601516161]
+position = Vector2(1451, 443)
+gizmo_extents = 50.0
+
+[node name="Point35" type="Marker2D" parent="RockLandingPoints" unique_id=333044044]
+position = Vector2(1488, 530)
+gizmo_extents = 50.0
+
+[node name="Point29" type="Marker2D" parent="RockLandingPoints" unique_id=142623174]
+position = Vector2(1622, 827)
+gizmo_extents = 50.0
+
+[node name="Point24" type="Marker2D" parent="RockLandingPoints" unique_id=1765624890]
+position = Vector2(1039, 1153)
+gizmo_extents = 50.0
+
+[node name="Point36" type="Marker2D" parent="RockLandingPoints" unique_id=760759265]
+position = Vector2(1497, 728)
+gizmo_extents = 50.0
+
+[node name="Point37" type="Marker2D" parent="RockLandingPoints" unique_id=765958794]
+position = Vector2(1242, 926)
+gizmo_extents = 50.0
+
+[node name="Point14" type="Marker2D" parent="RockLandingPoints" unique_id=463260699]
+position = Vector2(768, 1141)
+gizmo_extents = 50.0
+
+[node name="Point15" type="Marker2D" parent="RockLandingPoints" unique_id=439163725]
+position = Vector2(765, 1015)
+gizmo_extents = 50.0
+
+[node name="Point16" type="Marker2D" parent="RockLandingPoints" unique_id=1877814552]
+position = Vector2(951, 761)
+gizmo_extents = 50.0
+
+[node name="Point17" type="Marker2D" parent="RockLandingPoints" unique_id=1680944775]
+position = Vector2(934, 508)
+gizmo_extents = 50.0
+
+[node name="Point18" type="Marker2D" parent="RockLandingPoints" unique_id=2050877777]
+position = Vector2(930, 598)
+gizmo_extents = 50.0
+
+[node name="Point19" type="Marker2D" parent="RockLandingPoints" unique_id=1916561600]
+position = Vector2(964, 659)
+gizmo_extents = 50.0
+
+[node name="Point20" type="Marker2D" parent="RockLandingPoints" unique_id=728098983]
+position = Vector2(996, 816)
+gizmo_extents = 50.0
+
+[node name="Point21" type="Marker2D" parent="RockLandingPoints" unique_id=1177699868]
+position = Vector2(1050, 976)
+gizmo_extents = 50.0
+
+[node name="Point22" type="Marker2D" parent="RockLandingPoints" unique_id=597709347]
+position = Vector2(1052, 1060)
+gizmo_extents = 50.0
+
+[node name="Point132" type="Marker2D" parent="RockLandingPoints" unique_id=1924371133]
+position = Vector2(928, 1382)
+gizmo_extents = 50.0
+
+[node name="Point134" type="Marker2D" parent="RockLandingPoints" unique_id=869285813]
+position = Vector2(1672, 1365)
+gizmo_extents = 50.0
+
+[node name="Point135" type="Marker2D" parent="RockLandingPoints" unique_id=581605353]
+position = Vector2(952, 1431)
+gizmo_extents = 50.0
+
+[node name="Point133" type="Marker2D" parent="RockLandingPoints" unique_id=1908038502]
+position = Vector2(865, 1446)
+gizmo_extents = 50.0
+
+[node name="Point137" type="Marker2D" parent="RockLandingPoints" unique_id=937562424]
+position = Vector2(2291, 1462)
+gizmo_extents = 50.0
+
+[node name="Point138" type="Marker2D" parent="RockLandingPoints" unique_id=1926847584]
+position = Vector2(2327, 1402)
+gizmo_extents = 50.0
+
+[node name="Point139" type="Marker2D" parent="RockLandingPoints" unique_id=1813707688]
+position = Vector2(1725, 1420)
+gizmo_extents = 50.0
+
+[node name="Point140" type="Marker2D" parent="RockLandingPoints" unique_id=1706243430]
+position = Vector2(2163, 1370)
+gizmo_extents = 50.0
+
+[node name="Point141" type="Marker2D" parent="RockLandingPoints" unique_id=2118206593]
+position = Vector2(1645, 1439)
+gizmo_extents = 50.0
+
+[node name="Point136" type="Marker2D" parent="RockLandingPoints" unique_id=871831625]
+position = Vector2(947, 1316)
+gizmo_extents = 50.0
+
+[node name="Point23" type="Marker2D" parent="RockLandingPoints" unique_id=229202388]
+position = Vector2(937, 1260)
+gizmo_extents = 50.0
+
+[node name="Point84" type="Marker2D" parent="RockLandingPoints" unique_id=204939944]
+position = Vector2(3392, 1163)
+gizmo_extents = 50.0
+
+[node name="Point85" type="Marker2D" parent="RockLandingPoints" unique_id=607273911]
+position = Vector2(3052, 1124)
+gizmo_extents = 50.0
+
+[node name="Point86" type="Marker2D" parent="RockLandingPoints" unique_id=1048632360]
+position = Vector2(3374, 1237)
+gizmo_extents = 50.0
+
+[node name="Point87" type="Marker2D" parent="RockLandingPoints" unique_id=346894323]
+position = Vector2(2825, 1127)
+gizmo_extents = 50.0
+
+[node name="Point88" type="Marker2D" parent="RockLandingPoints" unique_id=1826916820]
+position = Vector2(3031, 1333)
+gizmo_extents = 50.0
+
+[node name="Point89" type="Marker2D" parent="RockLandingPoints" unique_id=963868300]
+position = Vector2(3431, 1108)
+gizmo_extents = 50.0
+
+[node name="Point90" type="Marker2D" parent="RockLandingPoints" unique_id=2122891608]
+position = Vector2(3415, 1273)
+gizmo_extents = 50.0
+
+[node name="Point91" type="Marker2D" parent="RockLandingPoints" unique_id=1900676789]
+position = Vector2(3040, 1225)
+gizmo_extents = 50.0
+
+[node name="Point92" type="Marker2D" parent="RockLandingPoints" unique_id=471676427]
+position = Vector2(2636, 1551)
+gizmo_extents = 50.0
+
+[node name="Point93" type="Marker2D" parent="RockLandingPoints" unique_id=1044597674]
+position = Vector2(3454, 792)
+gizmo_extents = 50.0
+
+[node name="Point94" type="Marker2D" parent="RockLandingPoints" unique_id=1389461368]
+position = Vector2(3186, 700)
+gizmo_extents = 50.0
+
+[node name="Point95" type="Marker2D" parent="RockLandingPoints" unique_id=20840168]
+position = Vector2(3202, 370)
+gizmo_extents = 50.0
+
+[node name="Point96" type="Marker2D" parent="RockLandingPoints" unique_id=1032144733]
+position = Vector2(3183, 986)
+gizmo_extents = 50.0
+
+[node name="Point97" type="Marker2D" parent="RockLandingPoints" unique_id=837375835]
+position = Vector2(3420, 844)
+gizmo_extents = 50.0
+
+[node name="Point98" type="Marker2D" parent="RockLandingPoints" unique_id=2055825530]
+position = Vector2(3207, 469)
+gizmo_extents = 50.0
+
+[node name="Point100" type="Marker2D" parent="RockLandingPoints" unique_id=1062181687]
+position = Vector2(2731, 123)
+gizmo_extents = 50.0
+
+[node name="Point99" type="Marker2D" parent="RockLandingPoints" unique_id=1068670908]
+position = Vector2(3194, 880)
+gizmo_extents = 50.0
+
+[node name="Point101" type="Marker2D" parent="RockLandingPoints" unique_id=2032187595]
+position = Vector2(3308, 459)
+gizmo_extents = 50.0
+
+[node name="Point102" type="Marker2D" parent="RockLandingPoints" unique_id=1305018765]
+position = Vector2(3550, 328)
+gizmo_extents = 50.0
+
+[node name="Point103" type="Marker2D" parent="RockLandingPoints" unique_id=891316179]
+position = Vector2(3375, 235)
+gizmo_extents = 50.0
+
+[node name="Point105" type="Marker2D" parent="RockLandingPoints" unique_id=880393445]
+position = Vector2(2676, 1463)
+gizmo_extents = 50.0
+
+[node name="Point106" type="Marker2D" parent="RockLandingPoints" unique_id=1925816858]
+position = Vector2(2816, 1461)
+gizmo_extents = 50.0
+
+[node name="Point107" type="Marker2D" parent="RockLandingPoints" unique_id=933714916]
+position = Vector2(2898, 1445)
+gizmo_extents = 50.0
+
+[node name="Point108" type="Marker2D" parent="RockLandingPoints" unique_id=313173270]
+position = Vector2(3202, 1476)
+gizmo_extents = 50.0
+
+[node name="Point109" type="Marker2D" parent="RockLandingPoints" unique_id=379038864]
+position = Vector2(3185, 1565)
+gizmo_extents = 50.0
+
+[node name="Point110" type="Marker2D" parent="RockLandingPoints" unique_id=1444349319]
+position = Vector2(2748, 1434)
+gizmo_extents = 50.0
+
+[node name="Point111" type="Marker2D" parent="RockLandingPoints" unique_id=2110523759]
+position = Vector2(2693, 749)
+gizmo_extents = 50.0
+
+[node name="Point128" type="Marker2D" parent="RockLandingPoints" unique_id=1714193351]
+position = Vector2(3439, 636)
+gizmo_extents = 50.0
+
+[node name="Point129" type="Marker2D" parent="RockLandingPoints" unique_id=1717893338]
+position = Vector2(3406, 562)
+gizmo_extents = 50.0
+
+[node name="Point104" type="Marker2D" parent="RockLandingPoints" unique_id=1264310380]
+position = Vector2(3421, 912)
+gizmo_extents = 50.0
+
+[node name="Point112" type="Marker2D" parent="RockLandingPoints" unique_id=1042042143]
+position = Vector2(3462, 386)
+gizmo_extents = 50.0
+
+[node name="Point113" type="Marker2D" parent="RockLandingPoints" unique_id=869959392]
+position = Vector2(3042, 130)
+gizmo_extents = 50.0
+
+[node name="Point114" type="Marker2D" parent="RockLandingPoints" unique_id=1397865621]
+position = Vector2(3186, 260)
+gizmo_extents = 50.0
+
+[node name="Point130" type="Marker2D" parent="RockLandingPoints" unique_id=1549157165]
+position = Vector2(3490, 659)
+gizmo_extents = 50.0
+
+[node name="Point115" type="Marker2D" parent="RockLandingPoints" unique_id=38863575]
+position = Vector2(3475, 732)
+gizmo_extents = 50.0
+
+[node name="Point116" type="Marker2D" parent="RockLandingPoints" unique_id=546409110]
+position = Vector2(3484, 470)
+gizmo_extents = 50.0
+
+[node name="Point117" type="Marker2D" parent="RockLandingPoints" unique_id=1583523636]
+position = Vector2(3409, 464)
+gizmo_extents = 50.0
+
+[node name="Point118" type="Marker2D" parent="RockLandingPoints" unique_id=1843211655]
+position = Vector2(3426, 992)
+gizmo_extents = 50.0
+
+[node name="Point119" type="Marker2D" parent="RockLandingPoints" unique_id=1440226117]
+position = Vector2(3179, 794)
+gizmo_extents = 50.0
+
+[node name="Point120" type="Marker2D" parent="RockLandingPoints" unique_id=2056144887]
+position = Vector2(3565, 234)
+gizmo_extents = 50.0
+
+[node name="Point121" type="Marker2D" parent="RockLandingPoints" unique_id=650694258]
+position = Vector2(3653, 1174)
+gizmo_extents = 50.0
+
+[node name="Point122" type="Marker2D" parent="RockLandingPoints" unique_id=1737083264]
+position = Vector2(2666, 720)
+gizmo_extents = 50.0
+
+[node name="Point123" type="Marker2D" parent="RockLandingPoints" unique_id=1054858807]
+position = Vector2(3232, 1366)
+gizmo_extents = 50.0
+
+[node name="Point124" type="Marker2D" parent="RockLandingPoints" unique_id=28844788]
+position = Vector2(3302, 1590)
+gizmo_extents = 50.0
+
+[node name="Point125" type="Marker2D" parent="RockLandingPoints" unique_id=2100058431]
+position = Vector2(3584, 146)
+gizmo_extents = 50.0
+
+[node name="Point126" type="Marker2D" parent="RockLandingPoints" unique_id=959854699]
+position = Vector2(3652, 777)
+gizmo_extents = 50.0
+
+[node name="Point127" type="Marker2D" parent="RockLandingPoints" unique_id=1406557727]
+position = Vector2(3515, 1039)
+gizmo_extents = 50.0
+
+[node name="Point68" type="Marker2D" parent="RockLandingPoints" unique_id=473401136]
+position = Vector2(735, 722)
+gizmo_extents = 50.0
+
+[node name="RoomPortals" type="Node2D" parent="." unique_id=2100000001]
+
+[node name="TopRoomOutside" type="Marker2D" parent="RoomPortals" unique_id=2100000002]
+position = Vector2(1942, 232)
+gizmo_extents = 50.0
+
+[node name="TopRoomInside" type="Marker2D" parent="RoomPortals" unique_id=2100000003]
+position = Vector2(1951, 73)
+gizmo_extents = 50.0
+
+[node name="BottomLeftOutside" type="Marker2D" parent="RoomPortals" unique_id=2100000004]
+position = Vector2(568, 1423)
+gizmo_extents = 50.0
+
+[node name="BottomLeftInside" type="Marker2D" parent="RoomPortals" unique_id=2100000005]
+position = Vector2(563, 1523)
+gizmo_extents = 50.0
+
+[node name="BottomRightOutside" type="Marker2D" parent="RoomPortals" unique_id=2100000006]
+position = Vector2(2436, 1419)
+gizmo_extents = 50.0
+
+[node name="BottomRightInside" type="Marker2D" parent="RoomPortals" unique_id=2100000007]
+position = Vector2(2447, 1519)
+gizmo_extents = 50.0
+
+[node name="TopRoomDoor" type="StaticBody2D" parent="." unique_id=2100000101]
+position = Vector2(1934, 167)
+script = ExtResource("31_roomdoor")
+DoorId = &"TopRoom"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopRoomDoor" unique_id=2100000102]
+position = Vector2(9, -8)
+shape = SubResource("RectangleShape2D_fpu53")
+
+[node name="DetectionArea" type="Area2D" parent="TopRoomDoor" unique_id=2100000103]
+position = Vector2(10, 6)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopRoomDoor/DetectionArea" unique_id=2100000104]
+position = Vector2(-2, -14)
+shape = SubResource("CircleShape2D_sekl2")
+
+[node name="BottomLeftDoor" type="StaticBody2D" parent="." unique_id=2100000105]
+position = Vector2(633, 1421)
+script = ExtResource("31_roomdoor")
+DoorId = &"BottomLeftRoom"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomLeftDoor" unique_id=2100000106]
+position = Vector2(-73.5, 66.375)
+shape = SubResource("RectangleShape2D_fpu53")
+
+[node name="DetectionArea" type="Area2D" parent="BottomLeftDoor" unique_id=2100000107]
+position = Vector2(-4, 9)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomLeftDoor/DetectionArea" unique_id=2100000108]
+position = Vector2(-70, 57)
+shape = SubResource("CircleShape2D_sekl2")
+
+[node name="BottomRightDoor" type="StaticBody2D" parent="." unique_id=2100000109]
+position = Vector2(2434, 1473)
+script = ExtResource("31_roomdoor")
+DoorId = &"BottomRightRoom"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomRightDoor" unique_id=2100000110]
+position = Vector2(0, 14.5)
+shape = SubResource("RectangleShape2D_fpu53")
+
+[node name="DetectionArea" type="Area2D" parent="BottomRightDoor" unique_id=2100000111]
+position = Vector2(406, -51)
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomRightDoor/DetectionArea" unique_id=2100000112]
+position = Vector2(-405, 58)
 shape = SubResource("CircleShape2D_sekl2")
 
 [connection signal="pressed" from="CanvasLayer/Inventory/Button" to="CanvasLayer/Inventory" method="CraftUniversityKey"]

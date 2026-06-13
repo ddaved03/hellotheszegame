@@ -40,6 +40,7 @@ public partial class WorldController : Node2D
 
     public override void _Ready()
     {
+        GD.Print("WORLDCONTROLLER READY");
         if (PlayerPath != null) _player = GetNodeOrNull<BasePlayer>(PlayerPath);
         if (PauseMenuPath != null) _pauseMenu = GetNodeOrNull<Control>(PauseMenuPath);
         if (QuestLabelPath != null) _questLabel = GetNodeOrNull<Label>(QuestLabelPath);
@@ -89,10 +90,35 @@ public partial class WorldController : Node2D
         }
 
         // Start background music if available
-        if (AudioManager.Instance != null)
+        var backgroundPlayer = AudioManager.EnsureInstance()?.PlayBackground();
+        if (backgroundPlayer == null)
         {
-            AudioManager.Instance.PlayBackground();
+            PlayFallbackBackgroundMusic();
         }
+
+        // First-run modal removed: introduction handled in main menu now.
+    }
+
+    private void PlayFallbackBackgroundMusic()
+    {
+        var stream = ResourceLoader.Load<AudioStream>("res://audio/background.wav");
+        if (stream == null)
+        {
+            GD.PrintErr("[WorldController] Fallback background.wav load failed.");
+            return;
+        }
+
+        var player = new AudioStreamPlayer
+        {
+            Stream = stream,
+            Bus = "Master",
+            ProcessMode = ProcessModeEnum.Always,
+            Autoplay = true
+        };
+
+        AddChild(player);
+        player.Play();
+        GD.Print("[WorldController] Fallback background music started.");
     }
 
     public void RestoreProgressState()
@@ -141,47 +167,66 @@ public partial class WorldController : Node2D
     }
 
     public override void _Process(double delta)
-    {
-        if (GetTree().Paused) return;
+{
+    if (GetTree().Paused) return;
 
-        _trafficTimer += (float)delta;
-        if (_trafficTimer >= TrafficSpawnInterval)
+    _trafficTimer += (float)delta;
+    if (_trafficTimer >= TrafficSpawnInterval)
+    {
+        SpawnRandomTraffic();
+        _trafficTimer = 0;
+    }
+
+    if (_rocksTimerActive)
+    {
+        _rocksTimeLeft -= (float)delta; 
+        
+        // --- 1. RÉSZ: Visszaszámláló ---
+        if (_questLabel != null)
         {
-            SpawnRandomTraffic();
-            _trafficTimer = 0;
+            int seconds = Mathf.CeilToInt(_rocksTimeLeft);
+            string ujSzoveg = $"Túlélsz: {seconds} másodperc...";
+        
+            if (_questLabel.Text != ujSzoveg)
+            {
+                _questLabel.Text = ujSzoveg;
+                
+            }
         }
 
-        if (_rocksTimerActive)
+        // --- 2. RÉSZ: Zombik teremtése ---
+        _rocksSpawnCooldown -= (float)delta;
+        if (_rocksSpawnCooldown <= 0)
         {
-            _rocksTimeLeft -= (float)delta; 
+            SpawnRocksZombie();
+            _rocksSpawnCooldown = 1.5f; 
+        }
+
+        // --- 3. RÉSZ: EZ HIÁNYZOTT! Ellenőrizzük, hogy lejárt-e az idő! ---
+        if (_rocksTimeLeft <= 0)
+        {
+            _rocksTimerActive = false; // Kikapcsoljuk az órát
             
             if (_questLabel != null)
             {
-                int seconds = Mathf.CeilToInt(_rocksTimeLeft);
-                _questLabel.Text = $"Túlélsz: {seconds} másodperc...";
-            }
-
-            _rocksSpawnCooldown -= (float)delta;
-            if (_rocksSpawnCooldown <= 0)
-            {
-                SpawnRocksZombie();
-                _rocksSpawnCooldown = 1.5f; 
-            }
-
-            if (_rocksTimeLeft <= 0 && _rocksTimerActive)
-            {
-                _rocksTimerActive = false;
-                if (_questLabel != null)
-                    _questLabel.Text = "Küldetés: Tisztítsd meg a területet az utolsó kulcsért!";
-                    
-                if (_rocksZombiesAlive <= 0 && !_rocksEventCompleted)
+                string vegeSzoveg = "Küldetés: Tisztítsd meg a területet az utolsó kulcsért!";
+            
+                if (_questLabel.Text != vegeSzoveg)
                 {
-                    _rocksEventCompleted = true; 
-                    SpawnKeyPart(_rocksSpawnCenter, "KeyPart3");
+                    _questLabel.Text = vegeSzoveg;
+                    
                 }
+            }
+            
+            // Kulcs spawnolása (ez is lemaradt az előbb!)
+            if (_rocksZombiesAlive <= 0 && !_rocksEventCompleted)
+            {
+                _rocksEventCompleted = true; 
+                SpawnKeyPart(_rocksSpawnCenter, "KeyPart3");
             }
         }
     }
+}
 
     private void OnParkingTriggerEntered(Node2D body)
     {
@@ -462,10 +507,15 @@ public partial class WorldController : Node2D
         }
     }
 
-    public void UpdateQuestText(string text)
+public void UpdateQuestText(string newText)
+{
+    var questLabel = GetNodeOrNull<Label>("CanvasLayer/Control/QuestLabel");
+    if (questLabel != null)
     {
-        if (_questLabel != null) _questLabel.Text = text;
+        questLabel.Text = newText;
+
     }
+}
 
     private void OnDoorTriggerEntered(Node2D body)
     {

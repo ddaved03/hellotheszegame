@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public partial class MainMenuController : Control
 {
+    private static readonly Texture2D MenuBackgroundTexture = GD.Load<Texture2D>("res://src/level-hattér.png");
     private Panel _settingsPanel;
     private Panel _loadMenuPanel;
     private VBoxContainer _saveFilesContainer;
@@ -11,9 +12,19 @@ public partial class MainMenuController : Control
     private Panel _renamePanel;
     private LineEdit _renameInput;
     private string _currentRenamingFile;
+    private Panel _newGamePanel;
+    private LineEdit _newGameNameInput;
+    private HSlider _masterVolumeSlider;
+    private HSlider _musicVolumeSlider;
 
     public override void _Ready()
     {
+        var audioManager = AudioManager.EnsureInstance();
+        if (audioManager != null && !audioManager.HasActiveMusic())
+        {
+            audioManager.PlayBackground();
+        }
+
         var newGameBtn = GetNode<Button>("CenterContainer/VBoxContainer/NewGameButton");
         newGameBtn.Pressed += OnNewGamePressed;
 
@@ -27,20 +38,154 @@ public partial class MainMenuController : Control
 
         _settingsPanel = GetNode<Panel>("SettingsPanel");
         _settingsPanel.Visible = false;
-        GetNode<Button>("SettingsPanel/CloseSettingsButton").Pressed += () => _settingsPanel.Visible = false;
+        GetNode<Button>("SettingsPanel/CenterContainer/VBoxContainer/CloseSettingsButton").Pressed += () => _settingsPanel.Visible = false;
+
+        SetupAudioSettingsControls();
 
         CreateLoadMenuUI();
+        CreateNewGamePanel();
+    }
+
+    private void SetupAudioSettingsControls()
+    {
+        var settingsVBox = GetNode<VBoxContainer>("SettingsPanel/CenterContainer/VBoxContainer");
+        var closeButton = GetNode<Button>("SettingsPanel/CenterContainer/VBoxContainer/CloseSettingsButton");
+
+        var audioTitle = new Label();
+        audioTitle.Text = "Hang beállítások";
+        audioTitle.HorizontalAlignment = HorizontalAlignment.Center;
+        settingsVBox.AddChild(audioTitle);
+
+        var masterRow = new VBoxContainer();
+        masterRow.AddThemeConstantOverride("separation", 4);
+        settingsVBox.AddChild(masterRow);
+
+        var masterLabel = new Label();
+        masterLabel.Text = "Főhangerő";
+        masterRow.AddChild(masterLabel);
+
+        _masterVolumeSlider = new HSlider();
+        _masterVolumeSlider.MinValue = 0;
+        _masterVolumeSlider.MaxValue = 1;
+        _masterVolumeSlider.Step = 0.01;
+        _masterVolumeSlider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        _masterVolumeSlider.ValueChanged += OnMasterVolumeChanged;
+        masterRow.AddChild(_masterVolumeSlider);
+
+        var musicRow = new VBoxContainer();
+        musicRow.AddThemeConstantOverride("separation", 4);
+        settingsVBox.AddChild(musicRow);
+
+        var musicLabel = new Label();
+        musicLabel.Text = "Zene hangereje";
+        musicRow.AddChild(musicLabel);
+
+        _musicVolumeSlider = new HSlider();
+        _musicVolumeSlider.MinValue = 0;
+        _musicVolumeSlider.MaxValue = 1;
+        _musicVolumeSlider.Step = 0.01;
+        _musicVolumeSlider.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        _musicVolumeSlider.ValueChanged += OnMusicVolumeChanged;
+        musicRow.AddChild(_musicVolumeSlider);
+
+        settingsVBox.MoveChild(closeButton, settingsVBox.GetChildCount() - 1);
+
+        _masterVolumeSlider.Value = AudioManager.Instance?.MasterVolume ?? 1f;
+        _musicVolumeSlider.Value = AudioManager.Instance?.MusicVolume ?? 1f;
+    }
+
+    private void OnMasterVolumeChanged(double value)
+    {
+        AudioManager.Instance?.SetMasterVolume((float)value);
+    }
+
+    private void OnMusicVolumeChanged(double value)
+    {
+        AudioManager.Instance?.SetMusicVolume((float)value);
+    }
+
+    private void CreateNewGamePanel()
+    {
+        _newGamePanel = new Panel();
+        _newGamePanel.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        _newGamePanel.Visible = false;
+        AddChild(_newGamePanel);
+
+        var background = new TextureRect();
+        background.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        background.Texture = MenuBackgroundTexture;
+        background.StretchMode = TextureRect.StretchModeEnum.Scale;
+        _newGamePanel.AddChild(background);
+
+        var center = new CenterContainer();
+        center.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        _newGamePanel.AddChild(center);
+
+        var dialogPanel = new Panel();
+        dialogPanel.CustomMinimumSize = new Vector2(600, 380);
+        center.AddChild(dialogPanel);
+
+        var vbox = new VBoxContainer();
+        vbox.CustomMinimumSize = new Vector2(560, 340);
+        dialogPanel.AddChild(vbox);
+
+        var title = new Label();
+        title.Text = "Új játék - Add meg a neved";
+        title.HorizontalAlignment = HorizontalAlignment.Center;
+        title.Set("theme_override_colors/font_color", new Color(1,1,1,1));
+        vbox.AddChild(title);
+
+        _newGameNameInput = new LineEdit();
+        _newGameNameInput.PlaceholderText = "Név...";
+        _newGameNameInput.CustomMinimumSize = new Vector2(400, 40);
+        _newGameNameInput.Set("theme_override_colors/font_color", new Color(1,1,1,1));
+        _newGameNameInput.Set("theme_override_colors/font_placeholder_color", new Color(1,1,1,0.65f));
+        vbox.AddChild(_newGameNameInput);
+
+        var info = new Label();
+        info.Text = "WASD: mozgás, Bal egér: támadás, E: inventory, O: ajtó nyitás\n\nTörténet: ";
+        info.Set("autowrap_mode", 2);
+        info.Set("theme_override_colors/font_color", new Color(1,1,1,1));
+        info.CustomMinimumSize = new Vector2(560, 180);
+        vbox.AddChild(info);
+
+        var hbox = new HBoxContainer();
+        vbox.AddChild(hbox);
+
+        var startBtn = new Button();
+        startBtn.Text = "Kezdés";
+        startBtn.Set("theme_override_colors/font_color", new Color(1,1,1,1));
+        startBtn.Pressed += ConfirmNewGame;
+        startBtn.Disabled = true; // require name before enabling
+        startBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        hbox.AddChild(startBtn);
+
+        var cancelBtn = new Button();
+        cancelBtn.Text = "Mégse";
+        cancelBtn.Set("theme_override_colors/font_color", new Color(1,1,1,1));
+        cancelBtn.Pressed += () => _newGamePanel.Visible = false;
+        cancelBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        hbox.AddChild(cancelBtn);
+
+        // Enable start button only when there's a non-empty name
+        _newGameNameInput.TextChanged += (string newText) => { startBtn.Disabled = string.IsNullOrWhiteSpace(newText); };
     }
 
     private void CreateLoadMenuUI()
     {
         _loadMenuPanel = new Panel();
-        _loadMenuPanel.SetAnchorsPreset(LayoutPreset.FullRect); 
+        _loadMenuPanel.SetAnchorsPreset(Control.LayoutPreset.FullRect); 
         _loadMenuPanel.Visible = false;
         AddChild(_loadMenuPanel);
 
+        var background = new TextureRect();
+        background.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        background.Texture = MenuBackgroundTexture;
+        background.StretchMode = TextureRect.StretchModeEnum.Scale;
+        _loadMenuPanel.AddChild(background);
+
         var center = new CenterContainer();
-        center.SetAnchorsPreset(LayoutPreset.FullRect);
+        center.SetAnchorsPreset(Control.LayoutPreset.FullRect);
         _loadMenuPanel.AddChild(center);
 
         var vbox = new VBoxContainer();
@@ -65,13 +210,18 @@ public partial class MainMenuController : Control
         vbox.AddChild(closeBtn);
 
         _renamePanel = new Panel();
-        _renamePanel.SetAnchorsPreset(LayoutPreset.FullRect);
-        _renamePanel.SelfModulate = new Color(0, 0, 0, 0.8f);
+        _renamePanel.SetAnchorsPreset(Control.LayoutPreset.FullRect);
         _renamePanel.Visible = false;
         AddChild(_renamePanel);
 
+        var renameBackground = new TextureRect();
+        renameBackground.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        renameBackground.Texture = MenuBackgroundTexture;
+        renameBackground.StretchMode = TextureRect.StretchModeEnum.Scale;
+        _renamePanel.AddChild(renameBackground);
+
         var renCenter = new CenterContainer();
-        renCenter.SetAnchorsPreset(LayoutPreset.FullRect);
+        renCenter.SetAnchorsPreset(Control.LayoutPreset.FullRect);
         _renamePanel.AddChild(renCenter);
 
         var renVbox = new VBoxContainer();
@@ -190,9 +340,22 @@ public partial class MainMenuController : Control
     private void OnNewGamePressed()
     {
         AudioManager.Instance?.PlayUiClick();
+        // Show new-game modal to collect player name and show controls/story
+        _newGamePanel.Visible = true;
+    }
+
+    private void ConfirmNewGame()
+    {
+        AudioManager.Instance?.PlayUiClick();
+        string name = _newGameNameInput.Text.Trim();
+        if (string.IsNullOrEmpty(name)) name = "Player";
+
+        SaveSystem.PlayerName = name;
+        SaveSystem.FirstRun = true;
         SaveSystem.LoadRequested = false;
-        SaveSystem.SetNewSaveFile(); 
-        InventoryManager.Items.Clear(); 
+        SaveSystem.SetNewSaveFile();
+        InventoryManager.Items.Clear();
+
         GetTree().ChangeSceneToFile("res://scenes/World.tscn");
     }
 

@@ -5,6 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://j7o1wuti6nkb" path="res://scenes/Paalda.tscn" id="3_paalda"]
 [ext_resource type="Texture2D" uid="uid://dqlwy8m4lpvac" path="res://kepek/C100-monitor-overlay.png" id="4_monitor_overlay"]
 [ext_resource type="Texture2D" uid="uid://f7qnj35bltya" path="res://kepek/C100-teacher-desk-overlay.png" id="5_teacher_overlay"]
+[ext_resource type="Script" path="res://src/C100DialogueController.cs" id="6_c100_dialogue"]
+[ext_resource type="Script" path="res://src/PixelDialogueBox.cs" id="7_pixel_dialogue_box"]
+[ext_resource type="Texture2D" uid="uid://x5xxm6dcaxwg" path="res://src/level-hattér.png" id="8_pause_bg"]
+[ext_resource type="Texture2D" uid="uid://bmh858cgyhpn0" path="res://kepek/level-barv2.png" id="9_pause_button"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_top"]
 size = Vector2(2304, 205)
@@ -24,8 +28,15 @@ size = Vector2(725, 36)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_teacher_desk"]
 size = Vector2(200, 71)
 
+[sub_resource type="SystemFont" id="SystemFont_dialogue"]
+font_names = PackedStringArray("Consolas", "Courier New")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pause_button"]
+texture = ExtResource("9_pause_button")
+
 [node name="C100" type="Node2D" unique_id=2050255343]
 y_sort_enabled = true
+script = ExtResource("6_c100_dialogue")
 
 [node name="Sprite2D Map" type="Sprite2D" parent="." unique_id=163658260]
 z_index = -10
@@ -296,66 +307,118 @@ position = Vector2(271, 348.5)
 shape = SubResource("RectangleShape2D_teacher_desk")
 
 [node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
-position = Vector2(1152, 336)
+position = Vector2(980, 360)
+InitialIdleAnimation = "idle_side"
+InitialFlipH = true
+
+[node name="Camera2D" parent="Player" index="2" unique_id=1121726718]
+limit_right = 2304
+limit_bottom = 1536
 
 [node name="Paalda" parent="." unique_id=1296762172 instance=ExtResource("3_paalda")]
-position = Vector2(1152, 768)
+position = Vector2(470, 350)
+Speed = 0.0
 
 [node name="PatrolPoints" type="Node2D" parent="Paalda" unique_id=1368874975]
 
-[node name="CenterTop" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1086265325]
-position = Vector2(0, -442)
+[node name="DialogueCanvas" type="CanvasLayer" parent="."]
+process_mode = 3
+visible = false
+layer = 100
 
-[node name="CenterTopDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=615469112]
-position = Vector2(100, -332)
+[node name="DialogueRoot" type="Control" parent="DialogueCanvas"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="CenterGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1461901440]
-position = Vector2(0, -222)
+[node name="TextBox" type="Control" parent="DialogueCanvas/DialogueRoot"]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.055
+anchor_top = 0.69
+anchor_right = 0.945
+anchor_bottom = 0.92
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("7_pixel_dialogue_box")
 
-[node name="LeftGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=71809832]
-position = Vector2(-982, -222)
+[node name="DialogueText" type="Label" parent="DialogueCanvas/DialogueRoot/TextBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 78.0
+offset_top = 30.0
+offset_right = -42.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("SystemFont_dialogue")
+theme_override_font_sizes/font_size = 38
+text = "> Szia, mar vartalak!"
+autowrap_mode = 2
 
-[node name="LeftGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1879180922]
-position = Vector2(-982, 28)
+[node name="PauseCanvas" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 120
 
-[node name="CenterGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2116323577]
-position = Vector2(0, 28)
+[node name="PauseMenu" type="Panel" parent="PauseCanvas"]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="CenterDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1087938612]
-position = Vector2(-100, 158)
+[node name="TextureRect" type="TextureRect" parent="PauseCanvas/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_pause_bg")
 
-[node name="CenterDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1558948111]
-position = Vector2(100, 392)
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseCanvas/PauseMenu"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 25.0
+offset_right = 355.0
+offset_bottom = 275.0
+theme_override_constants/separation = 10
 
-[node name="CenterGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1850664886]
-position = Vector2(0, 392)
+[node name="Title" type="Label" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+text = "Szuenet"
+horizontal_alignment = 1
 
-[node name="LeftGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2084035899]
-position = Vector2(-982, 392)
+[node name="ResumeButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Folytatas"
 
-[node name="LeftBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=510711043]
-position = Vector2(-982, 560)
+[node name="SaveButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Mentes"
 
-[node name="CenterBottom" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=750295725]
-position = Vector2(120, 560)
+[node name="LoadButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Betoltes"
 
-[node name="BottomDiagonalLeft" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1520624325]
-position = Vector2(-100, 470)
-
-[node name="BottomDiagonalRight" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=923802747]
-position = Vector2(100, 560)
-
-[node name="RightBottomAisle" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=135721754]
-position = Vector2(982, 560)
-
-[node name="RightGapThree" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=823756907]
-position = Vector2(982, 392)
-
-[node name="RightGapTwo" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1788233594]
-position = Vector2(982, 28)
-
-[node name="RightGapOne" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=1136176302]
-position = Vector2(982, -222)
-
-[node name="RightTopReturn" type="Marker2D" parent="Paalda/PatrolPoints" unique_id=2145266138]
-position = Vector2(982, -442)
+[node name="MainMenuButton" type="Button" parent="PauseCanvas/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pause_button")
+text = "Fomenu"
