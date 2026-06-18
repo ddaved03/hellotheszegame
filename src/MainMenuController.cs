@@ -1,10 +1,10 @@
-using Godot;
+﻿using Godot;
 using System;
 using System.Collections.Generic;
 
 public partial class MainMenuController : Control
 {
-    private static readonly Texture2D MenuBackgroundTexture = GD.Load<Texture2D>("res://src/level-hattér.png");
+    private static readonly Texture2D MenuBackgroundTexture = GD.Load<Texture2D>("res://src/level-hattÃ©r.png");
     private Panel _settingsPanel;
     private Panel _loadMenuPanel;
     private VBoxContainer _saveFilesContainer;
@@ -52,7 +52,7 @@ public partial class MainMenuController : Control
         var closeButton = GetNode<Button>("SettingsPanel/CenterContainer/VBoxContainer/CloseSettingsButton");
 
         var audioTitle = new Label();
-        audioTitle.Text = "Hang beállítások";
+        audioTitle.Text = "Hang be\u00e1ll\u00edt\u00e1sok";
         audioTitle.HorizontalAlignment = HorizontalAlignment.Center;
         settingsVBox.AddChild(audioTitle);
 
@@ -61,7 +61,7 @@ public partial class MainMenuController : Control
         settingsVBox.AddChild(masterRow);
 
         var masterLabel = new Label();
-        masterLabel.Text = "Főhangerő";
+        masterLabel.Text = "F\u0151hanger\u0151";
         masterRow.AddChild(masterLabel);
 
         _masterVolumeSlider = new HSlider();
@@ -77,7 +77,7 @@ public partial class MainMenuController : Control
         settingsVBox.AddChild(musicRow);
 
         var musicLabel = new Label();
-        musicLabel.Text = "Zene hangereje";
+        musicLabel.Text = "Zene hanger\u0151";
         musicRow.AddChild(musicLabel);
 
         _musicVolumeSlider = new HSlider();
@@ -122,12 +122,21 @@ public partial class MainMenuController : Control
         _newGamePanel.AddChild(center);
 
         var dialogPanel = new Panel();
-        dialogPanel.CustomMinimumSize = new Vector2(600, 380);
+        dialogPanel.CustomMinimumSize = new Vector2(720, 500);
         center.AddChild(dialogPanel);
 
+        var margin = new MarginContainer();
+        margin.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+        margin.AddThemeConstantOverride("margin_left", 28);
+        margin.AddThemeConstantOverride("margin_top", 22);
+        margin.AddThemeConstantOverride("margin_right", 28);
+        margin.AddThemeConstantOverride("margin_bottom", 22);
+        dialogPanel.AddChild(margin);
+
         var vbox = new VBoxContainer();
-        vbox.CustomMinimumSize = new Vector2(560, 340);
-        dialogPanel.AddChild(vbox);
+        vbox.CustomMinimumSize = new Vector2(664, 456);
+        vbox.AddThemeConstantOverride("separation", 10);
+        margin.AddChild(vbox);
 
         var title = new Label();
         title.Text = "Új játék - Add meg a neved";
@@ -144,9 +153,11 @@ public partial class MainMenuController : Control
 
         var info = new Label();
         info.Text = "WASD: mozgás, Bal egér: támadás, E: inventory, O: ajtó nyitás\n\nTörténet: ";
+        info.Text += "Egy átlagos egyetemi napnak indul, de amikor a főhős megérkezik a kampuszra, valami nagyon nincs rendben. Az épület környékét zombik lepték el, a bejárathoz vezető kulcs darabokra tört, és a túléléshez össze kell gyűjteni minden részét. A játékosnak át kell verekednie magát az udvaron, meg kell találnia a kulcsdarabokat, majd bejutnia az egyetemre. Odabent sötét folyosók, elromlott lift, földrengés és újabb veszélyek várják. A cél: eljutni a C100-as terembe, ahol az utolsó próbatétel nem fegyverrel, hanem tudással dől el.";
         info.Set("autowrap_mode", 2);
         info.Set("theme_override_colors/font_color", new Color(1,1,1,1));
-        info.CustomMinimumSize = new Vector2(560, 180);
+        info.CustomMinimumSize = new Vector2(640, 270);
+        info.SizeFlagsVertical = SizeFlags.ExpandFill;
         vbox.AddChild(info);
 
         var hbox = new HBoxContainer();
@@ -192,7 +203,7 @@ public partial class MainMenuController : Control
         center.AddChild(vbox);
 
         var title = new Label();
-        title.Text = "Mentett játékok betöltése";
+        title.Text = "Mentett jÃ¡tÃ©kok betÃ¶ltÃ©se";
         title.HorizontalAlignment = HorizontalAlignment.Center;
         vbox.AddChild(title);
 
@@ -205,7 +216,7 @@ public partial class MainMenuController : Control
         scroll.AddChild(_saveFilesContainer);
 
         var closeBtn = new Button();
-        closeBtn.Text = "Vissza a menübe";
+        closeBtn.Text = "Vissza a menÃ¼be";
         closeBtn.Pressed += () => _loadMenuPanel.Visible = false;
         vbox.AddChild(closeBtn);
 
@@ -228,7 +239,7 @@ public partial class MainMenuController : Control
         renCenter.AddChild(renVbox);
 
         var renLabel = new Label();
-        renLabel.Text = "Új név megadása:";
+        renLabel.Text = "Ãšj nÃ©v megadÃ¡sa:";
         renVbox.AddChild(renLabel);
 
         _renameInput = new LineEdit();
@@ -239,13 +250,13 @@ public partial class MainMenuController : Control
         renVbox.AddChild(renHbox);
 
         var renOkBtn = new Button();
-        renOkBtn.Text = "Mentés";
+        renOkBtn.Text = "MentÃ©s";
         renOkBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         renOkBtn.Pressed += ConfirmRename;
         renHbox.AddChild(renOkBtn);
 
         var renCancelBtn = new Button();
-        renCancelBtn.Text = "Mégse";
+        renCancelBtn.Text = "MÃ©gse";
         renCancelBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         renCancelBtn.Pressed += () => _renamePanel.Visible = false;
         renHbox.AddChild(renCancelBtn);
@@ -281,12 +292,12 @@ public partial class MainMenuController : Control
             row.AddChild(loadBtn);
 
             Button renameBtn = new Button();
-            renameBtn.Text = "Átnevez";
+            renameBtn.Text = "Ãtnevez";
             renameBtn.Pressed += () => OpenRenamePanel(saveFile);
             row.AddChild(renameBtn);
 
             Button deleteBtn = new Button();
-            deleteBtn.Text = "Töröl";
+            deleteBtn.Text = "TÃ¶rÃ¶l";
             deleteBtn.SelfModulate = new Color(1, 0.5f, 0.5f);
             deleteBtn.Pressed += () => DeleteGame(saveFile);
             row.AddChild(deleteBtn);

@@ -60,6 +60,10 @@ public partial class AudioManager : Node
     public void PlayPickupXp(Vector2 position) => Play2D("pickup_xp", position, 0.05f);
     public void PlayKeyPickup(Vector2 position) => Play2D("key_pickup", position, 0.05f);
     public void PlayFootstep(Vector2 position) => Play2D("footstep", position, 0.05f);
+    public void PlayEarthquake(Vector2 position) => Play2D("earthquake", position, 0.01f);
+    public void PlayBusArrival(Vector2 position) => PlayGlobal("bus_arrival", 0.01f);
+    public void PlayBusDoor(Vector2 position) => PlayGlobal("bus_door", 0.01f);
+    public void PlayCar(Vector2 position) => PlayGlobal("car", 0.02f);
     public AudioStreamPlayer PlayBackground()
     {
         if (!_streams.TryGetValue("background", out var stream)) return null;
@@ -187,7 +191,7 @@ public partial class AudioManager : Node
     {
         if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
         {
-            _backgroundPlayer.VolumeDb = 0f;
+            _backgroundPlayer.VolumeDb = LinearToDb(MusicVolume);
         }
     }
 
@@ -269,7 +273,6 @@ public partial class AudioManager : Node
             new[] { "res://audio/pickup_xp.wav", "res://audio/xp.wav" },
             () => CreateTone(980f, 0.12f, 0.25f, false, 8f, 0.0f));
 
-        // New mappings by filename
         _streams["background"] = LoadOrFallback(
             new[] { "res://audio/background.wav", "res://audio/background.mp3" },
             () => null);
@@ -288,6 +291,18 @@ public partial class AudioManager : Node
         _streams["elevator"] = LoadOrFallback(
             new[] { "res://audio/elevator.wav", "res://audio/elevator.mp3" },
             () => CreateTone(220f, 1.2f, 0.06f, false, 0.6f, 0.04f));
+        _streams["earthquake"] = LoadOrFallback(
+            new[] { "res://audio/earthquake.wav", "res://audio/earthquake.mp3" },
+            () => CreateTone(80f, 1.8f, 0.20f, false, 0.8f, 0.35f));
+        _streams["bus_arrival"] = LoadOrFallback(
+            new[] { "res://audio/bus_arrival.wav", "res://audio/bus_arrival.mp3" },
+            () => CreateTone(110f, 2.0f, 0.10f, false, 0.45f, 0.10f));
+        _streams["bus_door"] = LoadOrFallback(
+            new[] { "res://audio/bus_door.wav", "res://audio/bus_door.mp3" },
+            () => CreateTone(260f, 0.45f, 0.16f, true, 3.0f, 0.04f));
+        _streams["car"] = LoadOrFallback(
+            new[] { "res://audio/car.wav", "res://audio/car.mp3" },
+            () => CreateTone(140f, 2.4f, 0.08f, false, 0.35f, 0.08f));
         _streams["zombie_spawn"] = LoadOrFallback(
             new[] { "res://audio/zombi.wav", "res://audio/zombi.mp3", "res://audio/zombie.wav", "res://audio/zombie.mp3" },
             () => CreateTone(180f, 0.45f, 0.14f, false, 1.1f, 0.2f));
