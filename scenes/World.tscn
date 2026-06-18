@@ -25,9 +25,12 @@
 [ext_resource type="Texture2D" uid="uid://b632o2sc7vg57" path="res://kepek/Hero1Idol/Hero1Idol6.png" id="12_b64vv"]
 [ext_resource type="Texture2D" uid="uid://dr6o4gssjdtlk" path="res://kepek/level-hattérv2.png" id="13_1w2qq"]
 [ext_resource type="Texture2D" uid="uid://dmyfh3uwnawli" path="res://kepek/Hero1Idol/Hero1Idol7.png" id="13_agajo"]
+[ext_resource type="Texture2D" uid="uid://b4vqdwa5xip38" path="res://kepek/megallo.png" id="13_cgwb4"]
 [ext_resource type="Texture2D" uid="uid://c31idm6o4bl16" path="res://kepek/Hero1Idol/Hero1Idol8.png" id="14_2pad8"]
+[ext_resource type="Texture2D" uid="uid://6bnffrj85iua" path="res://kepek/kuka.png" id="14_tx6do"]
 [ext_resource type="Texture2D" uid="uid://3pywombx8e60" path="res://kepek/level-barv3.3.png" id="14_yd118"]
 [ext_resource type="Texture2D" uid="uid://dm2n6a31s67jb" path="res://kepek/Hero1Idol/Hero1Idol9.png" id="15_e4yt5"]
+[ext_resource type="Texture2D" uid="uid://7lmgos853vxm" path="res://kepek/busztabla.png" id="15_jot8m"]
 [ext_resource type="Texture2D" uid="uid://oxcigvspafw0" path="res://kepek/Hero1Idol/Hero1Idol10.png" id="16_x70b3"]
 [ext_resource type="Script" uid="uid://kn873uhxipbb" path="res://src/InventoryManager.cs" id="17_1bdwf"]
 [ext_resource type="Texture2D" uid="uid://4g7c2l7s4v8p" path="res://kepek/Hero1Idol/Hero1Idol11.png" id="17_5w2bu"]
@@ -91,6 +94,15 @@ size = Vector2(2477, 62)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1bdwf"]
 size = Vector2(79, 29)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_302v5"]
+size = Vector2(295, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cgwb4"]
+size = Vector2(49, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tx6do"]
+size = Vector2(14, 3.75)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e4yt5"]
 size = Vector2(2040, 418)
@@ -396,6 +408,18 @@ shape = SubResource("RectangleShape2D_2pad8")
 position = Vector2(2765.5, -424.5)
 shape = SubResource("RectangleShape2D_1bdwf")
 
+[node name="CollisionShape2D buszmegallo" type="CollisionShape2D" parent="MapBoundaries" unique_id=1404100958]
+position = Vector2(-392.5, 416.5)
+shape = SubResource("RectangleShape2D_302v5")
+
+[node name="CollisionShape2D kuka" type="CollisionShape2D" parent="MapBoundaries" unique_id=1823426474]
+position = Vector2(-189.5, 446)
+shape = SubResource("RectangleShape2D_cgwb4")
+
+[node name="CollisionShape2D tabla" type="CollisionShape2D" parent="MapBoundaries" unique_id=410178127]
+position = Vector2(-669, 551)
+shape = SubResource("RectangleShape2D_tx6do")
+
 [node name="ParkingTrigger" type="Area2D" parent="." unique_id=287140749]
 collision_mask = 4
 
@@ -425,7 +449,7 @@ scale = Vector2(0.19011424, 0.30156824)
 texture = ExtResource("5_b64vv")
 
 [node name="Sprite2D Szobor 2 2" type="Sprite2D" parent="." unique_id=1201568847]
-position = Vector2(1372.9999, 86.00003)
+position = Vector2(1375.9999, 91)
 scale = Vector2(0.41164634, 0.56324583)
 texture = ExtResource("4_ngql4")
 
@@ -442,6 +466,21 @@ texture = ExtResource("6_agajo")
 position = Vector2(3743.9998, 567)
 scale = Vector2(0.24658178, 0.23190509)
 texture = ExtResource("7_2pad8")
+
+[node name="Sprite2D buszmegallo" type="Sprite2D" parent="." unique_id=1864747522]
+position = Vector2(-394, 408)
+scale = Vector2(0.29923883, 0.2984)
+texture = ExtResource("13_cgwb4")
+
+[node name="Sprite2D kuka" type="Sprite2D" parent="." unique_id=1232926850]
+position = Vector2(-189, 443)
+scale = Vector2(0.3490566, 0.43867925)
+texture = ExtResource("14_tx6do")
+
+[node name="Sprite2D tabla" type="Sprite2D" parent="." unique_id=224605737]
+position = Vector2(-668, 437)
+scale = Vector2(0.40384614, 0.34712726)
+texture = ExtResource("15_jot8m")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1149986149]
 

@@ -58,13 +58,16 @@ TemporaryDependencyNodeTargetIdentifier=net8.0
 src/
  AudioManager.cs
  BasePlayer.cs
+ C100DialogueController.cs
  ElevatorDoor.cs
  GroundFloorController.cs
  InventoryItem.cs
  InventoryManager.cs
  MainMenuController.cs
  PaaldaPatrol.cs
+ PixelDialogueBox.cs
  Potion.cs
+ RoomDoor.cs
  SaveSystem.cs
  TutorialItem.cs
  UniversityDoor.cs
