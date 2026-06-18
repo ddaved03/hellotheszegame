@@ -246,6 +246,8 @@ public partial class WorldController : Node2D
     {
         if (_questLabel != null) _questLabel.Text = "Küldetés: Vigyázz! Erősítés érkezik a parkolóba!";
 
+        AudioManager.Instance?.PlayCar(_player != null ? _player.GlobalPosition : GlobalPosition);
+
         for (int i = 0; i < 3; i++)
         {
             SpawnParkingCar(i);
@@ -395,6 +397,12 @@ public partial class WorldController : Node2D
         }
     }
 
+    private Vector2 GetBusSoundPosition()
+    {
+        var busNode = GetNodeOrNull<Node2D>("Sprite2D busz");
+        return busNode != null ? busNode.GlobalPosition : new Vector2(-463f, 493f);
+    }
+
     private async void StartArrivalCutscene()
     {
         if (_player != null)
@@ -403,9 +411,11 @@ public partial class WorldController : Node2D
             _player.ProcessMode = ProcessModeEnum.Disabled;
         }
 
+        AudioManager.Instance?.PlayBusArrival(GetBusSoundPosition());
         _busAnim.Play("Arrival");
         float waitTime = 8.5f; 
         await ToSignal(GetTree().CreateTimer(waitTime), "timeout");
+        AudioManager.Instance?.PlayBusDoor(GetBusSoundPosition());
 
         if (_player != null)
         {
@@ -429,6 +439,7 @@ public partial class WorldController : Node2D
             camera.GlobalPosition = cameraGlobalPos;
 
             await ToSignal(GetTree().CreateTimer(1.0f), "timeout");
+            AudioManager.Instance?.PlayBusArrival(busNode.GlobalPosition);
             _busAnim.Play("ZombieBusArrival");
 
             float timer = 0;
@@ -441,6 +452,7 @@ public partial class WorldController : Node2D
             }
         }
 
+        AudioManager.Instance?.PlayBusDoor(busNode != null ? busNode.GlobalPosition : new Vector2(-463f, 493f));
         SpawnTenZombies();
         await ToSignal(GetTree().CreateTimer(3.0f), "timeout");
 

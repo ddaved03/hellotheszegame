@@ -334,6 +334,7 @@ public partial class GroundFloorController : Node2D
 
         Camera2D camera = _player != null ? _player.GetNodeOrNull<Camera2D>("Camera2D") : null;
         Vector2? originalCameraOffset = camera != null ? camera.Offset : null;
+        AudioManager.Instance?.PlayEarthquake(_player != null ? _player.GlobalPosition : GlobalPosition);
 
         // Először sötétítsük el a képernyőt, hogy a játékos tudja, hogy valami nagy dolog történik. 
         {
