@@ -19,12 +19,6 @@ public partial class MainMenuController : Control
 
     public override void _Ready()
     {
-        var audioManager = AudioManager.EnsureInstance();
-        if (audioManager != null && !audioManager.HasActiveMusic())
-        {
-            audioManager.PlayBackground();
-        }
-
         var newGameBtn = GetNode<Button>("CenterContainer/VBoxContainer/NewGameButton");
         newGameBtn.Pressed += OnNewGamePressed;
 
@@ -345,7 +339,7 @@ public partial class MainMenuController : Control
         AudioManager.Instance?.PlayUiClick();
         SaveSystem.CurrentSaveFileName = fileName; 
         SaveSystem.LoadRequested = true;
-        GetTree().ChangeSceneToFile("res://scenes/World.tscn");
+        GetTree().ChangeSceneToFile(SaveSystem.GetSavedScenePath(fileName));
     }
 
     private void OnNewGamePressed()

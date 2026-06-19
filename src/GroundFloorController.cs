@@ -11,6 +11,7 @@ public partial class GroundFloorController : Node2D
     // --- JÁTÉKOS, HUD ÉS EGYÉB FONTOS NODE-OK ---
     private BasePlayer _player;
     private Control _pauseMenu;
+    private PauseLoadMenu _pauseLoadMenu;
     private Label _questLabel;
     private ColorRect _darknessOverlay;
     private ShaderMaterial _darknessMaterial;
@@ -31,6 +32,7 @@ public partial class GroundFloorController : Node2D
     private const float ElevatorDetectionRadius = 200f;
     private bool _earthquakeSequenceRunning = false;
     private bool _flashlightPickupSpawned = false;
+    private Area2D _flashlightPickup;
     private bool _elevatorTransitionRunning = false;
     // --- EGYÉB SEGÉDFÜGGVÉNYEK ÉS OSZTÁLYOK ---
     private sealed class RoomPortal
@@ -77,9 +79,6 @@ public partial class GroundFloorController : Node2D
         _zombieSmallScene = GD.Load<PackedScene>("res://scenes/ZombieSmall.tscn");
         _zombieBigScene = GD.Load<PackedScene>("res://scenes/ZombieBig.tscn");
 
-        // Ha a pályát közvetlenül indítjuk Godotból, az AudioManager singleton még hiányozhat.
-        AudioManager.EnsureInstance()?.PlayBackground();
-
         // 1. PAUSE MENÜ KERESÉSE ÉS BEKÖTÉSE
         if (PauseMenuPath != null)
         {
@@ -97,6 +96,11 @@ public partial class GroundFloorController : Node2D
                     _pauseMenu.GetNode<Button>("VBoxContainer/SaveButton").Pressed += OnSavePressed;
                     _pauseMenu.GetNode<Button>("VBoxContainer/LoadButton").Pressed += OnLoadPressed;
                     _pauseMenu.GetNode<Button>("VBoxContainer/MainMenuButton").Pressed += OnMainMenuPressed;
+                    CreatePauseLoadMenu();
+
+                    var pauseInput = new PauseInputHandler();
+                    AddChild(pauseInput);
+                    pauseInput.PausePressed += OnPausePressed;
                     GD.Print("SIKER: Pause menü gombjai sikeresen bekötve!");
                 }
                 catch (Exception e)
@@ -199,14 +203,119 @@ public partial class GroundFloorController : Node2D
 
     public void RestoreGroundFloorProgress()
     {
-        if (_darknessOverlay != null)
+        SaveSystem.GroundFloorStateData state = SaveSystem.LastLoadedData?.GroundFloorState;
+        if (state == null)
         {
-            _darknessOverlay.Visible = false;
-            _darknessOverlay.Color = new Color(0f, 0f, 0f, 0f);
+            bool earthquakeAlreadyHappened =
+                InventoryManager.Items.Contains("Fuse") ||
+                InventoryManager.Items.Contains("Cable");
+
+            if (earthquakeAlreadyHappened && _darknessOverlay != null)
+            {
+                _earthquakeTriggered = true;
+                _darknessOverlay.Visible = true;
+                _darknessOverlay.Color = new Color(0f, 0f, 0f, 0.88f);
+            }
+
+            if (InventoryManager.Items.Contains("Flashlight"))
+            {
+                RemoveSpawnedFlashlightPickup();
+                _player?.EquipFlashlight();
+            }
+
+            SpawnFlashlightPickupIfNeeded();
+            InitQuestState();
+            UpdateDarknessFocus();
+            return;
         }
 
-        SpawnFlashlightPickupIfNeeded();
-        InitQuestState();
+        _earthquakeTriggered = state.EarthquakeTriggered;
+        _elevatorFound = state.ElevatorFound;
+        _questInitialized = state.QuestInitialized;
+
+        if (_darknessOverlay != null)
+        {
+            _darknessOverlay.Visible = state.DarknessVisible;
+            _darknessOverlay.Color = new Color(0f, 0f, 0f, state.DarknessAlpha);
+        }
+
+        if (InventoryManager.Items.Contains("Flashlight"))
+        {
+            _flashlightPickupSpawned = true;
+            RemoveSpawnedFlashlightPickup();
+            _player?.EquipFlashlight();
+        }
+        else
+        {
+            _flashlightPickupSpawned = false;
+            SpawnFlashlightPickupIfNeeded();
+        }
+
+        if (state.Rooms != null)
+        {
+            foreach (SaveSystem.RoomStateData roomState in state.Rooms)
+            {
+                RoomPortal portal = GetPortalByName(roomState.Name);
+                if (portal == null) continue;
+
+                portal.IsInside = roomState.IsInside;
+                portal.RewardSpawned = roomState.RewardSpawned;
+                portal.Cleared = roomState.Cleared;
+                portal.AliveZombies = 0;
+
+                if (roomState.ZombiesSpawned && !roomState.Cleared && roomState.AliveZombies > 0)
+                {
+                    SpawnRoomZombies(portal, roomState.AliveZombies);
+                }
+                else
+                {
+                    portal.ZombiesSpawned = roomState.ZombiesSpawned;
+                }
+
+                if (roomState.RewardSpawned &&
+                    portal.RewardItemName != null &&
+                    !InventoryManager.Items.Contains(portal.RewardItemName))
+                {
+                    SpawnRoomReward(portal, portal.InsidePosition);
+                }
+            }
+        }
+
+        if (_questLabel != null && !string.IsNullOrEmpty(state.QuestText))
+        {
+            _questLabel.Text = state.QuestText;
+        }
+
+        UpdateDarknessFocus();
+    }
+
+    private SaveSystem.GroundFloorStateData CaptureGroundFloorState()
+    {
+        var state = new SaveSystem.GroundFloorStateData
+        {
+            DarknessVisible = _darknessOverlay?.Visible ?? false,
+            DarknessAlpha = _darknessOverlay?.Color.A ?? 0f,
+            EarthquakeTriggered = _earthquakeTriggered,
+            ElevatorFound = _elevatorFound,
+            FlashlightPickupSpawned = _flashlightPickupSpawned,
+            QuestInitialized = _questInitialized,
+            QuestText = _questLabel?.Text
+        };
+
+        foreach (RoomPortal portal in _roomPortals)
+        {
+            state.Rooms.Add(new SaveSystem.RoomStateData
+            {
+                Name = portal.Name,
+                IsInside = portal.IsInside,
+                ZombiesSpawned = portal.ZombiesSpawned,
+                RewardSpawned = portal.RewardSpawned,
+                Cleared = portal.Cleared,
+                AliveZombies = portal.AliveZombies
+            });
+        }
+
+        return state;
     }
     // --- FÖLDSZINTI ESEMÉNYEK, KÜLDETÉSEK ÉS ÁLLAPOTKÖVETÉS FOLYTATÁSA ---
     private void SpawnFlashlightPickupIfNeeded()
@@ -224,7 +333,18 @@ public partial class GroundFloorController : Node2D
         flashInst.Scale = new Vector2(0.35f, 0.35f);
         flashInst.ZIndex = 200;
         AddChild(flashInst);
+        _flashlightPickup = flashInst;
         _flashlightPickupSpawned = true;
+    }
+
+    private void RemoveSpawnedFlashlightPickup()
+    {
+        if (_flashlightPickup != null && IsInstanceValid(_flashlightPickup))
+        {
+            _flashlightPickup.QueueFree();
+        }
+
+        _flashlightPickup = null;
     }
 
     public void UpdateQuestText(string text)
@@ -546,6 +666,11 @@ public partial class GroundFloorController : Node2D
     // --- PAUSE MENÜ GOMBOK ÉS BILLENTYŰZET ---
     public override void _Input(InputEvent @event)
     {
+        if (GetTree().Paused)
+        {
+            return;
+        }
+
         // Interakció ajtókkal és lifttel
         if (@event.IsActionPressed("interact"))
         {
@@ -576,30 +701,32 @@ public partial class GroundFloorController : Node2D
         }
     }
 
-    public override void _UnhandledInput(InputEvent @event)
+    private void OnPausePressed()
     {
-        if (@event.IsActionPressed("pause"))
+        GD.Print("ESC gomb megnyomva!");
+
+        if (_pauseMenu == null)
         {
-            GD.Print("ESC gomb megnyomva!");
+            GD.PrintErr("Nem tudom kinyitni a menüt, mert a _pauseMenu nulla! (Nézd meg az Inspectort!)");
+            return;
+        }
 
-            if (_pauseMenu == null)
-            {
-                GD.PrintErr("Nem tudom kinyitni a menüt, mert a _pauseMenu nulla! (Nézd meg az Inspectort!)");
-                return;
-            }
+        if (_pauseLoadMenu != null && _pauseLoadMenu.Visible)
+        {
+            _pauseLoadMenu.Close();
+            return;
+        }
 
-            bool openPauseMenu = !GetTree().Paused;
-            if (openPauseMenu)
-            {
-                GetTree().Paused = true;
-                _pauseMenu.Visible = true;
-                Input.MouseMode = Input.MouseModeEnum.Visible;
-            }
-            else if (_pauseMenu.Visible)
-            {
-                OnResumePressed();
-            }
-            GetViewport().SetInputAsHandled();
+        bool openPauseMenu = !GetTree().Paused;
+        if (openPauseMenu)
+        {
+            _pauseMenu.Visible = true;
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+            GetTree().Paused = true;
+        }
+        else if (_pauseMenu.Visible)
+        {
+            OnResumePressed();
         }
     }
 
@@ -611,22 +738,54 @@ public partial class GroundFloorController : Node2D
         Input.MouseMode = Input.MouseModeEnum.Visible;
     }
 
-    private void OnSavePressed() { if (_player != null) SaveSystem.Save(_player); }
+    private void OnSavePressed()
+    {
+        AudioManager.Instance?.PlayUiClick();
+        if (_player != null) SaveSystem.Save(_player, groundFloorState: CaptureGroundFloorState());
+    }
 
     private void OnLoadPressed()
     {
-        if (_player != null)
+        AudioManager.Instance?.PlayUiClick();
+        if (_pauseLoadMenu == null) return;
+
+        _pauseMenu.Visible = false;
+        _pauseLoadMenu.Open();
+    }
+
+    private void CreatePauseLoadMenu()
+    {
+        var loadMenuLayer = new CanvasLayer
         {
-            SaveSystem.Load(_player);
-            RestoreGroundFloorProgress();
-        }
-        OnResumePressed();
+            Name = "PauseLoadMenuLayer",
+            Layer = 100,
+            ProcessMode = ProcessModeEnum.WhenPaused
+        };
+        AddChild(loadMenuLayer);
+
+        _pauseLoadMenu = new PauseLoadMenu { Name = "PauseLoadMenu" };
+        loadMenuLayer.AddChild(_pauseLoadMenu);
+        _pauseLoadMenu.Setup(LoadSelectedSave, () => _pauseMenu.Visible = true);
+    }
+
+    private void LoadSelectedSave(string fileName)
+    {
+        SaveSystem.CurrentSaveFileName = fileName;
+        string targetScene = SaveSystem.GetSavedScenePath(fileName);
+        SaveSystem.LoadRequested = true;
+        GetTree().Paused = false;
+        GetTree().ChangeSceneToFile(targetScene);
     }
 
     private void OnMainMenuPressed() { OnResumePressed(); GetTree().ChangeSceneToFile("res://scenes/MainMenu.tscn"); }
 
     public override void _Process(double delta)
     {
+        if (GetTree().Paused)
+        {
+            return;
+        }
+
         UpdateDarknessFocus();
         CheckEarthquakeApproach();
         UpdateQuestState();
@@ -892,44 +1051,47 @@ void fragment() {
 
         if (!portal.ZombiesSpawned)
         {
-            portal.ZombiesSpawned = true;
-
-            for (int i = 0; i < portal.SmallZombieCount; i++)
-            {
-                var zombie = (Node2D)_zombieSmallScene.Instantiate();
-                if (zombie == null) continue;
-
-                Vector2 spawnPos = portal.InsidePosition + new Vector2(
-                    (float)GD.RandRange(-200, 200),
-                    (float)GD.RandRange(-100, 100)
-                );
-                zombie.GlobalPosition = spawnPos;
-                zombie.ZIndex = 50;
-                AddChild(zombie);
-
-                portal.AliveZombies++;
-                AudioManager.Instance?.PlayZombieSpawn(spawnPos);
-
-                zombie.TreeExited += () =>
-                {
-                    portal.AliveZombies--;
-
-                    if (portal.AliveZombies <= 0 && !portal.RewardSpawned && portal.RewardItemName != null)
-                    {
-                        portal.RewardSpawned = true;
-                        SpawnRoomReward(portal, spawnPos);
-                    }
-
-                    if (portal.AliveZombies <= 0)
-                    {
-                        portal.Cleared = true;
-                        UpdateQuestState();
-                    }
-                };
-            }
-
-            UpdateQuestState();
+            SpawnRoomZombies(portal, portal.SmallZombieCount);
         }
+    }
+
+    private void SpawnRoomZombies(RoomPortal portal, int zombieCount)
+    {
+        if (_zombieSmallScene == null || zombieCount <= 0) return;
+
+        portal.ZombiesSpawned = true;
+        for (int i = 0; i < zombieCount; i++)
+        {
+            var zombie = (Node2D)_zombieSmallScene.Instantiate();
+            if (zombie == null) continue;
+
+            Vector2 spawnPos = portal.InsidePosition + new Vector2(
+                (float)GD.RandRange(-200, 200),
+                (float)GD.RandRange(-100, 100));
+            zombie.GlobalPosition = spawnPos;
+            zombie.ZIndex = 50;
+            AddChild(zombie);
+
+            portal.AliveZombies++;
+            zombie.TreeExited += () =>
+            {
+                portal.AliveZombies--;
+
+                if (portal.AliveZombies <= 0 && !portal.RewardSpawned && portal.RewardItemName != null)
+                {
+                    portal.RewardSpawned = true;
+                    SpawnRoomReward(portal, spawnPos);
+                }
+
+                if (portal.AliveZombies <= 0)
+                {
+                    portal.Cleared = true;
+                    UpdateQuestState();
+                }
+            };
+        }
+
+        UpdateQuestState();
     }
 
     private void ExitRoom(RoomPortal portal)
