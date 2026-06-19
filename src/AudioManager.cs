@@ -206,7 +206,7 @@ public partial class AudioManager : Node
             new[] { "res://audio/click.wav" },
             () => CreateTone(1300f, 0.05f, 0.20f, false, 18f, 0.0f));
 
-        // A talált hit.wav több eseményhez is felhasználható eltérő pitch jitterrel.
+        // A támadások ugyanazt a hangot használják enyhén eltérő hangmagassággal.
         _streams["player_attack"] = LoadOrFallback(
             new[] { "res://audio/hit.wav" },
             () => CreateTone(840f, 0.10f, 0.35f, true, 10f, 0.0f));
@@ -215,7 +215,7 @@ public partial class AudioManager : Node
             new[] { "res://audio/levelup.wav" },
             () => CreateTone(1120f, 0.25f, 0.32f, false, 3f, 0.02f));
 
-        // Zombi hangok: ahol nincs fájl, ott marad a generált fallback.
+        // Hiányzó hangfájl esetén rövid, generált tartalékhang szól.
         _streams["zombie_ambient"] = LoadOrFallback(
             new[] { "res://audio/zombi.wav" },
             () => CreateTone(125f, 0.55f, 0.18f, false, 1.7f, 0.45f));
@@ -226,12 +226,12 @@ public partial class AudioManager : Node
             new[] { "res://audio/hit.wav" },
             () => CreateTone(205f, 0.09f, 0.37f, true, 13f, 0.35f));
 
-        // Use death.* if available
+        // A WAV az elsődleges, az MP3 csak tartalék.
         _streams["death"] = LoadOrFallback(
             new[] { "res://audio/death.wav", "res://audio/death.mp3" },
             () => CreateTone(95f, 0.65f, 0.40f, false, 1.9f, 0.50f));
 
-        // Drops and pickups
+        // Tárgydobás és tárgyfelvétel.
         _streams["drop_potion"] = LoadOrFallback(
             new[] { "res://audio/potion.wav" },
             () => CreateTone(520f, 0.10f, 0.25f, false, 8f, 0.05f));

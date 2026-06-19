@@ -8,7 +8,6 @@ public partial class GroundFloorController : Node2D
     [Export] public NodePath PauseMenuPath;
     [Export] public NodePath QuestLabelPath;
     [Export] public NodePath AnimationPlayerPath;
-    // --- JÁTÉKOS, HUD ÉS EGYÉB FONTOS NODE-OK ---
     private BasePlayer _player;
     private Control _pauseMenu;
     private PauseLoadMenu _pauseLoadMenu;
@@ -16,7 +15,6 @@ public partial class GroundFloorController : Node2D
     private ColorRect _darknessOverlay;
     private ShaderMaterial _darknessMaterial;
     private AnimationPlayer _sceneAnimPlayer;
-    // --- FÖLDSZINTI ESEMÉNYEK, ELLENSÉGEK ÉS ÁLLAPOTKÖVETÉS ---
     private PackedScene _zombieNormalScene;
     private PackedScene _zombieSmallScene;
     private PackedScene _zombieBigScene;
@@ -25,7 +23,7 @@ public partial class GroundFloorController : Node2D
     private readonly List<RoomPortal> _roomPortals = new List<RoomPortal>();
     private RoomPortal _activeRoomPortal;
     private string _nearbyRoomDoorId;
-    // Ezek a változók segítenek nyomon követni, hogy a földrengés esemény már megtörtént-e, hogy a liftet megtalálták-e, és hogy a játékos közel van-e a lifthez.
+    // A földrengés és a lift egyszer lefutható állapotai.
     private bool _earthquakeTriggered = false;
     private bool _elevatorFound = false;
     private Vector2 _elevatorPosition = Vector2.Zero;
@@ -34,7 +32,6 @@ public partial class GroundFloorController : Node2D
     private bool _flashlightPickupSpawned = false;
     private Area2D _flashlightPickup;
     private bool _elevatorTransitionRunning = false;
-    // --- EGYÉB SEGÉDFÜGGVÉNYEK ÉS OSZTÁLYOK ---
     private sealed class RoomPortal
     {
         public string Name;
@@ -58,7 +55,6 @@ public partial class GroundFloorController : Node2D
         if (QuestLabelPath != null) _questLabel = GetNodeOrNull<Label>(QuestLabelPath);
         _darknessOverlay = GetNodeOrNull<ColorRect>("CanvasLayer/DarknessOverlay");
 
-        // DEBUG: Ellenőrizd, hogy a DarknessOverlay létezik-e
         if (_darknessOverlay != null)
         {
             GD.Print("[GroundFloor] SIKER: DarknessOverlay megtalálva!");
@@ -79,7 +75,7 @@ public partial class GroundFloorController : Node2D
         _zombieSmallScene = GD.Load<PackedScene>("res://scenes/ZombieSmall.tscn");
         _zombieBigScene = GD.Load<PackedScene>("res://scenes/ZombieBig.tscn");
 
-        // 1. PAUSE MENÜ KERESÉSE ÉS BEKÖTÉSE
+        // A szünetmenü saját feldolgozási módban fut, ezért szünet közben is kattintható.
         if (PauseMenuPath != null)
         {
             _pauseMenu = GetNodeOrNull<Control>(PauseMenuPath);
@@ -89,7 +85,6 @@ public partial class GroundFloorController : Node2D
                 _pauseMenu.Visible = false;
                 _pauseMenu.ProcessMode = ProcessModeEnum.WhenPaused;
 
-                // Gombok bekötése pontosan úgy, ahogy a World-ben van!
                 try
                 {
                     _pauseMenu.GetNode<Button>("VBoxContainer/ResumeButton").Pressed += OnResumePressed;
@@ -120,7 +115,7 @@ public partial class GroundFloorController : Node2D
 
         if (_darknessOverlay != null)
         {
-            // Fontos: a DarknessOverlay-t át kell helyezni egy CanvasLayer alá, hogy mindig a játék mögött legyen, de a HUD előtt.
+            // A sötétítő réteg a pálya fölött, de a HUD alatt jelenik meg.
             var sceneCanvas = GetNodeOrNull<CanvasLayer>("CanvasLayer");
             var oldParent = _darknessOverlay.GetParent();
             if (oldParent != null && oldParent != sceneCanvas && sceneCanvas != null)
@@ -139,7 +134,7 @@ public partial class GroundFloorController : Node2D
             SetupDarknessOverlayShader();
         }
 
-        // Fontos: a HUD-nak is egy CanvasLayer alatt kell lennie, hogy a sötétség mögé kerüljön, de a játék elé
+        // A HUD külön rétegen marad, hogy a sötétítés ne takarja el.
         var hudControl = GetNodeOrNull<Control>("CanvasLayer/Control");
         if (hudControl != null)
         {
@@ -148,7 +143,7 @@ public partial class GroundFloorController : Node2D
             {
                 hudLayer = new CanvasLayer();
                 hudLayer.Name = "HUDLayer";
-                hudLayer.Layer = 1; // Ez biztosítja, hogy a HUD a DarknessOverlay fölött legyen
+                hudLayer.Layer = 1;
                 AddChild(hudLayer);
             }
 
@@ -181,7 +176,6 @@ public partial class GroundFloorController : Node2D
             _elevatorPosition = _player.GlobalPosition + new Vector2(300, 0);
         }
 
-        // Földrengés trigger bekötése
         var quakeArea = GetNodeOrNull<Area2D>("EarthquakeTrigger");
         if (quakeArea != null)
         {
@@ -189,10 +183,8 @@ public partial class GroundFloorController : Node2D
             GD.Print("SIKER: Földrengés aktiváló terület csatlakoztatva.");
         }
 
-        // Kezdeti küldetés beállítása a földszinten
         InitQuestState();
 
-        // Betöltés ellenőrzése
         if (SaveSystem.LoadRequested)
         {
             SaveSystem.LoadRequested = false;
@@ -317,7 +309,6 @@ public partial class GroundFloorController : Node2D
 
         return state;
     }
-    // --- FÖLDSZINTI ESEMÉNYEK, KÜLDETÉSEK ÉS ÁLLAPOTKÖVETÉS FOLYTATÁSA ---
     private void SpawnFlashlightPickupIfNeeded()
     {
         if (_flashlightPickupSpawned) return;
@@ -365,7 +356,6 @@ public partial class GroundFloorController : Node2D
 
     private void UpdateQuestState()
     {
-        // Ha nincs még inicializálva, akkor inicializáljuk
         if (!_questInitialized)
         {
             InitQuestState();
@@ -374,23 +364,20 @@ public partial class GroundFloorController : Node2D
 
         if (_player == null) return;
 
-        // Ellenőrizd, hogy a játékos közel van-e a lifthez
         float distanceToElevator = _player.GlobalPosition.DistanceTo(_elevatorPosition);
         bool playerNearElevator = distanceToElevator < ElevatorDetectionRadius;
 
         bool hasCable = InventoryManager.Items.Contains("Cable");
         bool hasFuse = InventoryManager.Items.Contains("Fuse");
 
-        // Ha a játékos még nem találta meg a liftet
         if (!_elevatorFound)
         {
             if (playerNearElevator)
             {
-                _elevatorFound = true;  // Megtalálta a liftet
+                _elevatorFound = true;
             }
             else
             {
-                // Még mindig keres a liftet
                 if (_questLabel != null && _questLabel.Text != "Küldetés: Keresd meg a liftet!")
                 {
                     UpdateQuestText("Küldetés: Keresd meg a liftet!");
@@ -399,12 +386,10 @@ public partial class GroundFloorController : Node2D
             }
         }
 
-        // Ha már megtalálta a liftet
         if (_elevatorFound)
         {
             if (!hasCable || !hasFuse)
             {
-                // Hiányzik valami
                 if (_questLabel != null && !_questLabel.Text.Contains("Elromlott"))
                 {
                     UpdateQuestText("Küldetés: Elromlott a lift! Keress valamit a megjavításához!");
@@ -412,7 +397,6 @@ public partial class GroundFloorController : Node2D
             }
             else
             {
-                // Van minden, használható a lift
                 if (_questLabel != null && !_questLabel.Text.Contains("Tudsz"))
                 {
                     UpdateQuestText("Küldetés: Most már tudod használni a liftet a következő szintre!");
@@ -421,7 +405,6 @@ public partial class GroundFloorController : Node2D
         }
     }
 
-    // --- LIFT HASZNÁLATA ÉS FÖLDSZINTI ESEMÉNYEK FOLYTATÁSA ---
     public void TryUseElevator()
     {
         if (_elevatorTransitionRunning) return;
@@ -446,7 +429,6 @@ public partial class GroundFloorController : Node2D
     {
         GetTree().ChangeSceneToFile("res://scenes/C100.tscn");
     }
-    // --- FÖLDSZINTI ESEMÉNYEK, KÜLDETÉSEK ÉS ÁLLAPOTKÖVETÉS FOLYTATÁSA VÉGE ---
     private async void StartEarthquakeSequence()
     {
         if (_earthquakeSequenceRunning) return;
@@ -456,13 +438,13 @@ public partial class GroundFloorController : Node2D
         Vector2? originalCameraOffset = camera != null ? camera.Offset : null;
         AudioManager.Instance?.PlayEarthquake(_player != null ? _player.GlobalPosition : GlobalPosition);
 
-        // Először sötétítsük el a képernyőt, hogy a játékos tudja, hogy valami nagy dolog történik. 
+        // A rengés után a földszint sötét marad.
         {
             _darknessOverlay.Visible = true;
             _darknessOverlay.Color = new Color(0f, 0f, 0f, 0.88f);
         }
 
-        // Ha a játékosnak van lámpája, kapcsoljuk fel, hogy lásson a sötétben, és hogy a lámpa fénye azonnal megjelenjen a sötétség shader alatt.
+        // A már felvett zseblámpát azonnal felszereljük.
         if (_player != null && InventoryManager.Items.Contains("Flashlight"))
         {
             _player.EquipFlashlight();
@@ -475,7 +457,6 @@ public partial class GroundFloorController : Node2D
             ShakeCamera(camera, originalCameraOffset ?? Vector2.Zero);
         }
 
-        // Várjunk egy kicsit a rengés után, hogy a játékos feldolgozhassa a helyzetet, mielőtt a kövek elkezdenek hullani.
         var rockScene = GD.Load<PackedScene>("res://scenes/Rock.tscn");
         if (rockScene == null)
         {
@@ -508,7 +489,7 @@ public partial class GroundFloorController : Node2D
 
         var landingRoot = GetNodeOrNull<Node2D>("RockLandingPoints");
 
-        // Először próbáljunk meg marker alapján spawnolni, ha vannak ilyenek
+        // A kézzel elhelyezett pontok elsőbbséget élveznek a generált rácshoz képest.
         var landingPoints = new List<Vector2>();
         if (landingRoot != null)
         {
@@ -628,10 +609,9 @@ public partial class GroundFloorController : Node2D
             }
         }
 
-        // Várunk egy rövid ideig, hogy a kövek leessenek és a rengés befejeződjön
         await ToSignal(GetTree().CreateTimer(2.0f), "timeout");
 
-        // Keep the player on GroundFloor; the earthquake only creates the blackout and obstacle event.
+        // A rengés csak a környezetet módosítja, nem vált pályát.
         if (camera != null)
         {
             camera.Offset = originalCameraOffset ?? Vector2.Zero;
@@ -639,7 +619,7 @@ public partial class GroundFloorController : Node2D
         _earthquakeSequenceRunning = false;
         return;
     }
-    // Ez a függvény felelős a kamera megrázásáért a földrengés alatt, hogy még intenzívebbé tegye az élményt.
+    // Rövid, csillapodó kamerarázás a földrengéshez.
     private async void ShakeCamera(Camera2D camera, Vector2 baseOffset)
     {
         if (camera == null) return;
@@ -663,7 +643,6 @@ public partial class GroundFloorController : Node2D
         }
     }
 
-    // --- PAUSE MENÜ GOMBOK ÉS BILLENTYŰZET ---
     public override void _Input(InputEvent @event)
     {
         if (GetTree().Paused)
@@ -671,12 +650,11 @@ public partial class GroundFloorController : Node2D
             return;
         }
 
-        // Interakció ajtókkal és lifttel
+        // Ajtó- és liftinterakció.
         if (@event.IsActionPressed("interact"))
         {
             GD.Print("[GroundFloor] Interact gomb megnyomva! _elevatorPosition=" + _elevatorPosition);
 
-            // először ellenőrizzük, hogy a játékos közel van-e a lifthez,
             if (_player != null)
             {
                 float distToElevator = _player.GlobalPosition.DistanceTo(_elevatorPosition);
@@ -691,7 +669,6 @@ public partial class GroundFloorController : Node2D
                 }
             }
 
-            // Ajtók nyitása
             if (TryUseRoomPortal())
             {
                 GD.Print("[GroundFloor] Ajtó nyitása sikeres!");
@@ -936,12 +913,9 @@ void fragment() {
         if (_darknessOverlay == null || _darknessMaterial == null || _player == null) return;
         Vector2 focusPos = GetViewport().GetCanvasTransform() * (_player.GlobalPosition + new Vector2(0, -10));
         _darknessMaterial.SetShaderParameter("focus_pos", focusPos);
-        // Ha a játékosnál van lámpa, akkor egy kis körben láthatóvá tesszük a környezetet
-        // Egyébként teljes sötétség marad
         var hasLightNode = _player.GetNodeOrNull<PointLight2D>("FlashlightLight") != null;
         if (hasLightNode)
         {
-            // A látható kör méretének beállítása a zseblámpáhozv
             _darknessMaterial.SetShaderParameter("hole_radius", 90.0f);
             _darknessMaterial.SetShaderParameter("softness", 50.0f);
         }
@@ -959,7 +933,7 @@ void fragment() {
 
         foreach (var portal in _roomPortals)
         {
-            // Csak akkor induljon el a földrengés, ha a játékos beljebb ment a szobábav
+            // Az ajtó közelében még nem indul el a rengés.
             float distanceFromDoor = _player.GlobalPosition.DistanceTo(portal.OutsidePosition);
             if (portal.RoomBounds.HasPoint(_player.GlobalPosition) && distanceFromDoor > 140f)
             {
