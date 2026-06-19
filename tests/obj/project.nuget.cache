@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "I5rHgGq+p24=",
+  "success": true,
+  "projectFilePath": "E:\\Godot\\Projektek\\hellotheszegame\\tests\\GameTests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Dávid\\.nuget\\packages\\godot.sourcegenerators\\4.6.0\\godot.sourcegenerators.4.6.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\godotsharp\\4.6.0\\godotsharp.4.6.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\godotsharpeditor\\4.6.0\\godotsharpeditor.4.6.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\microsoft.codecoverage\\17.10.0\\microsoft.codecoverage.17.10.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\microsoft.net.test.sdk\\17.10.0\\microsoft.net.test.sdk.17.10.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.10.0\\microsoft.testplatform.objectmodel.17.10.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\microsoft.testplatform.testhost\\17.10.0\\microsoft.testplatform.testhost.17.10.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\nunit\\4.2.2\\nunit.4.2.2.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\nunit.analyzers\\4.2.0\\nunit.analyzers.4.2.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\nunit3testadapter\\4.6.0\\nunit3testadapter.4.6.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.23\\microsoft.netcore.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.23\\microsoft.windowsdesktop.app.ref.8.0.23.nupkg.sha512",
+    "C:\\Users\\Dávid\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.23\\microsoft.aspnetcore.app.ref.8.0.23.nupkg.sha512"
+  ],
+  "logs": []
+}

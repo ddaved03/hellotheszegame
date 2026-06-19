@@ -57,7 +57,13 @@ public static class SaveSystem
         public int AttackDamage { get; set; }
         public float AttackCooldown { get; set; }
         public List<string> InventoryItems { get; set; } // Hátizsák tartalma
+        public string PlayerName { get; set; }
+        public bool FirstRun { get; set; }
     }
+
+    // Ideiglenes játékindítási adatok
+    public static string PlayerName { get; set; } = "Player";
+    public static bool FirstRun { get; set; } = false;
 
     public static List<string> GetSaveFiles()
     {
@@ -97,7 +103,20 @@ public static class SaveSystem
         return false;
     }
 
-    public static void SetNewSaveFile() { CurrentSaveFileName = $"Mentés_{DateTime.Now:yyyyMMdd_HHmmss}.json"; }
+    public static void SetNewSaveFile()
+    {
+        string baseName = "Mentés";
+        string candidate = $"{baseName}.json";
+        int index = 2;
+
+        while (File.Exists(Path.Combine(SaveDirectory, candidate)))
+        {
+            candidate = $"{baseName} ({index}).json";
+            index++;
+        }
+
+        CurrentSaveFileName = candidate;
+    }
     
     public static bool HasAnySave() { return GetSaveFiles().Count > 0; }
 
@@ -113,6 +132,8 @@ public static class SaveSystem
                 Level = player.Level, PotionsCount = player.PotionsCount, Speed = player.Speed,
                 AttackDamage = player.AttackDamage, AttackCooldown = player.AttackCooldown,
                 InventoryItems = new List<string>(InventoryManager.Items)
+                , PlayerName = PlayerName
+                , FirstRun = FirstRun
             };
 
             // 2. JAVÍTÁS: Stabil, hagyományos fájlírás a Godot FileAccess helyett.
@@ -146,6 +167,9 @@ public static class SaveSystem
 
             InventoryManager.Items.Clear();
             if (data.InventoryItems != null) InventoryManager.Items.AddRange(data.InventoryItems);
+
+            PlayerName = data.PlayerName ?? PlayerName;
+            FirstRun = data.FirstRun;
 
             if (player.HasMethod("RefreshUI")) player.Call("RefreshUI");
             if (player.Inventory != null) player.Inventory.UpdateUI();

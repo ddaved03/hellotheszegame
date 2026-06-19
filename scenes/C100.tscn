@@ -307,7 +307,7 @@ position = Vector2(271, 348.5)
 shape = SubResource("RectangleShape2D_teacher_desk")
 
 [node name="Player" parent="." unique_id=947205357 instance=ExtResource("2_player")]
-position = Vector2(1152, 336)
+position = Vector2(980, 360)
 InitialIdleAnimation = "idle_side"
 InitialFlipH = true
 

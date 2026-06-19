@@ -19,10 +19,8 @@ size = Vector2(92, 101)
 bg_color = Color(1, 0, 0, 1)
 
 [node name="Zombie" type="CharacterBody2D" unique_id=564053419]
-z_index = -1
 position = Vector2(42, -97)
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_yaogc")
 FrontTexture = ExtResource("3_yaogc")
 BackTexture = ExtResource("5_back")

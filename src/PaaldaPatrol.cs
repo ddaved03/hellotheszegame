@@ -73,6 +73,18 @@ public partial class PaaldaPatrol : CharacterBody2D
         PushPlayerAway((float)delta);
     }
 
+    public void FaceDirection(Vector2 direction)
+    {
+        if (direction == Vector2.Zero)
+        {
+            return;
+        }
+
+        Velocity = direction.Normalized() * 100.0f;
+        UpdateFacing();
+        Velocity = Vector2.Zero;
+    }
+
     private void AdvancePoint()
     {
         _currentPointIndex = (_currentPointIndex + 1) % _patrolPoints.Count;
