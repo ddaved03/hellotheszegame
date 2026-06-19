@@ -19,6 +19,7 @@ public partial class WorldController : Node2D
 
     private BasePlayer _player;
     private Control _pauseMenu;
+    private PauseLoadMenu _pauseLoadMenu;
     private AnimationPlayer _busAnim;
     private Label _questLabel;
     private float _trafficTimer = 0;
@@ -65,6 +66,11 @@ public partial class WorldController : Node2D
             _pauseMenu.GetNode<Button>("VBoxContainer/SaveButton").Pressed += OnSavePressed;
             _pauseMenu.GetNode<Button>("VBoxContainer/LoadButton").Pressed += OnLoadPressed;
             _pauseMenu.GetNode<Button>("VBoxContainer/MainMenuButton").Pressed += OnMainMenuPressed;
+            CreatePauseLoadMenu();
+
+            var pauseInput = new PauseInputHandler();
+            AddChild(pauseInput);
+            pauseInput.PausePressed += OnPausePressed;
         }
 
         var doorTrigger = GetNodeOrNull<Area2D>("UniversityDoor/DetectionArea");
@@ -80,6 +86,7 @@ public partial class WorldController : Node2D
             if (_player != null) SaveSystem.Load(_player);
             
             RestoreProgressState();
+            RestoreSavedWorldState();
         }
         else
         {
@@ -89,36 +96,7 @@ public partial class WorldController : Node2D
             }
         }
 
-        // Start background music if available
-        var backgroundPlayer = AudioManager.EnsureInstance()?.PlayBackground();
-        if (backgroundPlayer == null)
-        {
-            PlayFallbackBackgroundMusic();
-        }
-
         // First-run modal removed: introduction handled in main menu now.
-    }
-
-    private void PlayFallbackBackgroundMusic()
-    {
-        var stream = ResourceLoader.Load<AudioStream>("res://audio/background.wav");
-        if (stream == null)
-        {
-            GD.PrintErr("[WorldController] Fallback background.wav load failed.");
-            return;
-        }
-
-        var player = new AudioStreamPlayer
-        {
-            Stream = stream,
-            Bus = "Master",
-            ProcessMode = ProcessModeEnum.Always,
-            Autoplay = true
-        };
-
-        AddChild(player);
-        player.Play();
-        GD.Print("[WorldController] Fallback background music started.");
     }
 
     public void RestoreProgressState()
@@ -163,6 +141,49 @@ public partial class WorldController : Node2D
         else
         {
             UpdateQuestText("Küldetés: Szerezd meg a kulcsot a buszról!");
+        }
+    }
+
+    private SaveSystem.WorldStateData CaptureWorldState()
+    {
+        return new SaveSystem.WorldStateData
+        {
+            ParkingEventStarted = _parkingEventStarted,
+            ParkingZombiesAlive = _parkingZombiesAlive,
+            RocksEventStarted = _rocksEventStarted,
+            RocksTimerActive = _rocksTimerActive,
+            RocksTimeLeft = _rocksTimeLeft,
+            RocksSpawnCooldown = _rocksSpawnCooldown,
+            RocksSpawnX = _rocksSpawnCenter.X,
+            RocksSpawnY = _rocksSpawnCenter.Y,
+            RocksZombiesAlive = _rocksZombiesAlive,
+            RocksEventCompleted = _rocksEventCompleted,
+            TutorialZombiesAlive = _tutorialZombiesAlive,
+            TrafficTimer = _trafficTimer,
+            QuestText = _questLabel?.Text
+        };
+    }
+
+    private void RestoreSavedWorldState()
+    {
+        SaveSystem.WorldStateData state = SaveSystem.LastLoadedData?.WorldState;
+        if (state == null) return;
+
+        _parkingEventStarted = state.ParkingEventStarted;
+        _parkingZombiesAlive = state.ParkingZombiesAlive;
+        _rocksEventStarted = state.RocksEventStarted;
+        _rocksTimerActive = state.RocksTimerActive;
+        _rocksTimeLeft = state.RocksTimeLeft;
+        _rocksSpawnCooldown = state.RocksSpawnCooldown;
+        _rocksSpawnCenter = new Vector2(state.RocksSpawnX, state.RocksSpawnY);
+        _rocksZombiesAlive = state.RocksZombiesAlive;
+        _rocksEventCompleted = state.RocksEventCompleted;
+        _tutorialZombiesAlive = state.TutorialZombiesAlive;
+        _trafficTimer = state.TrafficTimer;
+
+        if (_questLabel != null && !string.IsNullOrEmpty(state.QuestText))
+        {
+            _questLabel.Text = state.QuestText;
         }
     }
 
@@ -553,9 +574,15 @@ public void UpdateQuestText(string newText)
 
     private void OnMapTransitionTriggerEntered(Node2D body)
     {
-        if (body is BasePlayer)
+        var player = body as BasePlayer;
+        if (player != null || body.IsInGroup("Player"))
         {
             GD.Print("Játékos belépett a kapun! Töltés a következő pályára...");
+            BasePlayer.CaptureForSceneChange(player);
+            if (player == null)
+            {
+                BasePlayer.CaptureActivePlayerForSceneChange(GetTree());
+            }
             GetTree().ChangeSceneToFile("res://scenes/GroundFloor.tscn");
         }
     }
@@ -578,21 +605,24 @@ public void UpdateQuestText(string newText)
         if (!fromRight && vehicle.HasNode("Sprite2D")) vehicle.GetNode<Sprite2D>("Sprite2D").FlipH = true;
     }
 
-    public override void _UnhandledInput(InputEvent @event)
+    private void OnPausePressed()
     {
-        if (@event.IsActionPressed("pause"))
+        if (_pauseMenu == null) return;
+
+        if (_pauseLoadMenu != null && _pauseLoadMenu.Visible)
         {
-            if (_pauseMenu == null) return;
-            bool openPauseMenu = !GetTree().Paused;
-            if (openPauseMenu)
-            {
-                GetTree().Paused = true;
-                _pauseMenu.Visible = true;
-                Input.MouseMode = Input.MouseModeEnum.Visible;
-            }
-            else if (_pauseMenu.Visible) OnResumePressed();
-            GetViewport().SetInputAsHandled();
+            _pauseLoadMenu.Close();
+            return;
         }
+
+        bool openPauseMenu = !GetTree().Paused;
+        if (openPauseMenu)
+        {
+            _pauseMenu.Visible = true;
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+            GetTree().Paused = true;
+        }
+        else if (_pauseMenu.Visible) OnResumePressed();
     }
 
     private void OnResumePressed()
@@ -603,16 +633,43 @@ public void UpdateQuestText(string newText)
         Input.MouseMode = Input.MouseModeEnum.Visible;
     }
 
-    private void OnSavePressed() { if (_player != null) SaveSystem.Save(_player); }
+    private void OnSavePressed()
+    {
+        AudioManager.Instance?.PlayUiClick();
+        if (_player != null) SaveSystem.Save(_player, CaptureWorldState());
+    }
     
-    private void OnLoadPressed() 
-    { 
-        if (_player != null) 
+    private void OnLoadPressed()
+    {
+        AudioManager.Instance?.PlayUiClick();
+        if (_pauseLoadMenu == null) return;
+
+        _pauseMenu.Visible = false;
+        _pauseLoadMenu.Open();
+    }
+
+    private void CreatePauseLoadMenu()
+    {
+        var loadMenuLayer = new CanvasLayer
         {
-            SaveSystem.Load(_player); 
-            RestoreProgressState();
-        }
-        OnResumePressed(); 
+            Name = "PauseLoadMenuLayer",
+            Layer = 100,
+            ProcessMode = ProcessModeEnum.WhenPaused
+        };
+        AddChild(loadMenuLayer);
+
+        _pauseLoadMenu = new PauseLoadMenu { Name = "PauseLoadMenu" };
+        loadMenuLayer.AddChild(_pauseLoadMenu);
+        _pauseLoadMenu.Setup(LoadSelectedSave, () => _pauseMenu.Visible = true);
+    }
+
+    private void LoadSelectedSave(string fileName)
+    {
+        SaveSystem.CurrentSaveFileName = fileName;
+        string targetScene = SaveSystem.GetSavedScenePath(fileName);
+        SaveSystem.LoadRequested = true;
+        GetTree().Paused = false;
+        GetTree().ChangeSceneToFile(targetScene);
     }
 
     private void OnMainMenuPressed() { OnResumePressed(); GetTree().ChangeSceneToFile("res://scenes/MainMenu.tscn"); }

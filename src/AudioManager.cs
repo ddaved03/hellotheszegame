@@ -64,30 +64,6 @@ public partial class AudioManager : Node
     public void PlayBusArrival(Vector2 position) => PlayGlobal("bus_arrival", 0.01f);
     public void PlayBusDoor(Vector2 position) => PlayGlobal("bus_door", 0.01f);
     public void PlayCar(Vector2 position) => PlayGlobal("car", 0.02f);
-    public AudioStreamPlayer PlayBackground()
-    {
-        if (!_streams.TryGetValue("background", out var stream)) return null;
-
-        if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
-        {
-            _backgroundPlayer.QueueFree();
-            _backgroundPlayer = null;
-        }
-
-        _backgroundPlayer = new AudioStreamPlayer
-        {
-            Stream = stream,
-            Bus = "Master",
-            ProcessMode = ProcessModeEnum.Always,
-            Autoplay = true
-        };
-
-        AddChild(_backgroundPlayer);
-        ApplyMusicVolume();
-        _backgroundPlayer.Play();
-        return _backgroundPlayer;
-    }
-
     public AudioStreamPlayer PlayC100Theme()
     {
         return PlayMusic("c100_theme");
@@ -100,11 +76,6 @@ public partial class AudioManager : Node
             _backgroundPlayer.Stop();
             _backgroundPlayer.Play();
         }
-    }
-
-    public bool HasActiveMusic()
-    {
-        return _backgroundPlayer != null && IsInstanceValid(_backgroundPlayer) && _backgroundPlayer.Playing;
     }
 
     private AudioStreamPlayer PlayMusic(string key)
@@ -235,7 +206,7 @@ public partial class AudioManager : Node
             new[] { "res://audio/click.wav" },
             () => CreateTone(1300f, 0.05f, 0.20f, false, 18f, 0.0f));
 
-        // A talált hit.wav több eseményhez is felhasználható eltérő pitch jitterrel.
+        // A támadások ugyanazt a hangot használják enyhén eltérő hangmagassággal.
         _streams["player_attack"] = LoadOrFallback(
             new[] { "res://audio/hit.wav" },
             () => CreateTone(840f, 0.10f, 0.35f, true, 10f, 0.0f));
@@ -244,8 +215,10 @@ public partial class AudioManager : Node
             new[] { "res://audio/levelup.wav" },
             () => CreateTone(1120f, 0.25f, 0.32f, false, 3f, 0.02f));
 
-        // Zombi hangok: ahol nincs fájl, ott marad a generált fallback.
-        _streams["zombie_ambient"] = CreateTone(125f, 0.55f, 0.18f, false, 1.7f, 0.45f);
+        // Hiányzó hangfájl esetén rövid, generált tartalékhang szól.
+        _streams["zombie_ambient"] = LoadOrFallback(
+            new[] { "res://audio/zombi.wav" },
+            () => CreateTone(125f, 0.55f, 0.18f, false, 1.7f, 0.45f));
         _streams["zombie_attack"] = LoadOrFallback(
             new[] { "res://audio/hit.wav" },
             () => CreateTone(320f, 0.12f, 0.42f, true, 9f, 0.28f));
@@ -253,12 +226,12 @@ public partial class AudioManager : Node
             new[] { "res://audio/hit.wav" },
             () => CreateTone(205f, 0.09f, 0.37f, true, 13f, 0.35f));
 
-        // Use death.* if available
+        // A WAV az elsődleges, az MP3 csak tartalék.
         _streams["death"] = LoadOrFallback(
             new[] { "res://audio/death.wav", "res://audio/death.mp3" },
             () => CreateTone(95f, 0.65f, 0.40f, false, 1.9f, 0.50f));
 
-        // Drops and pickups
+        // Tárgydobás és tárgyfelvétel.
         _streams["drop_potion"] = LoadOrFallback(
             new[] { "res://audio/potion.wav" },
             () => CreateTone(520f, 0.10f, 0.25f, false, 8f, 0.05f));
@@ -273,9 +246,6 @@ public partial class AudioManager : Node
             new[] { "res://audio/pickup_xp.wav", "res://audio/xp.wav" },
             () => CreateTone(980f, 0.12f, 0.25f, false, 8f, 0.0f));
 
-        _streams["background"] = LoadOrFallback(
-            new[] { "res://audio/background.wav", "res://audio/background.mp3" },
-            () => null);
         _streams["c100_theme"] = LoadOrFallback(
             new[] { "res://audio/paalda_boss_theme_2_with_ending.mp3" },
             () => CreateTone(72f, 4f, 0.03f, false, 0.5f, 0.02f));
@@ -307,7 +277,7 @@ public partial class AudioManager : Node
             new[] { "res://audio/zombi.wav", "res://audio/zombi.mp3", "res://audio/zombie.wav", "res://audio/zombie.mp3" },
             () => CreateTone(180f, 0.45f, 0.14f, false, 1.1f, 0.2f));
         _streams["zombie_footstep"] = LoadOrFallback(
-            new[] { "res://audio/zombie_footstep.wav", "res://audio/zombi_footstep.wav", "res://audio/footstep.wav" },
+            new[] { "res://audio/zombi_footstep.wav" },
             () => CreateTone(220f, 0.06f, 0.05f, false, 2f, 0.02f));
     }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class MainMenuController : Control
 {
-    private static readonly Texture2D MenuBackgroundTexture = GD.Load<Texture2D>("res://src/level-hattÃ©r.png");
+    private static readonly Texture2D MenuBackgroundTexture = GD.Load<Texture2D>("res://src/level-hattér.png");
     private Panel _settingsPanel;
     private Panel _loadMenuPanel;
     private VBoxContainer _saveFilesContainer;
@@ -19,12 +19,6 @@ public partial class MainMenuController : Control
 
     public override void _Ready()
     {
-        var audioManager = AudioManager.EnsureInstance();
-        if (audioManager != null && !audioManager.HasActiveMusic())
-        {
-            audioManager.PlayBackground();
-        }
-
         var newGameBtn = GetNode<Button>("CenterContainer/VBoxContainer/NewGameButton");
         newGameBtn.Pressed += OnNewGamePressed;
 
@@ -167,7 +161,7 @@ public partial class MainMenuController : Control
         startBtn.Text = "Kezdés";
         startBtn.Set("theme_override_colors/font_color", new Color(1,1,1,1));
         startBtn.Pressed += ConfirmNewGame;
-        startBtn.Disabled = true; // require name before enabling
+        startBtn.Disabled = true;
         startBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         hbox.AddChild(startBtn);
 
@@ -178,7 +172,7 @@ public partial class MainMenuController : Control
         cancelBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         hbox.AddChild(cancelBtn);
 
-        // Enable start button only when there's a non-empty name
+        // Név nélkül nem indítható új játék.
         _newGameNameInput.TextChanged += (string newText) => { startBtn.Disabled = string.IsNullOrWhiteSpace(newText); };
     }
 
@@ -203,7 +197,7 @@ public partial class MainMenuController : Control
         center.AddChild(vbox);
 
         var title = new Label();
-        title.Text = "Mentett jÃ¡tÃ©kok betÃ¶ltÃ©se";
+        title.Text = "Mentett játékok betöltése";
         title.HorizontalAlignment = HorizontalAlignment.Center;
         vbox.AddChild(title);
 
@@ -216,7 +210,7 @@ public partial class MainMenuController : Control
         scroll.AddChild(_saveFilesContainer);
 
         var closeBtn = new Button();
-        closeBtn.Text = "Vissza a menÃ¼be";
+        closeBtn.Text = "Vissza a menübe";
         closeBtn.Pressed += () => _loadMenuPanel.Visible = false;
         vbox.AddChild(closeBtn);
 
@@ -239,7 +233,7 @@ public partial class MainMenuController : Control
         renCenter.AddChild(renVbox);
 
         var renLabel = new Label();
-        renLabel.Text = "Ãšj nÃ©v megadÃ¡sa:";
+        renLabel.Text = "Új név megadása:";
         renVbox.AddChild(renLabel);
 
         _renameInput = new LineEdit();
@@ -250,13 +244,13 @@ public partial class MainMenuController : Control
         renVbox.AddChild(renHbox);
 
         var renOkBtn = new Button();
-        renOkBtn.Text = "MentÃ©s";
+        renOkBtn.Text = "Mentés";
         renOkBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         renOkBtn.Pressed += ConfirmRename;
         renHbox.AddChild(renOkBtn);
 
         var renCancelBtn = new Button();
-        renCancelBtn.Text = "MÃ©gse";
+        renCancelBtn.Text = "Mégse";
         renCancelBtn.SizeFlagsHorizontal = SizeFlags.ExpandFill;
         renCancelBtn.Pressed += () => _renamePanel.Visible = false;
         renHbox.AddChild(renCancelBtn);
@@ -292,12 +286,12 @@ public partial class MainMenuController : Control
             row.AddChild(loadBtn);
 
             Button renameBtn = new Button();
-            renameBtn.Text = "Ãtnevez";
+            renameBtn.Text = "Átnevez";
             renameBtn.Pressed += () => OpenRenamePanel(saveFile);
             row.AddChild(renameBtn);
 
             Button deleteBtn = new Button();
-            deleteBtn.Text = "TÃ¶rÃ¶l";
+            deleteBtn.Text = "Töröl";
             deleteBtn.SelfModulate = new Color(1, 0.5f, 0.5f);
             deleteBtn.Pressed += () => DeleteGame(saveFile);
             row.AddChild(deleteBtn);
@@ -345,13 +339,12 @@ public partial class MainMenuController : Control
         AudioManager.Instance?.PlayUiClick();
         SaveSystem.CurrentSaveFileName = fileName; 
         SaveSystem.LoadRequested = true;
-        GetTree().ChangeSceneToFile("res://scenes/World.tscn");
+        GetTree().ChangeSceneToFile(SaveSystem.GetSavedScenePath(fileName));
     }
 
     private void OnNewGamePressed()
     {
         AudioManager.Instance?.PlayUiClick();
-        // Show new-game modal to collect player name and show controls/story
         _newGamePanel.Visible = true;
     }
 

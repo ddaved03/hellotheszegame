@@ -55,6 +55,79 @@ public partial class BasePlayer : CharacterBody2D
     private float _timeSinceLastAction = 0f; // Méri az időt az utolsó mana-használat óta
     public float ManaRegenDelay = 1.0f;      // Mennyit kell várni használat után, hogy elkezdjen tölteni
 
+    private sealed class RuntimeState
+    {
+        public int MaxHealth;
+        public int CurrentHealth;
+        public int CurrentXP;
+        public int MaxXP;
+        public int Level;
+        public int PotionsCount;
+        public int MaxPotionSlots;
+        public float Speed;
+        public int AttackDamage;
+        public float AttackCooldown;
+        public float MaxMana;
+        public float CurrentMana;
+        public float ManaRegenRate;
+        public float ManaCost;
+    }
+
+    private static RuntimeState _pendingRuntimeState;
+
+    public static void CaptureForSceneChange(BasePlayer player)
+    {
+        if (player == null) return;
+
+        _pendingRuntimeState = new RuntimeState
+        {
+            MaxHealth = player.MaxHealth,
+            CurrentHealth = player.CurrentHealth,
+            CurrentXP = player.CurrentXP,
+            MaxXP = player.MaxXP,
+            Level = player.Level,
+            PotionsCount = player.PotionsCount,
+            MaxPotionSlots = player.MaxPotionSlots,
+            Speed = player.Speed,
+            AttackDamage = player.AttackDamage,
+            AttackCooldown = player.AttackCooldown,
+            MaxMana = player.MaxMana,
+            CurrentMana = player.CurrentMana,
+            ManaRegenRate = player.ManaRegenRate,
+            ManaCost = player.ManaCost
+        };
+    }
+
+    public static void CaptureActivePlayerForSceneChange(SceneTree tree)
+    {
+        if (tree == null) return;
+
+        var player = tree.GetFirstNodeInGroup("Player") as BasePlayer;
+        CaptureForSceneChange(player);
+    }
+
+    private void ApplyPendingRuntimeState()
+    {
+        if (_pendingRuntimeState == null) return;
+
+        MaxHealth = _pendingRuntimeState.MaxHealth;
+        CurrentHealth = Mathf.Clamp(_pendingRuntimeState.CurrentHealth, 0, MaxHealth);
+        CurrentXP = Mathf.Max(0, _pendingRuntimeState.CurrentXP);
+        MaxXP = Mathf.Max(1, _pendingRuntimeState.MaxXP);
+        Level = Mathf.Max(1, _pendingRuntimeState.Level);
+        PotionsCount = Mathf.Max(0, _pendingRuntimeState.PotionsCount);
+        MaxPotionSlots = Mathf.Max(1, _pendingRuntimeState.MaxPotionSlots);
+        Speed = _pendingRuntimeState.Speed;
+        AttackDamage = _pendingRuntimeState.AttackDamage;
+        AttackCooldown = Mathf.Max(0.05f, _pendingRuntimeState.AttackCooldown);
+        MaxMana = Mathf.Max(1f, _pendingRuntimeState.MaxMana);
+        CurrentMana = Mathf.Clamp(_pendingRuntimeState.CurrentMana, 0f, MaxMana);
+        ManaRegenRate = _pendingRuntimeState.ManaRegenRate;
+        ManaCost = _pendingRuntimeState.ManaCost;
+
+        _pendingRuntimeState = null;
+    }
+
     public override void _Ready()
     {
         AddToGroup("Player");
@@ -64,6 +137,9 @@ public partial class BasePlayer : CharacterBody2D
         Inventory = new InventoryManager();
         CallDeferred("add_child", Inventory);
 
+        ApplyPendingRuntimeState();
+        NormalizeStats();
+        EnsureSceneUiCompatibility();
         UpdateUI();
         
         if (BtnSpeed != null) BtnSpeed.Pressed += () => ApplyUpgrade("speed");
@@ -214,6 +290,7 @@ public partial class BasePlayer : CharacterBody2D
         
         if (InventoryNode != null)
         {
+            EnsureSceneUiCompatibility();
             InventoryNode.Visible = _isInventoryOpen;
             if (_isInventoryOpen) UpdateInventoryStatsUI();
         }
@@ -228,6 +305,103 @@ public partial class BasePlayer : CharacterBody2D
         {
             Input.MouseMode = Input.MouseModeEnum.Visible; 
         }
+    }
+
+    private void EnsureSceneUiCompatibility()
+    {
+        EnsureInventoryManaLabel();
+        EnsureManaBar();
+
+        if (StatManaLabel != null)
+        {
+            StatManaLabel.Visible = true;
+            StatManaLabel.ZIndex = 100;
+        }
+    }
+
+    private void NormalizeStats()
+    {
+        Level = Mathf.Max(1, Level);
+        MaxXP = Mathf.Max(1, MaxXP);
+        MaxHealth = Mathf.Max(1, MaxHealth);
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 1, MaxHealth);
+        MaxPotionSlots = Mathf.Max(1, MaxPotionSlots);
+        PotionsCount = Mathf.Clamp(PotionsCount, 0, MaxPotionSlots);
+
+        if (MaxMana <= 0f)
+        {
+            MaxMana = 100f;
+        }
+
+        if (CurrentMana <= 0f)
+        {
+            CurrentMana = MaxMana;
+        }
+        else
+        {
+            CurrentMana = Mathf.Clamp(CurrentMana, 0f, MaxMana);
+        }
+    }
+
+    private void EnsureInventoryManaLabel()
+    {
+        if (StatManaLabel != null) return;
+
+        var inventory = InventoryNode ?? GetTree().Root.FindChild("Inventory", true, false) as Control;
+        if (inventory == null) return;
+
+        StatManaLabel = inventory.GetNodeOrNull<Label>("Label_Mana");
+        if (StatManaLabel != null) return;
+
+        MoveInventoryLabel(inventory, "Label_Attack", 16f);
+        MoveInventoryLabel(inventory, "Label_Armor", 16f);
+        MoveInventoryLabel(inventory, "Label_SpeedLevel", 16f);
+        MoveInventoryLabel(inventory, "Label_Attack_Speed", 16f);
+
+        StatManaLabel = new Label
+        {
+            Name = "Label_Mana",
+            Text = "Mana: 0 / 0",
+            OffsetLeft = -287f,
+            OffsetTop = -164f,
+            OffsetRight = -150f,
+            OffsetBottom = -141f,
+            ZIndex = 100
+        };
+        inventory.AddChild(StatManaLabel);
+    }
+
+    private void MoveInventoryLabel(Control inventory, string labelName, float yOffset)
+    {
+        var label = inventory.GetNodeOrNull<Label>(labelName);
+        if (label == null) return;
+
+        label.OffsetTop += yOffset;
+        label.OffsetBottom += yOffset;
+    }
+
+    private void EnsureManaBar()
+    {
+        var control = GetTree().Root.FindChild("Control", true, false) as Control;
+        if (control == null || control.GetNodeOrNull<ProgressBar>("ManaBar") != null) return;
+
+        var manaBar = new ProgressBar
+        {
+            Name = "ManaBar",
+            ShowPercentage = false,
+            MaxValue = MaxMana,
+            Value = CurrentMana,
+            OffsetLeft = 113f,
+            OffsetTop = 53f,
+            OffsetRight = 284f,
+            OffsetBottom = 65f
+        };
+
+        var fill = new StyleBoxFlat { BgColor = new Color(0.15f, 0.45f, 1f, 1f) };
+        var background = new StyleBoxFlat { BgColor = new Color(0.03f, 0.05f, 0.12f, 0.85f) };
+        manaBar.AddThemeStyleboxOverride("fill", fill);
+        manaBar.AddThemeStyleboxOverride("background", background);
+        control.AddChild(manaBar);
     }
 
     private void UpdateInventoryStatsUI()

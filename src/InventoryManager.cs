@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class InventoryManager : Control
 {
-    // A felvett tárgyak neveinek listája
+    // A lista jelenetváltáskor is megőrzi a felvett tárgyakat.
     public static List<string> Items = new List<string>();
     [Export] public int MaxSlots = 8;
 
@@ -45,8 +45,6 @@ public partial class InventoryManager : Control
                 if (i < Items.Count)
                 {
                     iconDisplay.Texture = GetTextureForItem(Items[i]);
-                    // Ezzel biztosítjuk, hogy a kép ne lógjon ki a beállított keretből, 
-                    // hanem méretarányosan zsugorodjon össze a TextureRect méretére.
                     iconDisplay.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
                     iconDisplay.StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered;
                     iconDisplay.Visible = true;
