@@ -38,6 +38,7 @@ public partial class GroundFloorController : Node2D
         public Vector2 OutsidePosition;
         public Vector2 InsidePosition;
         public Rect2 RoomBounds;
+        public Rect2 SafeSpawnBounds;
         public int SmallZombieCount;
         public string RewardItemName;
         public string RewardTexturePath;
@@ -268,7 +269,7 @@ public partial class GroundFloorController : Node2D
                     portal.RewardItemName != null &&
                     !InventoryManager.Items.Contains(portal.RewardItemName))
                 {
-                    SpawnRoomReward(portal, portal.InsidePosition);
+                    SpawnRoomReward(portal);
                 }
             }
         }
@@ -783,6 +784,7 @@ public partial class GroundFloorController : Node2D
             OutsidePosition = new Vector2(1510f, 210f),
             InsidePosition = new Vector2(1510f, 110f),
             RoomBounds = new Rect2(1180f, 20f, 1400f, 250f),
+            SafeSpawnBounds = new Rect2(1260f, 45f, 1180f, 165f),
             SmallZombieCount = 4
         });
 
@@ -792,6 +794,7 @@ public partial class GroundFloorController : Node2D
             OutsidePosition = new Vector2(640f, 1400f),
             InsidePosition = new Vector2(640f, 1510f),
             RoomBounds = new Rect2(240f, 1360f, 1000f, 290f),
+            SafeSpawnBounds = new Rect2(330f, 1440f, 820f, 150f),
             SmallZombieCount = 5,
             RewardItemName = "Fuse",
             RewardTexturePath = "res://kepek/fuse.png"
@@ -803,6 +806,7 @@ public partial class GroundFloorController : Node2D
             OutsidePosition = new Vector2(2190f, 1400f),
             InsidePosition = new Vector2(2190f, 1510f),
             RoomBounds = new Rect2(1450f, 1360f, 1180f, 290f),
+            SafeSpawnBounds = new Rect2(1540f, 1440f, 1000f, 150f),
             SmallZombieCount = 5,
             RewardItemName = "Cable",
             RewardTexturePath = "res://kepek/cable.png"
@@ -869,16 +873,41 @@ public partial class GroundFloorController : Node2D
         var insideMarker = markerRoot.GetNodeOrNull<Marker2D>(insideName);
         if (outsideMarker == null || insideMarker == null) return;
 
+        Rect2 roomBounds = GetConfiguredRoomBounds(portalName, insideMarker.GlobalPosition);
+
         _roomPortals.Add(new RoomPortal
         {
             Name = portalName,
             OutsidePosition = outsideMarker.GlobalPosition,
             InsidePosition = insideMarker.GlobalPosition,
-            RoomBounds = new Rect2(Mathf.Min(outsideMarker.GlobalPosition.X, insideMarker.GlobalPosition.X) - 350f, Mathf.Min(outsideMarker.GlobalPosition.Y, insideMarker.GlobalPosition.Y) - 200f, 900f, 320f),
+            RoomBounds = roomBounds,
+            SafeSpawnBounds = GetConfiguredSafeSpawnBounds(portalName, roomBounds),
             SmallZombieCount = smallZombieCount,
             RewardItemName = rewardItem,
             RewardTexturePath = rewardTexture
         });
+    }
+
+    private static Rect2 GetConfiguredRoomBounds(string portalName, Vector2 insidePosition)
+    {
+        return portalName switch
+        {
+            "TopRoom" => new Rect2(1180f, 20f, 1400f, 250f),
+            "BottomLeftRoom" => new Rect2(240f, 1360f, 1000f, 290f),
+            "BottomRightRoom" => new Rect2(1450f, 1360f, 1180f, 290f),
+            _ => new Rect2(insidePosition - new Vector2(350f, 160f), new Vector2(700f, 320f))
+        };
+    }
+
+    private static Rect2 GetConfiguredSafeSpawnBounds(string portalName, Rect2 roomBounds)
+    {
+        return portalName switch
+        {
+            "TopRoom" => new Rect2(1260f, 45f, 1180f, 165f),
+            "BottomLeftRoom" => new Rect2(330f, 1440f, 820f, 150f),
+            "BottomRightRoom" => new Rect2(1540f, 1440f, 1000f, 150f),
+            _ => new Rect2(roomBounds.Position + new Vector2(70f, 70f), roomBounds.Size - new Vector2(140f, 140f))
+        };
     }
 
     private void SetupDarknessOverlayShader()
@@ -1034,14 +1063,14 @@ void fragment() {
         if (_zombieSmallScene == null || zombieCount <= 0) return;
 
         portal.ZombiesSpawned = true;
+        var reservedPositions = new List<Vector2>();
         for (int i = 0; i < zombieCount; i++)
         {
             var zombie = (Node2D)_zombieSmallScene.Instantiate();
             if (zombie == null) continue;
 
-            Vector2 spawnPos = portal.InsidePosition + new Vector2(
-                (float)GD.RandRange(-200, 200),
-                (float)GD.RandRange(-100, 100));
+            Vector2 spawnPos = FindSafeRoomPosition(portal, 32f, reservedPositions);
+            reservedPositions.Add(spawnPos);
             zombie.GlobalPosition = spawnPos;
             zombie.ZIndex = 50;
             AddChild(zombie);
@@ -1054,7 +1083,7 @@ void fragment() {
                 if (portal.AliveZombies <= 0 && !portal.RewardSpawned && portal.RewardItemName != null)
                 {
                     portal.RewardSpawned = true;
-                    SpawnRoomReward(portal, spawnPos);
+                    SpawnRoomReward(portal);
                 }
 
                 if (portal.AliveZombies <= 0)
@@ -1068,6 +1097,73 @@ void fragment() {
         UpdateQuestState();
     }
 
+    private Vector2 FindSafeRoomPosition(RoomPortal portal, float clearanceRadius, List<Vector2> reservedPositions = null)
+    {
+        Rect2 bounds = portal.SafeSpawnBounds.Size.X > 0f && portal.SafeSpawnBounds.Size.Y > 0f
+            ? portal.SafeSpawnBounds
+            : portal.RoomBounds;
+
+        for (int attempt = 0; attempt < 48; attempt++)
+        {
+            Vector2 candidate = new Vector2(
+                (float)GD.RandRange(bounds.Position.X, bounds.End.X),
+                (float)GD.RandRange(bounds.Position.Y, bounds.End.Y));
+
+            if (IsSafeRoomPosition(portal, candidate, clearanceRadius, reservedPositions))
+            {
+                return candidate;
+            }
+        }
+
+        // Véletlen sikertelenség esetén rendezett pontokat is végigpróbálunk.
+        for (int row = 1; row <= 3; row++)
+        {
+            for (int column = 1; column <= 7; column++)
+            {
+                Vector2 candidate = new Vector2(
+                    Mathf.Lerp(bounds.Position.X, bounds.End.X, column / 8f),
+                    Mathf.Lerp(bounds.Position.Y, bounds.End.Y, row / 4f));
+
+                if (IsSafeRoomPosition(portal, candidate, clearanceRadius, reservedPositions))
+                {
+                    return candidate;
+                }
+            }
+        }
+
+        GD.PrintErr($"[GroundFloor] Nem találtam teljesen üres spawnpontot a(z) {portal.Name} szobában.");
+        return bounds.GetCenter();
+    }
+
+    private bool IsSafeRoomPosition(RoomPortal portal, Vector2 position, float clearanceRadius, List<Vector2> reservedPositions)
+    {
+        if (!portal.RoomBounds.HasPoint(position)) return false;
+        if (position.DistanceTo(portal.InsidePosition) < 90f) return false;
+
+        if (reservedPositions != null)
+        {
+            foreach (Vector2 reserved in reservedPositions)
+            {
+                if (position.DistanceTo(reserved) < clearanceRadius * 2.4f)
+                {
+                    return false;
+                }
+            }
+        }
+
+        var shape = new CircleShape2D { Radius = clearanceRadius };
+        var query = new PhysicsShapeQueryParameters2D
+        {
+            Shape = shape,
+            Transform = new Transform2D(0f, position),
+            CollisionMask = uint.MaxValue,
+            CollideWithBodies = true,
+            CollideWithAreas = false
+        };
+
+        return GetWorld2D().DirectSpaceState.IntersectShape(query, 16).Count == 0;
+    }
+
     private void ExitRoom(RoomPortal portal)
     {
         portal.IsInside = false;
@@ -1078,15 +1174,16 @@ void fragment() {
         }
     }
 
-    private void SpawnRoomReward(RoomPortal portal, Vector2 pos)
+    private void SpawnRoomReward(RoomPortal portal)
     {
         if (portal.RewardItemName == null || portal.RewardTexturePath == null) return;
+        Vector2 rewardPosition = portal.OutsidePosition;
 
         var reward = (TutorialItem)GD.Load<PackedScene>("res://scenes/TutorialKeyPart.tscn").Instantiate();
         if (reward != null)
         {
             reward.ItemName = portal.RewardItemName;
-            reward.GlobalPosition = pos;
+            reward.GlobalPosition = rewardPosition;
 
             var sprite = reward.GetNodeOrNull<Sprite2D>("Sprite2D");
             if (sprite != null)
@@ -1097,7 +1194,7 @@ void fragment() {
             reward.Scale = new Vector2(0.25f, 0.25f);
             AddChild(reward);
 
-            GD.Print($"[GroundFloor] Spawned reward: {portal.RewardItemName} at {pos}");
+            GD.Print($"[GroundFloor] Spawned reward: {portal.RewardItemName} at {rewardPosition}");
         }
     }
 }
