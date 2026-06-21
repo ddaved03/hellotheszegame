@@ -81,6 +81,8 @@ public partial class C100DialogueController : Node2D
     private Label _quizProgressLabel;
     private Label _quizQuestionLabel;
     private Label _quizFeedbackLabel;
+    private ProgressBar _quizHealthBar;
+    private Label _quizHealthLabel;
     private bool _isDialogueOpen;
     private bool _isQuizOpen;
     private bool _isEndingDialogueOpen;
@@ -537,13 +539,13 @@ public partial class C100DialogueController : Node2D
 
         var panel = new Panel
         {
-            CustomMinimumSize = new Vector2(900f, 420f)
+            CustomMinimumSize = new Vector2(900f, 480f)
         };
         panel.SetAnchorsPreset(Control.LayoutPreset.Center);
         panel.OffsetLeft = -450f;
-        panel.OffsetTop = -210f;
+        panel.OffsetTop = -240f;
         panel.OffsetRight = 450f;
-        panel.OffsetBottom = 210f;
+        panel.OffsetBottom = 240f;
         root.AddChild(panel);
 
         var margin = new MarginContainer();
@@ -564,6 +566,51 @@ public partial class C100DialogueController : Node2D
         };
         _quizProgressLabel.AddThemeFontSizeOverride("font_size", 28);
         layout.AddChild(_quizProgressLabel);
+
+        var healthRow = new HBoxContainer
+        {
+            Alignment = BoxContainer.AlignmentMode.Center
+        };
+        healthRow.AddThemeConstantOverride("separation", 16);
+        layout.AddChild(healthRow);
+
+        var hpTitle = new Label
+        {
+            Text = "HP"
+        };
+        hpTitle.AddThemeFontSizeOverride("font_size", 24);
+        healthRow.AddChild(hpTitle);
+
+        _quizHealthBar = new ProgressBar
+        {
+            CustomMinimumSize = new Vector2(420f, 30f),
+            ShowPercentage = false
+        };
+        _quizHealthBar.AddThemeStyleboxOverride("background", new StyleBoxFlat
+        {
+            BgColor = new Color(0.12f, 0.03f, 0.03f, 0.95f),
+            CornerRadiusTopLeft = 6,
+            CornerRadiusTopRight = 6,
+            CornerRadiusBottomLeft = 6,
+            CornerRadiusBottomRight = 6
+        });
+        _quizHealthBar.AddThemeStyleboxOverride("fill", new StyleBoxFlat
+        {
+            BgColor = new Color(0.85f, 0.12f, 0.12f, 1f),
+            CornerRadiusTopLeft = 6,
+            CornerRadiusTopRight = 6,
+            CornerRadiusBottomLeft = 6,
+            CornerRadiusBottomRight = 6
+        });
+        healthRow.AddChild(_quizHealthBar);
+
+        _quizHealthLabel = new Label
+        {
+            CustomMinimumSize = new Vector2(130f, 0f),
+            HorizontalAlignment = HorizontalAlignment.Center
+        };
+        _quizHealthLabel.AddThemeFontSizeOverride("font_size", 24);
+        healthRow.AddChild(_quizHealthLabel);
 
         _quizQuestionLabel = new Label
         {
@@ -630,6 +677,8 @@ public partial class C100DialogueController : Node2D
         {
             _quizFeedbackLabel.Text = string.Empty;
         }
+
+        UpdateQuizHealthDisplay();
     }
 
     private void AnswerQuizQuestion(bool answer)
@@ -647,10 +696,32 @@ public partial class C100DialogueController : Node2D
         }
 
         _player?.TakeDamage(WrongAnswerDamage);
+        UpdateQuizHealthDisplay();
 
         if (_quizFeedbackLabel != null)
         {
             _quizFeedbackLabel.Text = $"-{WrongAnswerDamage} HP";
+        }
+    }
+
+    private void UpdateQuizHealthDisplay()
+    {
+        if (_player == null)
+        {
+            return;
+        }
+
+        int currentHealth = Mathf.Max(0, _player.CurrentHealth);
+
+        if (_quizHealthBar != null)
+        {
+            _quizHealthBar.MaxValue = _player.MaxHealth;
+            _quizHealthBar.Value = currentHealth;
+        }
+
+        if (_quizHealthLabel != null)
+        {
+            _quizHealthLabel.Text = $"{currentHealth} / {_player.MaxHealth}";
         }
     }
 

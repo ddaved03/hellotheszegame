@@ -1,36 +1,65 @@
 # SzeGames (HelloTheSzeGame)
 
-Egy 2D felülnézetes RPG / túlélőjáték, amely **Godot Engine 4** (C#) segítségével készült. A játékos célja, hogy túléljen egy zombiapokalipszist az egyetem (SZE) területén, megoldja a bejutáshoz szükséges feladatokat, és felfedezze az épületet.
+A SzeGames egy Godot 4.6 és C# használatával készült, felülnézetes akció-kalandjáték. A játékosnak a Széchenyi István Egyetem zombik által elfoglalt területén kell megszereznie a bejutáshoz szükséges kulcsdarabokat, helyreállítania a földszinti liftet, majd teljesítenie a C100 teremben váró végső feladatot.
 
-## 🌟 Főbb funkciók (Features)
-* **Karakterfejlődés és RPG elemek:** Tapasztalati pontok (XP gömbök) gyűjtése, szintlépés, HP (életerő), sebzés és támadási sebesség fejlesztése.
-* **Inventory és Kraftolás:** Tárgyak (pl. gyógyitalok, kulcsdarabok) felvétele és tárolása. A törött kulcsdarabokból (`KeyPart1`, `KeyPart2`, `KeyPart3`) egyetemi kulcs (`UniversityKey`) kraftolása az ajtók kinyitásához.
-* **Mentés és Betöltés (Perzisztencia):** Teljes értékű, JSON-alapú mentési rendszer (`SaveSystem`). Elmenti a játékos statisztikáit, pozícióját és az inventory tartalmát is. Különböző mentési fájlok kezelése, átnevezése és törlése a Főmenüből.
-* **Ellenségek és Harcrendszer:** Különböző típusú zombik (`ZombieSmall`, `ZombieBig`), hullámokban támadó ellenfelek (`WaveManager`), és közelharci rendszer.
-* **Több Jelenet (Pályák):** Főmenü, Külső udvar / Parkoló (`World.tscn`), Földszinti folyosók (`GroundFloor.tscn`) és specifikus termek (pl. `C100.tscn`).
+## Játékmenet
 
-## 🎮 Irányítás (Controls)
-* **W, A, S, D** vagy **Nyilak**: Mozgás
-* **Egér bal gomb**: Támadás (közelharc)
-* **ESC**: Szünet menü (Pause) és játék mentése
-* **E**: Inventory megnyitása
+A történet három egymást követő játéktéren halad végig:
 
-## 📂 Projekt Struktúra
-A projekt moduláris felépítést követ:
-* `/src/`: A játék logikáját adó C# szkriptek (pl. `BasePlayer.cs`, `InventoryManager.cs`, `WorldController.cs`).
-* `/scenes/`: A Godot vizuális jelenetei (`.tscn` fájlok).
-* `/kepek/`: Textúrák, sprite-ok, UI elemek és térképek.
-* `/audio/`: Hangeffektek (ütés, szintlépés, tárgy felvétel, kattintás).
-* `/saves/`: A játék által generált `.json` mentési fájlok helye.
+1. `World.tscn`: tutorial, zombik, események és a három kulcsdarab összegyűjtése.
+2. `GroundFloor.tscn`: sötét folyosók, földrengés, termek átkutatása, biztosíték és kábel megszerzése, majd a lift megjavítása.
+3. `C100.tscn`: párbeszéd és igaz-hamis kérdésekből álló végső próba, amely lezárja a játékot.
 
-## 🛠️ Telepítés és Futtatás (Fejlesztőknek)
-Mivel a játék C# szkripteket használ, a Godot **.NET (C#) verziójára** van szükség a futtatáshoz.
+A játék tartalmaz közelharcot, eltérő méretű zombikat, tapasztalati pontokat, szintlépést, fejleszthető tulajdonságokat, tárgykezelést, kraftolást, valamint JSON-alapú mentést és betöltést.
 
-1.  Töltsd le és telepítsd a **Godot 4.x .NET** verzióját a [hivatalos weboldalról](https://godotengine.org/download).
-2.  Bizonyosodj meg róla, hogy a gépeden telepítve van a **.NET SDK** (ajánlott a .NET 6.0 vagy 8.0).
-3.  Nyisd meg a Godot-t, és importáld a projektet a `project.godot` fájl kiválasztásával.
-4.  A jobb felső sarokban (vagy alul az MSBuild fülön) kattints a **Build** gombra, hogy a C# kódok leforduljanak.
-5.  Nyomd meg az **F5**-öt (Play) a játék indításához!
+## Irányítás
 
-## 🎓 Készítők
-*A projekt egyetemi beadandó / szkeleton feladatként készült.*
+| Művelet | Billentyű vagy egér |
+| --- | --- |
+| Mozgás | `W`, `A`, `S`, `D` vagy nyílbillentyűk |
+| Támadás | Bal egérgomb |
+| Gyógyítás | `H` |
+| Inventory megnyitása | `E` |
+| Interakció, ajtónyitás | `O` |
+| Szünet menü megnyitása és bezárása | `Esc` |
+
+A mentés nem automatikusan az ESC megnyomásakor történik: a szünet menü **Mentés** gombját kell használni.
+
+## Követelmények
+
+- Godot Engine `4.6` .NET kiadás
+- .NET SDK `8.0`
+- Git a forráskód letöltéséhez
+- Windows vagy Linux x64 fejlesztői környezet
+
+## Letöltés és fordítás
+
+```powershell
+git clone https://github.com/ddaved03/hellotheszegame.git
+cd hellotheszegame
+dotnet restore .\hellotheszegame.sln
+dotnet build .\hellotheszegame.sln
+```
+
+Sikeres fordítás után nyisd meg a Godot 4.6 .NET szerkesztőt, importáld a gyökérkönyvtárban található `project.godot` fájlt, majd indítsd el a projektet az `F5` billentyűvel.
+
+## Tesztek futtatása
+
+```powershell
+dotnet test .\tests\GameTests.csproj
+```
+
+A tesztek külön projektben találhatók. A fő játékprojekt a `tests` könyvtár C# fájljait nem fordítja bele a játékba.
+
+## Projektstruktúra
+
+- `src/`: C# játékmenet- és vezérlőkódok
+- `scenes/`: Godot jelenetek és pályák
+- `kepek/`: sprite-ok, textúrák és kezelőfelületi elemek
+- `audio/`: hangeffektek és a C100 jelenet saját zenéje
+- `tests/`: NUnit tesztprojekt
+- `saves/`: futás közben létrejövő JSON mentések
+
+## Mentések
+
+A mentési rendszer a játékos statisztikáit, pozícióját, inventoryját, az aktuális jelenetet és a pályák fontos állapotait JSON fájlban tárolja. Mentést a szünet menüből lehet készíteni; a betöltő felületen a mentések kiválaszthatók, átnevezhetők és törölhetők.
