@@ -2,8 +2,11 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+// A kezdeti nyílt világ (World / Udvar) pályavezérlője
+// Ez irányítja a tutorial-t, a parkoló eseményt, a forgalmat és a köves esemény the id\u0151z\u00edt\u00f6tt t\u00fal\u00e9l\u00e9si f\u00e1zisokat
 public partial class WorldController : Node2D
 {
+    // A játékos karakter elérési útja
     [Export] public NodePath PlayerPath;
     [Export] public NodePath PauseMenuPath;
     
@@ -42,6 +45,7 @@ public partial class WorldController : Node2D
     public override void _Ready()
     {
         GD.Print("WORLDCONTROLLER READY");
+        AudioManager.Instance?.StopMusic();
         if (PlayerPath != null) _player = GetNodeOrNull<BasePlayer>(PlayerPath);
         if (PauseMenuPath != null) _pauseMenu = GetNodeOrNull<Control>(PauseMenuPath);
         if (QuestLabelPath != null) _questLabel = GetNodeOrNull<Label>(QuestLabelPath);
@@ -96,7 +100,6 @@ public partial class WorldController : Node2D
             }
         }
 
-        // First-run modal removed: introduction handled in main menu now.
     }
 
     public void RestoreProgressState()

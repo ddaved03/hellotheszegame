@@ -44,7 +44,6 @@ public partial class Zombie : CharacterBody2D
 		_ambientTimer.Timeout += OnAmbientTimerTimeout;
 		ScheduleAmbient();
 
-		// Footstep timer for zombie movement
 		_footstepTimer = new Timer
 		{
 			OneShot = false,

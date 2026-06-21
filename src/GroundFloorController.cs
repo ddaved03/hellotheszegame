@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+// A földszinti (Ground Floor) szint vezérlője
+// Kezeli a sötétséget, a szobák közötti portálokat, a földrengés eseményt és a zombi spawnokat
 public partial class GroundFloorController : Node2D
 {
     [Export] public NodePath PlayerPath;
@@ -26,6 +28,7 @@ public partial class GroundFloorController : Node2D
     // A földrengés és a lift egyszer lefutható állapotai.
     private bool _earthquakeTriggered = false;
     private bool _elevatorFound = false;
+    private bool _elevatorZombieDefeated = false;
     private Vector2 _elevatorPosition = Vector2.Zero;
     private const float ElevatorDetectionRadius = 200f;
     private bool _earthquakeSequenceRunning = false;
@@ -192,6 +195,8 @@ public partial class GroundFloorController : Node2D
             if (_player != null) SaveSystem.Load(_player);
             RestoreGroundFloorProgress();
         }
+
+        SpawnElevatorZombieIfNeeded();
     }
 
     public void RestoreGroundFloorProgress()
@@ -224,6 +229,7 @@ public partial class GroundFloorController : Node2D
 
         _earthquakeTriggered = state.EarthquakeTriggered;
         _elevatorFound = state.ElevatorFound;
+        _elevatorZombieDefeated = state.ElevatorZombieDefeated;
         _questInitialized = state.QuestInitialized;
 
         if (_darknessOverlay != null)
@@ -290,6 +296,7 @@ public partial class GroundFloorController : Node2D
             DarknessAlpha = _darknessOverlay?.Color.A ?? 0f,
             EarthquakeTriggered = _earthquakeTriggered,
             ElevatorFound = _elevatorFound,
+            ElevatorZombieDefeated = _elevatorZombieDefeated,
             FlashlightPickupSpawned = _flashlightPickupSpawned,
             QuestInitialized = _questInitialized,
             QuestText = _questLabel?.Text
@@ -310,6 +317,21 @@ public partial class GroundFloorController : Node2D
 
         return state;
     }
+
+    private void SpawnElevatorZombieIfNeeded()
+    {
+        if (_elevatorZombieDefeated || _zombieBigScene == null) return;
+
+        var zombie = _zombieBigScene.Instantiate<Node2D>();
+        if (zombie == null) return;
+
+        // A zombi a lift ajtajának középvonalában, közvetlenül vele szemben áll.
+        zombie.GlobalPosition = _elevatorPosition + new Vector2(0f, -170f);
+        zombie.ZIndex = 50;
+        AddChild(zombie);
+        zombie.TreeExited += () => _elevatorZombieDefeated = true;
+    }
+
     private void SpawnFlashlightPickupIfNeeded()
     {
         if (_flashlightPickupSpawned) return;
@@ -1102,6 +1124,25 @@ void fragment() {
         Rect2 bounds = portal.SafeSpawnBounds.Size.X > 0f && portal.SafeSpawnBounds.Size.Y > 0f
             ? portal.SafeSpawnBounds
             : portal.RoomBounds;
+
+        // A kis zombik először az ajtó belső oldala előtt, rendezett sorban jelennek meg.
+        Vector2 roomDirection = (portal.InsidePosition - portal.OutsidePosition).Normalized();
+        Vector2 doorDirection = new Vector2(-roomDirection.Y, roomDirection.X);
+        float[] doorOffsets = { -180f, -90f, 90f, 180f, -270f, 270f, -360f, 360f };
+        int firstOffset = reservedPositions?.Count ?? 0;
+
+        for (int i = firstOffset; i < doorOffsets.Length; i++)
+        {
+            Vector2 candidate = portal.InsidePosition
+                + roomDirection * 30f
+                + doorDirection * doorOffsets[i];
+
+            if (bounds.HasPoint(candidate) &&
+                IsSafeRoomPosition(portal, candidate, clearanceRadius, reservedPositions))
+            {
+                return candidate;
+            }
+        }
 
         for (int attempt = 0; attempt < 48; attempt++)
         {

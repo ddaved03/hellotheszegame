@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public partial class AudioManager : Node
 {
+    // A megosztott AudioManager példány, amelyen keresztül az audiok lejátszhatók
     public static AudioManager Instance { get; private set; }
 
     private readonly RandomNumberGenerator _rng = new();
@@ -58,7 +59,7 @@ public partial class AudioManager : Node
     public void PlayDropXp(Vector2 position) => Play2D("drop_xp", position, 0.06f);
     public void PlayPickupPotion(Vector2 position) => Play2D("pickup_potion", position, 0.05f);
     public void PlayPickupXp(Vector2 position) => Play2D("pickup_xp", position, 0.05f);
-    public void PlayKeyPickup(Vector2 position) => Play2D("key_pickup", position, 0.05f);
+    public void PlayKeyPickup(Vector2 position) => Play2D("pickup_key", position, 0.05f);
     public void PlayFootstep(Vector2 position) => Play2D("footstep", position, 0.05f);
     public void PlayEarthquake(Vector2 position) => Play2D("earthquake", position, 0.01f);
     public void PlayBusArrival(Vector2 position) => PlayGlobal("bus_arrival", 0.01f);
@@ -76,6 +77,18 @@ public partial class AudioManager : Node
             _backgroundPlayer.Stop();
             _backgroundPlayer.Play();
         }
+    }
+
+    public void StopMusic()
+    {
+        if (_backgroundPlayer != null && IsInstanceValid(_backgroundPlayer))
+        {
+            _backgroundPlayer.Stop();
+            _backgroundPlayer.QueueFree();
+        }
+
+        _backgroundPlayer = null;
+        _currentMusicKey = null;
     }
 
     private AudioStreamPlayer PlayMusic(string key)

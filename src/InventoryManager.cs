@@ -12,6 +12,7 @@ public partial class InventoryManager : Control
         CallDeferred(nameof(UpdateUI));
     }
 
+    // Tárgy hozzáadása az inventoryhoz
     public bool AddItem(string itemName)
     {
         if (Items.Count < MaxSlots)
@@ -25,6 +26,7 @@ public partial class InventoryManager : Control
         return false;
     }
 
+    // Frissíti a felhasználói felületet, hogy megjelenítse az aktuális tárgyakat
     public void UpdateUI()
     {
         var grid = GetTree().Root.FindChild("GridContainer", true, false) as GridContainer;

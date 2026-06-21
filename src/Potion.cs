@@ -1,8 +1,10 @@
 using Godot;
 using System;
 
+// Egy felvehető gyógyital (Potion) objektum, amely Area2D alapú
 public partial class Potion : Area2D
 {
+    // A gyógyital eredeti Y koordinátája a lebegő animációhoz
     private float _startSlotY;
     private float _timePassed = 0.0f;
 

@@ -1,11 +1,14 @@
 using Godot;
 using System.Threading.Tasks;
 
+// A C100-as terem dialógusainak és kvíz kérdéseinek vezérlője
 public partial class C100DialogueController : Node2D
 {
     private const int DialogueSlideCount = 3;
+    // Helytelen válasz esetén kapott sebzés mértéke
     private const int WrongAnswerDamage = 20;
 
+    // A kvíz kérdéseinek tömbje
     private static readonly string[] QuizQuestions =
     {
         "Az NT \u00fctemez\u0151je a kernel m\u00f3dban, egy darab \u00fctemez\u0151 modulban tal\u00e1lhat\u00f3.",

@@ -2,10 +2,14 @@ using Godot;
 using System;
 using System.Collections.Generic; // Szükséges a List-hez
 
+// A játékos karakter alaposztálya, kezelve a mozgást, statisztikákat és interakciókat
 public partial class BasePlayer : CharacterBody2D
 {
+    // A játékos mozgási sebessége
     [Export] public float Speed = 300.0f;
+    // A maximális életerőpontok száma
     [Export] public int MaxHealth = 100;
+    // Jelenlegi életerő
     public int CurrentHealth;
     [Export] public int AttackDamage = 20;
     [Export] public float AttackCooldown = 0.5f;
@@ -164,7 +168,6 @@ public partial class BasePlayer : CharacterBody2D
         AddChild(_blinkTimer);
         _blinkTimer.Timeout += OnBlinkTimerTimeout;
 
-        // Footstep timer
         _footstepTimer = new Timer
         {
             OneShot = false,

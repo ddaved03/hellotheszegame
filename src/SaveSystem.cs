@@ -4,8 +4,10 @@ using System.IO;
 using System.Text.Json;
 using System.Collections.Generic;
 
+// Mentési és betöltési funkciókért felelős statikus osztály
 public static class SaveSystem
 {
+    // Az aktuális mentési fájl neve
     public static string CurrentSaveFileName { get; set; } = "savegame.json";
     private const string RelativeSaveDirectory = "saves";
 
@@ -91,6 +93,7 @@ public static class SaveSystem
         public float DarknessAlpha { get; set; }
         public bool EarthquakeTriggered { get; set; }
         public bool ElevatorFound { get; set; }
+        public bool ElevatorZombieDefeated { get; set; }
         public bool FlashlightPickupSpawned { get; set; }
         public bool QuestInitialized { get; set; }
         public string QuestText { get; set; }

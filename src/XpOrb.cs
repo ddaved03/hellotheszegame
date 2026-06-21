@@ -1,8 +1,10 @@
 using Godot;
 using System;
 
+// Egy felvehető tapasztalati pont (XP Orb) objektum
 public partial class XpOrb : Area2D
 {
+    // A felvételkor kapott tapasztalati pontok száma
     [Export] public int XpAmount = 25;
 
     public override void _Ready()

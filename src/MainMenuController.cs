@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+// A főmenü működéséért, a kezdőképernyőért, a mentések betöltéséért és a beállításokért felelős vezérlő
 public partial class MainMenuController : Control
 {
     private static readonly Texture2D MenuBackgroundTexture = GD.Load<Texture2D>("res://src/level-hattér.png");
@@ -46,7 +47,7 @@ public partial class MainMenuController : Control
         var closeButton = GetNode<Button>("SettingsPanel/CenterContainer/VBoxContainer/CloseSettingsButton");
 
         var audioTitle = new Label();
-        audioTitle.Text = "Hang be\u00e1ll\u00edt\u00e1sok";
+        audioTitle.Text = "Hang beállítások";
         audioTitle.HorizontalAlignment = HorizontalAlignment.Center;
         settingsVBox.AddChild(audioTitle);
 
@@ -55,7 +56,7 @@ public partial class MainMenuController : Control
         settingsVBox.AddChild(masterRow);
 
         var masterLabel = new Label();
-        masterLabel.Text = "F\u0151hanger\u0151";
+        masterLabel.Text = "Főhangerő";
         masterRow.AddChild(masterLabel);
 
         _masterVolumeSlider = new HSlider();
@@ -71,7 +72,7 @@ public partial class MainMenuController : Control
         settingsVBox.AddChild(musicRow);
 
         var musicLabel = new Label();
-        musicLabel.Text = "Zene hanger\u0151";
+        musicLabel.Text = "Zene hangerő";
         musicRow.AddChild(musicLabel);
 
         _musicVolumeSlider = new HSlider();
